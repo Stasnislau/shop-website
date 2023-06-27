@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "server": "nest start --watch"
+    "server": "cd server & nest start --watch"
   },
   "dependencies": {
     "@emotion/react": "^11.11.0",
@@ -32,6 +32,7 @@
     "@types/jest": "^29.5.2",
     "@types/styled-components": "^5.1.26",
     "@types/styled-components-react-native": "^5.2.1",
-    "@types/supertest": "^2.0.12"
+    "@types/supertest": "^2.0.12",
+    "source-map-support": "^0.5.21"
   }
 }
