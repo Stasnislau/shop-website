@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 @Injectable({})
-export class ExampleService {
+export class ProductsService {
     test() {
         return "Wnow' smieniaucca w pamiaći dni, czto ";
     }
