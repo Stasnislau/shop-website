@@ -1,0 +1,14 @@
+version: "4.2"
+services:
+  dev-db:
+    image: postgres:15
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: shop-db
+    networks:
+      - freecodecamp
+networks:
+  freecodecamp:
