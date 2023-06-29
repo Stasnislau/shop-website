@@ -26,19 +26,45 @@ export class ProductsService {
     return "Product created successfully";
   }
   async getAllProducts() {
-    const products = await this.prisma.product.findMany({
-      select: {
-        id: true,
-        name: true,
-        description: true,
-        prices: true,
-        gallery: true,
-        sizes: true,
-        colors: true,
-        category: true,
-      },
-    });
+    try {
+      const products = await this.prisma.product.findMany({
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          prices: true,
+          gallery: true,
+          sizes: true,
+          colors: true,
+          category: true,
+        },
+      });
+      return products;
+    } catch (error) {
+      console.log(error);
+    }
   }
+  async getSpecificProduct(id: string) {
+    try {
+      const product = await this.prisma.product.findUnique({
+        where: { id: Number(id) },
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          prices: true,
+          gallery: true,
+          sizes: true,
+          colors: true,
+          category: true,
+        },
+      });
+      return product;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   private async calculatePrice(price: Price) {
     const newPrices = [] as Price[];
     try {

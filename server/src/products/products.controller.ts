@@ -1,28 +1,29 @@
-import { Body, Controller, Get, Post, Delete } from "@nestjs/common";
+import { Body, Controller, Get, Post, Delete, Param } from "@nestjs/common";
 import { ProductsService } from "./products.service";
 import { ProductDTO } from "./dto";
-
 @Controller("products")
 export class ProductsController {
-  constructor(private readonly exampleService: ProductsService) {}
+  constructor(private productService: ProductsService) {}
   @Post("create")
   createProduct(@Body() body: ProductDTO) {
-    this.createProduct(body);
+    this.productService.createProduct(body);
   }
   @Get("all")
   getAllProducts() {
-    this.getAllProducts();
+    this.productService.getAllProducts();
   }
   @Get("specific/:id")
-  getSpecificProduct() {
-    // TODO: get specific product
+  getSpecificProduct(@Param("id") id: string) {
+    this.productService.getSpecificProduct(id);
   }
 
   @Get("category")
   getByCategory(
     @Body()
     category: "men" | "women" | "children"
-  ) {}
+  ) {
+    this.productService.getByCategory(category);
+  }
 
   @Delete("delete/:id")
   deleteProduct() {}
