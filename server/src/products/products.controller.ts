@@ -20,7 +20,7 @@ export class ProductsController {
   @Get("category")
   getByCategory(
     @Body()
-    category: "men" | "women" | "children"
+    category: "men" | "women" | "kids"
   ) {
     this.productService.getByCategory(category);
   }

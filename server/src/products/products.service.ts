@@ -65,6 +65,27 @@ export class ProductsService {
     }
   }
 
+  getByCategory(category: "men" | "women" | "kids") {
+    try {
+      const products = this.prisma.product.findMany({
+        where: { category },
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          prices: true,
+          gallery: true,
+          sizes: true,
+          colors: true,
+          category: true,
+        },
+      });
+      return products;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   private async calculatePrice(price: Price) {
     const newPrices = [] as Price[];
     try {
