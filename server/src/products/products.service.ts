@@ -1,11 +1,22 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from "@nestjs/common";
+import { ProductDTO } from "./dto";
+import { PrismaService } from "../prisma/prisma.service";
 @Injectable({})
 export class ProductsService {
-    test() {
-        return "Wnow' smieniaucca w pamiaći dni, czto ";
-    }
-
-    test2() {
-        return 'Hello World 2!';
-    }
+  constructor(private readonly prisma: PrismaService) {}
+  async createProduct(body: ProductDTO) {
+    const product = await this.prisma.product.create({
+      data: {
+        name: body.name,
+        description: body.description,
+        prices: {
+          create: body.prices,
+        },
+        gallery: [...body.gallery],
+        sizes: [...body.sizes],
+        colors: [...body.colors],
+        category: body.category,
+      },
+    });
+  }
 }
