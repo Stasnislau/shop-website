@@ -86,6 +86,17 @@ export class ProductsService {
     }
   }
 
+  async deleteProduct(id: string) {
+    try {
+      const product = await this.prisma.product.delete({
+        where: { id: Number(id) },
+      });
+      return product;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   private async calculatePrice(price: Price) {
     const newPrices = [] as Price[];
     try {

@@ -26,5 +26,7 @@ export class ProductsController {
   }
 
   @Delete("delete/:id")
-  deleteProduct() {}
+  deleteProduct(@Param("id") id: string) {
+    this.productService.deleteProduct(id);
+  }
 }
