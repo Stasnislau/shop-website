@@ -7,13 +7,11 @@ export class ProductsController {
   constructor(private readonly exampleService: ProductsService) {}
   @Post("create")
   createProduct(@Body() body: ProductDTO) {
-    // TODO: create product
-    
+    this.createProduct(body);
   }
   @Get("all")
   getAllProducts() {
-    // TODO: get all products
-    
+    this.getAllProducts();
   }
   @Get("specific/:id")
   getSpecificProduct() {
@@ -24,9 +22,7 @@ export class ProductsController {
   getByCategory(
     @Body()
     category: "men" | "women" | "children"
-  ) {
-    
-  }
+  ) {}
 
   @Delete("delete/:id")
   deleteProduct() {}

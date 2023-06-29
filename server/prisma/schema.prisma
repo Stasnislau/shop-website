@@ -19,7 +19,7 @@ model product {
   sizes       String[]
   colors      String[]
   category    String
-  cart_items  cart_item[]
+  cartItems   cart_item[]
   createdAt   DateTime    @default(now())
 }
 
@@ -46,7 +46,7 @@ model cart_item {
 }
 
 model currencies {
-  id                      Int    @id @default(autoincrement())
-  currency                String
-  exchangeRate           Float   // x/USD 
+  id           Int    @id @default(autoincrement())
+  currency     String
+  exchangeRate Float // x/USD 
 }
