@@ -33,7 +33,7 @@ model price {
 
 model cart {
   id    Int         @id @default(autoincrement())
-  items cart_item[]
+  items cart_item[] 
 }
 
 model cart_item {

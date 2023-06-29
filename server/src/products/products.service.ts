@@ -3,7 +3,7 @@ import { Price, ProductDTO } from "./dto";
 import { PrismaService } from "../prisma/prisma.service";
 @Injectable({})
 export class ProductsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) {}
   async createProduct(body: ProductDTO) {
     const prices = await this.calculatePrice(body.prices[0]);
     if (prices.length === 0) {

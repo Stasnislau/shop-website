@@ -9,6 +9,5 @@ export interface CartItemDTO {
     productId : number;
     quantity : number;
     cartId : number;
-    product : ProductDTO;
 }
 
