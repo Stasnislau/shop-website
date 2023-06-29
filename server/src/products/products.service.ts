@@ -19,4 +19,30 @@ export class ProductsService {
       },
     });
   }
+  private async calculatePrice(price: { currency: string; amount: number }) {
+    const newPrices = [];
+    try {
+      const currencies = await this.prisma.currencies.findMany();
+
+      const currentCurrency = currencies.find(
+        (currency) => currency.currency === price.currency
+      );
+      currencies.forEach((item) => {
+        if (item.currency === price.currency) {
+          newPrices.push(price);
+        }
+        if (item.currency !== price.currency) {
+          const newPrice = {
+            currency: item.currency,
+            amount:
+              (price.amount / currentCurrency.exchangeRate) * item.exchangeRate,
+          };
+          newPrices.push(newPrice);
+        }
+      });
+      return price;
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }

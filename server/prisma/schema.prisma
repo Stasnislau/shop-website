@@ -44,3 +44,9 @@ model cart_item {
   productId Int
   quantity  Int
 }
+
+model currencies {
+  id                      Int    @id @default(autoincrement())
+  currency                String
+  exchangeRate           Float   // x/USD 
+}
