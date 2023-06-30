@@ -21,18 +21,18 @@ export class CartController {
   addToCart(@Body() body: CartDTO) {
     // this.cartService.addToCart(body);
   }
-  @Get("all")
-  getAllCartItems() {
-    // this.cartService.getAllCartItems();
-  }
-
   @Delete("delete/:id")
-  deleteCartItem(@Param("id") id: number) {
+  deleteCart(@Param("id") id: number) {
     // this.cartService.deleteCartItem(id);
   }
 
   @Put("update/:id")
-  updateCartItem(@Param("id") id: number, @Body() body: CartDTO) {
+  updateCart(@Param("id") id: number, @Body() body: CartDTO) {
     // this.cartService.updateCartItem(id, body);
+  }
+
+  @Get("get/:id")
+  getCart(@Param("id") id: number) {
+    // this.cartService.getCart(id);
   }
 }
