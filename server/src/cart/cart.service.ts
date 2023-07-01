@@ -27,4 +27,11 @@ export class CartService {
     });
     return cart;
   }
+
+  async deleteCart(id: number) {
+    const cart = await this.PrismaService.cart.delete({
+      where: { id },
+    });
+    return cart;
+  }
 }
