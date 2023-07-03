@@ -1,4 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class CartItemService {}
+export class CartItemService {
+    constructor() {}
+    
+}
