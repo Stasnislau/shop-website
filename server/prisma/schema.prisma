@@ -26,7 +26,7 @@ model product {
 model price {
   id        Int      @id @default(autoincrement())
   currency  String
-  amount    Int
+  amount    Float
   product   product? @relation(fields: [productId], references: [id])
   productId Int?
 }

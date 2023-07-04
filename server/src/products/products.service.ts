@@ -6,16 +6,18 @@ export class ProductsService {
   constructor(private prisma: PrismaService) {}
   async createProduct(body: ProductDTO) {
     try {
-      const prices = await this.calculatePrice(body.prices[0]);
-      console.log(body.prices[0])
+      const prices = (await this.calculatePrice(body.prices[0])) as Price[];
       if (prices.length === 0) {
         throw new Error("Something went wrong");
       }
+      console.log(prices);
       const product = await this.prisma.product.create({
         data: {
           name: body.name,
           description: body.description,
-          prices: { create: [...prices] },
+          prices: {
+            create: prices
+          },
           gallery: [...body.gallery],
           sizes: [...body.sizes],
           colors: [...body.colors],
@@ -103,8 +105,8 @@ export class ProductsService {
   }
 
   private async calculatePrice(price: Price) {
-    const newPrices = [] as Price[];
     try {
+      const newPrices = [] as Price[];
       const currencies = await this.prisma.currencies.findMany();
 
       const currentCurrency = currencies.find(
@@ -117,8 +119,12 @@ export class ProductsService {
         if (item.currency !== price.currency) {
           const newPrice = {
             currency: item.currency,
-            amount:
-              (price.amount / currentCurrency.exchangeRate) * item.exchangeRate,
+            amount: Number(
+              (
+                (price.amount * currentCurrency.exchangeRate) /
+                item.exchangeRate
+              ).toFixed(2)
+            ),
           };
           newPrices.push(newPrice);
         }
@@ -129,5 +135,3 @@ export class ProductsService {
     }
   }
 }
-
-// TODO: fill in the currencies
