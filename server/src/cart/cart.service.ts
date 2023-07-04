@@ -6,7 +6,7 @@ import { CartItemDTO } from "./dto";
 @Injectable()
 export class CartService {
   constructor(private PrismaService: PrismaService) {}
-  async addToCart(body: CartItemDTO) {
+  async addCart(body: CartItemDTO) {
     try {
       const { cartId, productId, quantity } = body;
       const cartItem = await this.PrismaService.cart_item.create({
@@ -50,6 +50,17 @@ export class CartService {
     try {
       const cart = await this.PrismaService.cart.delete({
         where: { id },
+      });
+      return cart;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async updateCart(id: number, body: cart) {
+    try {
+      const cart = await this.PrismaService.cart.update({
+        where: { id },
+        data: body,
       });
       return cart;
     } catch (error) {
