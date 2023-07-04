@@ -13,10 +13,6 @@ import { CartDTO } from "./dto";
 @Controller("cart")
 export class CartController {
   constructor(private cartService: CartService) {}
-  @Post("create")
-  createCart() {
-    // this.cartService.createCart();
-  }
   @Post("add")
   addToCart(@Body() body: CartDTO) {
     // this.cartService.addToCart(body);
