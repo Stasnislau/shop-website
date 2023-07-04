@@ -5,25 +5,30 @@ import { PrismaService } from "../prisma/prisma.service";
 export class ProductsService {
   constructor(private prisma: PrismaService) {}
   async createProduct(body: ProductDTO) {
-    const prices = await this.calculatePrice(body.prices[0]);
-    if (prices.length === 0) {
-      throw new Error("Something went wrong");
+    try {
+      const prices = await this.calculatePrice(body.prices[0]);
+      console.log(body.prices[0])
+      if (prices.length === 0) {
+        throw new Error("Something went wrong");
+      }
+      const product = await this.prisma.product.create({
+        data: {
+          name: body.name,
+          description: body.description,
+          prices: { create: [...prices] },
+          gallery: [...body.gallery],
+          sizes: [...body.sizes],
+          colors: [...body.colors],
+          category: body.category,
+        },
+      });
+      if (!product) {
+        throw new Error("Something went wrong");
+      }
+      return product;
+    } catch (error) {
+      console.log(error);
     }
-    const product = await this.prisma.product.create({
-      data: {
-        name: body.name,
-        description: body.description,
-        prices: { create: [...prices] },
-        gallery: [...body.gallery],
-        sizes: [...body.sizes],
-        colors: [...body.colors],
-        category: body.category,
-      },
-    });
-    if (!product) {
-      throw new Error("Something went wrong");
-    }
-    return "Product created successfully";
   }
   async getAllProducts() {
     try {
@@ -124,3 +129,5 @@ export class ProductsService {
     }
   }
 }
+
+// TODO: fill in the currencies

@@ -1,4 +1,3 @@
-import { ProductDTO } from "../../products/dto";
 export interface CartDTO {
     id : number;
     cartItems : CartItemDTO[];
