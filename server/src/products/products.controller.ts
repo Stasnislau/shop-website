@@ -6,27 +6,24 @@ export class ProductsController {
   constructor(private productService: ProductsService) {}
   @Post("create")
   createProduct(@Body() body: ProductDTO) {
-    this.productService.createProduct(body);
+    return this.productService.createProduct(body);
   }
   @Get("all")
   getAllProducts() {
-    this.productService.getAllProducts();
+    return this.productService.getAllProducts();
   }
   @Get("specific/:id")
   getSpecificProduct(@Param("id") id: string) {
-    this.productService.getSpecificProduct(id);
+    return this.productService.getSpecificProduct(id);
   }
 
-  @Get("category")
-  getByCategory(
-    @Body()
-    category: "men" | "women" | "kids"
-  ) {
-    this.productService.getByCategory(category);
+  @Get("category/:category")
+  getByCategory(@Param("category") category: "men" | "women" | "kids") {
+    return this.productService.getByCategory(category);
   }
 
   @Delete("delete/:id")
   deleteProduct(@Param("id") id: string) {
-    this.productService.deleteProduct(id);
+    return this.productService.deleteProduct(id);
   }
 }

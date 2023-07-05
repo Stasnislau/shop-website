@@ -98,7 +98,7 @@ export class ProductsService {
       const product = await this.prisma.product.delete({
         where: { id: Number(id) },
       });
-      return product;
+      return "Product deleted"
     } catch (error) {
       console.log(error);
     }
