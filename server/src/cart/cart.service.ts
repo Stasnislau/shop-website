@@ -1,32 +1,54 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import { cart, product, cart_item } from "@prisma/client";
-import { CartItemDTO } from "./dto";
 
 @Injectable()
 export class CartService {
   constructor(private PrismaService: PrismaService) {}
-  async addCart(body: CartItemDTO) {
+  async addCart(body: cart_item) {
     try {
       const { cartId, productId, quantity } = body;
-      const cartItem = await this.PrismaService.cart_item.create({
-        data: {
-          cartId,
-          productId,
-          quantity,
+      const cart = await this.PrismaService.cart.findUnique({
+        where: { id: cartId },
+        select: {
+          id: true,
         },
       });
-      const cart = await this.PrismaService.cart.update({
-        where: { id: cartId },
-        data: {
-          items: {
-            connect: {
-              id: cartItem.id,
+      if (!cart) {
+        const newCart = await this.PrismaService.cart.create({
+          data: {
+            items: {
+              create: {
+                productId,
+                quantity,
+              },
             },
           },
-        },
-      });
-      return cart.id;
+        });
+        return newCart.id;
+      } else {
+        const cartItem = await this.PrismaService.cart_item.create({
+          data: {
+            cartId,
+            productId,
+            quantity,
+          },
+        });
+        if (!cartItem) {
+          return null;
+        }
+        const cart = await this.PrismaService.cart.update({
+          where: { id: cartId },
+          data: {
+            items: {
+              connect: {
+                id: cartItem.id,
+              },
+            },
+          },
+        });
+        return cart.id;
+      }
     } catch (error) {
       console.log(error);
     }
@@ -51,16 +73,20 @@ export class CartService {
       const cart = await this.PrismaService.cart.delete({
         where: { id },
       });
-      return cart;
+      return "Cart deleted";
     } catch (error) {
       console.log(error);
     }
   }
-  async updateCart(id: number, body: cart) {
+  async updateCart(id: number, body: cart_item[]) {
     try {
       const cart = await this.PrismaService.cart.update({
         where: { id },
-        data: body,
+        data: {
+          items: {
+            set: body,
+          },
+        },
       });
       return cart;
     } catch (error) {

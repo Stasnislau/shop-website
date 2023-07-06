@@ -10,7 +10,6 @@ export class ProductsService {
       if (prices.length === 0) {
         throw new Error("Something went wrong");
       }
-      console.log(prices);
       const product = await this.prisma.product.create({
         data: {
           name: body.name,
