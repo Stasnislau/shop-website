@@ -84,7 +84,7 @@ export class CartService {
         where: { id },
         data: {
           items: {
-            set: body,
+            create: body,
           },
         },
       });
