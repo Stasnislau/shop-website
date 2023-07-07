@@ -42,3 +42,5 @@ export default function App({
     </Context.Provider>
   );
 }
+
+// TODO: integrate with main pages
