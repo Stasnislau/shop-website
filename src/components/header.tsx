@@ -21,7 +21,7 @@ import { Context } from "@/pages/_app";
 import React from "react";
 
 const Header = () => {
-  const store  = React.useContext(Context);
+  const store = React.useContext(Context);
   const [value, setValue] = useState(0);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCurrencyMenuOpen, setIsCurrencyMenuOpen] = useState(false);
@@ -36,7 +36,12 @@ const Header = () => {
   useEffect(() => {
     document.documentElement.classList.toggle("cart-open", isCartOpen);
   }, [isCartOpen]);
-
+  const availableCurrencies = [
+    { currency: "$", exchangeRate: 1.0, currencyCode: "USD" },
+    { currency: "€", exchangeRate: 1.18, currencyCode: "EUR" },
+    { currency: "£", exchangeRate: 1.38, currencyCode: "GBP" },
+    { currency: "¥", exchangeRate: 0.0091, currencyCode: "JPY" },
+  ];
   return (
     <AppBar
       position="static"
@@ -109,7 +114,9 @@ const Header = () => {
             onMouseLeave={() => setIsCurrencyMenuOpen(false)}
             sx={{ position: "relative" }}
           >
-            <Typography variant="body1">{store.state.currentCurrency}</Typography>
+            <Typography variant="body1">
+              {store.state.currentCurrency}
+            </Typography>
             {isCurrencyMenuOpen && (
               <List
                 sx={{
@@ -127,45 +134,24 @@ const Header = () => {
                   },
                 }}
               >
-                <ListItem
-                  value="$"
-                  onClick={() => handleCurrencySelect("$")}
-                  sx={{
-                    py: 1,
-                    px: 2,
-                    fontSize: "1rem",
-                    backgroundColor:
-                      store.state.currentCurrency === "$" ? "#EEEEEE" : "#fff",
-                  }}
-                >
-                  $ USD
-                </ListItem>
-                <ListItem
-                  value="€"
-                  onClick={() => handleCurrencySelect("€")}
-                  sx={{
-                    py: 1,
-                    px: 2,
-                    fontSize: "1rem",
-                    backgroundColor:
-                      store.state.currentCurrency === "€" ? "#EEEEEE" : "#fff",
-                  }}
-                >
-                  € EUR
-                </ListItem>
-                <ListItem
-                  value="£"
-                  onClick={() => handleCurrencySelect("£")}
-                  sx={{
-                    py: 1,
-                    px: 2,
-                    fontSize: "1rem",
-                    backgroundColor:
-                      store.state.currentCurrency === "£" ? "#EEEEEE" : "#fff",
-                  }}
-                >
-                  £ GBP
-                </ListItem>
+                {availableCurrencies.map((currency) => (
+                  <ListItem
+                    key={currency.currencyCode}
+                    value={currency.currency}
+                    onClick={() => handleCurrencySelect(currency.currency)}
+                    sx={{
+                      py: 1,
+                      px: 2,
+                      fontSize: "1rem",
+                      backgroundColor:
+                        store.state.currentCurrency === currency.currency
+                          ? "#EEEEEE"
+                          : "#fff",
+                    }}
+                  >
+                    {currency.currency} {currency.currencyCode}
+                  </ListItem>
+                ))}
               </List>
             )}
           </IconButton>
@@ -188,7 +174,6 @@ const Header = () => {
     </AppBar>
   );
 };
-
 
 // TODO: change database and integrate fetching available currencies
 export default Header;
