@@ -17,15 +17,17 @@ import cartIcon from "../../public/cart-icon.svg";
 import Cart from "./cart";
 import CreateProduct from "./createProduct";
 import { ProductToCreate } from "../types";
+import { Context } from "@/pages/_app";
+import React from "react";
 
 const Header = () => {
+  const store  = React.useContext(Context);
   const [value, setValue] = useState(0);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCurrencyMenuOpen, setIsCurrencyMenuOpen] = useState(false);
-  const [currentCurrency, setCurrentCurrency] = useState("$");
   const [isCreateProductOpen, setIsCreateProductOpen] = useState(false);
   const handleCurrencySelect = (currency: string) => {
-    setCurrentCurrency(currency);
+    store.setCurrentCurrency(currency);
     setIsCurrencyMenuOpen(false);
   };
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -107,7 +109,7 @@ const Header = () => {
             onMouseLeave={() => setIsCurrencyMenuOpen(false)}
             sx={{ position: "relative" }}
           >
-            <Typography variant="body1">{currentCurrency}</Typography>
+            <Typography variant="body1">{store.state.currentCurrency}</Typography>
             {isCurrencyMenuOpen && (
               <List
                 sx={{
@@ -133,7 +135,7 @@ const Header = () => {
                     px: 2,
                     fontSize: "1rem",
                     backgroundColor:
-                      currentCurrency === "$" ? "#EEEEEE" : "#fff",
+                      store.state.currentCurrency === "$" ? "#EEEEEE" : "#fff",
                   }}
                 >
                   $ USD
@@ -146,7 +148,7 @@ const Header = () => {
                     px: 2,
                     fontSize: "1rem",
                     backgroundColor:
-                      currentCurrency === "€" ? "#EEEEEE" : "#fff",
+                      store.state.currentCurrency === "€" ? "#EEEEEE" : "#fff",
                   }}
                 >
                   € EUR
@@ -159,7 +161,7 @@ const Header = () => {
                     px: 2,
                     fontSize: "1rem",
                     backgroundColor:
-                      currentCurrency === "£" ? "#EEEEEE" : "#fff",
+                      store.state.currentCurrency === "£" ? "#EEEEEE" : "#fff",
                   }}
                 >
                   £ GBP
@@ -172,7 +174,7 @@ const Header = () => {
             onMouseLeave={() => setIsCartOpen(false)}
           >
             <Image src={cartIcon} alt="cart icon" />
-            <Cart currency={currentCurrency} open={isCartOpen} />
+            <Cart currency={store.state.currentCurrency} open={isCartOpen} />
           </IconButton>
           <IconButton size="large" edge="end" color="inherit"></IconButton>
         </Box>
@@ -187,4 +189,6 @@ const Header = () => {
   );
 };
 
+
+// TODO: change database and integrate fetching available currencies
 export default Header;

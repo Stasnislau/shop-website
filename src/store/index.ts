@@ -14,4 +14,11 @@ export default class Store {
     };
     makeAutoObservable(this);
   }
+
+  setCurrentCurrency = (currency: string) => {
+    this.state.currentCurrency = currency;
+  };
+  setCurrentCategory = (Category: "men" | "women" | "kids") => {
+    this.state.currentCategory = Category;
+  };
 }
