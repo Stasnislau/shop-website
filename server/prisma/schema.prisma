@@ -49,4 +49,5 @@ model currencies {
   id           Int    @id @default(autoincrement())
   currency     String
   exchangeRate Float // x/USD 
+  currencyCode String
 }

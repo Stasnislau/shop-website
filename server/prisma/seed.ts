@@ -3,10 +3,10 @@ const prisma = new PrismaClient();
 
 async function seed() {
   const currencies = [
-    { currency: "$", exchangeRate: 1.0 },
-    { currency: "€", exchangeRate: 1.18 },
-    { currency: "£", exchangeRate: 1.38 },
-    { currency: "¥", exchangeRate: 0.0091 },
+    { currency: "$", exchangeRate: 1.0, currencyCode: "USD" },
+    { currency: "€", exchangeRate: 1.18, currencyCode: "EUR" },
+    { currency: "£", exchangeRate: 1.38, currencyCode: "GBP" },
+    { currency: "¥", exchangeRate: 0.0091, currencyCode: "JPY" },
   ];
 
   for (const currency of currencies) {
@@ -16,4 +16,4 @@ async function seed() {
   }
 }
 
-seed()
+seed();
