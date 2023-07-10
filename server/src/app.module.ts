@@ -4,9 +4,10 @@ import { PrismaModule } from "./prisma/prisma.module";
 import { CartModule } from "./cart/cart.module";
 import { CartItemModule } from "./cart-item/cart-item.module";
 import { AppController } from "./app.controller";
+import { CurrencyModule } from './currency/currency.module';
 
 @Module({
-  imports: [ProductsModule, PrismaModule, CartModule, CartItemModule],
+  imports: [ProductsModule, PrismaModule, CartModule, CartItemModule, CurrencyModule],
   controllers: [AppController],
   providers: [],
 })
