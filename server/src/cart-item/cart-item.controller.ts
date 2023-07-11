@@ -1,19 +1,33 @@
-import { Controller } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Param,
+  Body,
+} from "@nestjs/common";
 import { CartItemService } from "./cart-item.service";
+import { cart_item } from "@prisma/client";
 
 @Controller("cart-item")
 export class CartItemController {
   constructor(private cartItemService: CartItemService) {}
-  getCartItem() {
-    // this.cartItemService.getCartItem();
+  @Get("specific/:id")
+  getCartItem(@Param("id") id: number) {
+    this.cartItemService.getCartItem(id);
   }
-  createCartItem() {
-    // this.cartItemService.createCartItem();
+  @Post("add")
+  createCartItem(@Param("cartId") cartId: number, @Body() cartItem: cart_item) {
+    this.cartItemService.addCartItem(cartItem, cartId);
   }
-  updateCartItem() {
-    // this.cartItemService.updateCartItem();
+  @Put("update/:id")
+  updateCartItem(@Param("id") id: number, @Body() value: number) {
+    this.cartItemService.changeQuantity(id, value);
   }
-  deleteCartItem() {
-    // this.cartItemService.deleteCartItem();
+
+  @Delete("delete/:id")
+  deleteCartItem(@Param("id") id: number) {
+    this.cartItemService.deleteCartItem(id);
   }
 }
