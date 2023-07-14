@@ -19,8 +19,10 @@ import CreateProduct from "./createProduct";
 import { ProductToCreate } from "../types";
 import { Context } from "@/pages/_app";
 import React from "react";
+import { useRouter } from "next/router";
 
 const Header = () => {
+  const navigate = useRouter();
   const store = React.useContext(Context);
   const [value, setValue] = useState(0);
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -87,6 +89,9 @@ const Header = () => {
               width: "fit-content",
               height: "fit-content",
               cursor: "pointer",
+            }}
+            onClick={() => {
+              navigate.push("/");
             }}
           >
             <Image src={shopLogo} alt="shop icon" />

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import {
   Box,
   Button,
@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 // import { Product } from "./types";
+import LoadingComponent from "./loadingComponent";
 
 const products = [
   {
@@ -80,29 +81,33 @@ const Cart = ({ open, currency }: CartProps) => {
             <b>My bag</b>, {numItems} items
           </Typography>
         </Box>
+
         <List>
           {items.map((item) => (
             <ListItem key={item.id}>
-              <ListItemAvatar>
-                <Image
-                  src={item.image}
-                  alt={item.name}
-                  width={64}
-                  height={64}
+              <Suspense fallback={<LoadingComponent />}>
+                <ListItemAvatar>
+                  <Image
+                    src={item.image}
+                    alt={item.name}
+                    width={64}
+                    height={64}
+                  />
+                </ListItemAvatar>
+                <ListItemText
+                  primary={item.name}
+                  secondary={`$${item.price} x ${item.quantity}`}
                 />
-              </ListItemAvatar>
-              <ListItemText
-                primary={item.name}
-                secondary={`$${item.price} x ${item.quantity}`}
-              />
-              <ListItemSecondaryAction>
-                <Typography variant="body1">
-                  ${item.price * item.quantity}
-                </Typography>
-              </ListItemSecondaryAction>
+                <ListItemSecondaryAction>
+                  <Typography variant="body1">
+                    ${item.price * item.quantity}
+                  </Typography>
+                </ListItemSecondaryAction>
+              </Suspense>
             </ListItem>
           ))}
         </List>
+
         <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
           <Typography fontSize="1rem">Total: </Typography>
           <Typography fontSize="1rem">
