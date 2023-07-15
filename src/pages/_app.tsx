@@ -6,6 +6,7 @@ import RootLayout from "./layout";
 import Store from "../store";
 import { createContext } from "react";
 const existingRoutes = ["/", "/cart", "/product"];
+import "./styles.css";
 
 const theme = createTheme({
   palette: {

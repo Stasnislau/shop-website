@@ -2,7 +2,7 @@ import { Grid, Card, Box, Typography, Container } from "@mui/material";
 import ItemCard from "@/components/itemCard";
 import { useRouter } from "next/router";
 import { Suspense } from "react";
-import LoadingComponent from "@/components/loadingComponent";
+import ItemLoadingComponent from "@/components/itemLoadingComponent";
 
 const Page = () => {
   const items = [
@@ -46,15 +46,14 @@ const Page = () => {
         flexDirection: "column",
         flex: 1,
         margin: 0,
-        border: "1px solid red",
         height: "100vh",
       }}
     >
-      {/* <Typography variant="h5" gutterBottom>
+      <Typography variant="h5" gutterBottom>
         Category Name
       </Typography>
       <Grid container spacing={8} height="50vh">
-        <Suspense fallback={<LoadingComponent />}>
+        <Suspense fallback={<ItemLoadingComponent />}>
           {items.map((item, index) => {
             return (
               <Grid item md={2} lg={4} key={index}>
@@ -72,8 +71,7 @@ const Page = () => {
             );
           })}
         </Suspense>
-      </Grid> */}
-      <LoadingComponent/>
+      </Grid>
     </Box>
   );
 };

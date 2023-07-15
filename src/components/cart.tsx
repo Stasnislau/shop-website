@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 // import { Product } from "./types";
-import LoadingComponent from "./loadingComponent";
+import LoadingComponent from "./itemLoadingComponent";
 
 const products = [
   {
