@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import Image from "next/image";
 import {
   AppBar,
@@ -10,6 +10,7 @@ import {
   List,
   ListItem,
   Typography,
+  Skeleton,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import shopLogo from "../../public/shop-logo.svg";
@@ -18,8 +19,8 @@ import Cart from "./cart";
 import CreateProduct from "./createProduct";
 import { ProductToCreate } from "../types";
 import { Context } from "@/pages/_app";
-import React from "react";
 import { useRouter } from "next/router";
+import LoadingSpinner from "./loadingSpinner";
 
 const Header = () => {
   const navigate = useRouter();
@@ -140,22 +141,23 @@ const Header = () => {
                 }}
               >
                 {availableCurrencies.map((currency) => (
-                  <ListItem
-                    key={currency.currencyCode}
-                    value={currency.currency}
-                    onClick={() => handleCurrencySelect(currency.currency)}
-                    sx={{
-                      py: 1,
-                      px: 2,
-                      fontSize: "1rem",
-                      backgroundColor:
-                        store.state.currentCurrency === currency.currency
-                          ? "#EEEEEE"
-                          : "#fff",
-                    }}
-                  >
-                    {currency.currency} {currency.currencyCode}
-                  </ListItem>
+                  <Suspense key={currency.currencyCode} fallback={<Skeleton/>}>
+                    <ListItem
+                      value={currency.currency}
+                      onClick={() => handleCurrencySelect(currency.currency)}
+                      sx={{
+                        py: 1,
+                        px: 2,
+                        fontSize: "1rem",
+                        backgroundColor:
+                          store.state.currentCurrency === currency.currency
+                            ? "#EEEEEE"
+                            : "#fff",
+                      }}
+                    >
+                      {currency.currency} {currency.currencyCode}
+                    </ListItem>
+                  </Suspense>
                 ))}
               </List>
             )}
@@ -180,5 +182,4 @@ const Header = () => {
   );
 };
 
-// TODO: change database and integrate fetching available currencies
 export default Header;
