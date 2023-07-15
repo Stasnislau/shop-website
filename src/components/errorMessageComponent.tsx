@@ -1,8 +1,9 @@
 import { Snackbar, Box, Alert } from "@mui/material";
 import React from "react";
 import { Context } from "../pages/_app";
+import { observer } from "mobx-react-lite";
 
-const ErrorMessageComponent = () => {
+const ErrorMessageComponent = observer(() => {
   const store = React.useContext(Context);
   return (
     <Snackbar
@@ -25,6 +26,6 @@ const ErrorMessageComponent = () => {
       </Alert>
     </Snackbar>
   );
-};
+});
 
 export default ErrorMessageComponent;

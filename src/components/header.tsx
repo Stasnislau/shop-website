@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useState, useEffect, Suspense, useContext } from "react";
 import Image from "next/image";
 import {
   AppBar,
@@ -12,29 +12,31 @@ import {
   Typography,
   Skeleton,
 } from "@mui/material";
+import { observer } from "mobx-react-lite";
 import AddIcon from "@mui/icons-material/Add";
 import shopLogo from "../../public/shop-logo.svg";
 import cartIcon from "../../public/cart-icon.svg";
 import Cart from "./cart";
 import CreateProduct from "./createProduct";
-import { ProductToCreate } from "../types";
 import { Context } from "@/pages/_app";
 import { useRouter } from "next/router";
 import LoadingSpinner from "./loadingSpinner";
 
-const Header = () => {
+const Header = observer(() => {
   const navigate = useRouter();
-  const store = React.useContext(Context);
-  const [value, setValue] = useState(0);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCurrencyMenuOpen, setIsCurrencyMenuOpen] = useState(false);
   const [isCreateProductOpen, setIsCreateProductOpen] = useState(false);
+  const store = useContext(Context);
   const handleCurrencySelect = (currency: string) => {
     store.setCurrentCurrency(currency);
     setIsCurrencyMenuOpen(false);
   };
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
+  const handleChange = (
+    event: React.SyntheticEvent,
+    newValue: "men" | "women" | "kids"
+  ) => {
+    store.setCurrentCategory(newValue);
   };
   useEffect(() => {
     document.documentElement.classList.toggle("cart-open", isCartOpen);
@@ -53,7 +55,7 @@ const Header = () => {
     >
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         <Tabs
-          value={value}
+          value={store.state.currentCategory}
           onChange={handleChange}
           sx={{
             width: "33%",
@@ -71,9 +73,9 @@ const Header = () => {
             },
           }}
         >
-          <Tab value={0} label="Men" />
-          <Tab value={1} label="Women" />
-          <Tab value={2} label="Kids" />
+          <Tab value={"men"} label="Men" />
+          <Tab value={"women"} label="Women" />
+          <Tab value={"kids"} label="Kids" />
         </Tabs>
         <Box
           sx={{
@@ -141,7 +143,7 @@ const Header = () => {
                 }}
               >
                 {availableCurrencies.map((currency) => (
-                  <Suspense key={currency.currencyCode} fallback={<Skeleton/>}>
+                  <Suspense key={currency.currencyCode} fallback={<Skeleton />}>
                     <ListItem
                       value={currency.currency}
                       onClick={() => handleCurrencySelect(currency.currency)}
@@ -169,7 +171,6 @@ const Header = () => {
             <Image src={cartIcon} alt="cart icon" />
             <Cart currency={store.state.currentCurrency} open={isCartOpen} />
           </IconButton>
-          <IconButton size="large" edge="end" color="inherit"></IconButton>
         </Box>
       </Box>
       <CreateProduct
@@ -180,6 +181,6 @@ const Header = () => {
       />
     </AppBar>
   );
-};
+});
 
 export default Header;

@@ -1,10 +1,13 @@
 import { Grid, Card, Box, Typography, Container } from "@mui/material";
 import ItemCard from "@/components/itemCard";
 import { useRouter } from "next/router";
-import { Suspense } from "react";
+import { Suspense, useContext } from "react";
 import ItemLoadingComponent from "@/components/itemLoadingComponent";
+import { observer } from "mobx-react-lite";
+import { Context } from "../pages/_app";
 
-const Page = () => {
+const Page = observer(() => {
+  const store = useContext(Context);
   const items = [
     {
       name: "test",
@@ -50,13 +53,14 @@ const Page = () => {
       }}
     >
       <Typography variant="h5" gutterBottom>
-        Category Name
+        {store.state.currentCategory.charAt(0).toUpperCase() +
+          store.state.currentCategory.slice(1)}
       </Typography>
       <Grid container spacing={8} height="50vh">
-        <Suspense fallback={<ItemLoadingComponent />}>
-          {items.map((item, index) => {
-            return (
-              <Grid item md={2} lg={4} key={index}>
+        {items.map((item, index) => {
+          return (
+            <Grid item md={2} lg={4} key={index}>
+              <Suspense fallback={<ItemLoadingComponent />}>
                 <ItemCard
                   onClick={() => {
                     router.push("/product");
@@ -67,13 +71,13 @@ const Page = () => {
                     console.log("add to cart");
                   }}
                 />
-              </Grid>
-            );
-          })}
-        </Suspense>
+              </Suspense>
+            </Grid>
+          );
+        })}
       </Grid>
     </Box>
   );
-};
+});
 
 export default Page;
