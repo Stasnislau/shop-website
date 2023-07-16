@@ -27,6 +27,7 @@ const Header = observer(() => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCurrencyMenuOpen, setIsCurrencyMenuOpen] = useState(false);
   const [isCreateProductOpen, setIsCreateProductOpen] = useState(false);
+  const [availableCurrencies, setAvailableCurrencies] = useState([] as any[]);
   const store = useContext(Context);
   const handleCurrencySelect = (currency: string) => {
     store.setCurrentCurrency(currency);
@@ -41,12 +42,21 @@ const Header = observer(() => {
   useEffect(() => {
     document.documentElement.classList.toggle("cart-open", isCartOpen);
   }, [isCartOpen]);
-  const availableCurrencies = [
-    { currency: "$", exchangeRate: 1.0, currencyCode: "USD" },
-    { currency: "€", exchangeRate: 1.18, currencyCode: "EUR" },
-    { currency: "£", exchangeRate: 1.38, currencyCode: "GBP" },
-    { currency: "¥", exchangeRate: 0.0091, currencyCode: "JPY" },
-  ];
+  useEffect(() => {
+    const fetchCurrencies = async () => {
+      try {
+        store.setIsLoading(true);
+        const response = await fetch(process.env.API_URL + "/currency/all");
+        const data = await response.json();
+        setAvailableCurrencies(data);
+      } catch (error) {
+        store.displayError((error as string) || "Something went wrong");
+      } finally {
+        store.setIsLoading(false);
+      }
+    };
+    fetchCurrencies();
+  }, [store.state.currentCurrency]);
   return (
     <AppBar
       position="static"
