@@ -23,7 +23,7 @@ export default function RootLayout({
   return (
     <Box sx={styles.root}>
       <Header />
-      {store.state.isErrorDisplayed && <ErrorMessageComponent />}
+      {/* {store.state.isErrorDisplayed && <ErrorMessageComponent />} */}
       <div>{children}</div>
     </Box>
   );
