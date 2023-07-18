@@ -1,4 +1,10 @@
-import React, { useState, useEffect, Suspense, useContext } from "react";
+import React, {
+  useState,
+  useEffect,
+  Suspense,
+  startTransition,
+  useContext,
+} from "react";
 import Image from "next/image";
 import {
   AppBar,
@@ -21,13 +27,17 @@ import CreateProduct from "./createProduct";
 import { Context } from "@/pages/_app";
 import { useRouter } from "next/router";
 import LoadingSpinner from "./loadingSpinner";
-
+import { Prisma, currencies } from "@prisma/client";
+import { start } from "repl";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 const Header = observer(() => {
   const navigate = useRouter();
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCurrencyMenuOpen, setIsCurrencyMenuOpen] = useState(false);
   const [isCreateProductOpen, setIsCreateProductOpen] = useState(false);
-  const [availableCurrencies, setAvailableCurrencies] = useState([] as any[]);
+  const [availableCurrencies, setAvailableCurrencies] = useState(
+    [] as currencies[]
+  );
   const store = useContext(Context);
   const handleCurrencySelect = (currency: string) => {
     store.setCurrentCurrency(currency);
@@ -46,7 +56,10 @@ const Header = observer(() => {
     const fetchCurrencies = async () => {
       try {
         store.setIsLoading(true);
-        const response = await fetch(process.env.API_URL + "/currency/all");
+        const response = await fetch(API_URL + "/currency/all");
+        if (!response.ok) {
+          throw new Error("Something went wrong");
+        }
         const data = await response.json();
         setAvailableCurrencies(data);
       } catch (error) {
@@ -55,7 +68,10 @@ const Header = observer(() => {
         store.setIsLoading(false);
       }
     };
-    fetchCurrencies();
+    startTransition(() => {
+      console.log("fetching currencies");
+      fetchCurrencies();
+    });
   }, [store.state.currentCurrency]);
   return (
     <AppBar
