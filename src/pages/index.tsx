@@ -60,7 +60,7 @@ const Page = observer(() => {
         {items.map((item, index) => {
           return (
             <Grid item md={2} lg={4} key={index}>
-              <Suspense fallback={<ItemLoadingComponent />}>
+              {/* <Suspense fallback={<ItemLoadingComponent />}> */}
                 <ItemCard
                   onClick={() => {
                     router.push("/product");
@@ -71,7 +71,7 @@ const Page = observer(() => {
                     console.log("add to cart");
                   }}
                 />
-              </Suspense>
+              {/* </Suspense> */}
             </Grid>
           );
         })}

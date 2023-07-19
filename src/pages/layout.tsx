@@ -3,6 +3,8 @@ import Header from "../components/header";
 import { useContext } from "react";
 import { Context } from "../pages/_app";
 import ErrorMessageComponent from "@/components/errorMessageComponent";
+import TechnicalComponent from "@/components/technicalComponent";
+
 export const metadata = {
   title: "Staryk Shop",
   description: "Pet shop",
@@ -23,7 +25,7 @@ export default function RootLayout({
   return (
     <Box sx={styles.root}>
       <Header />
-      {/* {store.state.isErrorDisplayed && <ErrorMessageComponent />} */}
+      {/* <TechnicalComponent /> */}
       <div>{children}</div>
     </Box>
   );
