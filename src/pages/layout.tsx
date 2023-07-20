@@ -25,7 +25,7 @@ export default function RootLayout({
   return (
     <Box sx={styles.root}>
       <Header />
-      {/* <TechnicalComponent /> */}
+      <TechnicalComponent />
       <div>{children}</div>
     </Box>
   );

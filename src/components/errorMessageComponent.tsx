@@ -4,6 +4,7 @@ import { Context } from "../pages/_app";
 import { observer } from "mobx-react-lite";
 
 const ErrorMessageComponent = observer(() => {
+  console.log("rendering error message component");
   const store = React.useContext(Context);
   return (
     <Snackbar
@@ -12,6 +13,12 @@ const ErrorMessageComponent = observer(() => {
       anchorOrigin={{ vertical: "top", horizontal: "center" }}
       onClose={() => {
         store.hideError();
+      }}
+      sx={{
+        position: "absolute",
+        top: "10%",
+        width: "200px",
+        height: "50px",
       }}
     >
       <Alert
