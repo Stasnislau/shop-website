@@ -63,6 +63,7 @@ const Header = observer(() => {
         const data = await response.json();
         setAvailableCurrencies(data);
       } catch (error) {
+        console.log(error);
         store.displayError((error as string) || "Something went wrong");
       } finally {
         store.setIsLoading(false);
@@ -151,7 +152,7 @@ const Header = observer(() => {
             <Typography variant="body1">
               {store.state.currentCurrency}
             </Typography>
-            {isCurrencyMenuOpen && (
+            {availableCurrencies.length > 0 && (
               <List
                 sx={{
                   position: "absolute",
@@ -168,7 +169,7 @@ const Header = observer(() => {
                   },
                 }}
               >
-                {availableCurrencies.map((currency) => (
+                { availableCurrencies.map((currency) => (
                   <Suspense key={currency.currencyCode} fallback={<Skeleton />}>
                     <ListItem
                       value={currency.currency}
