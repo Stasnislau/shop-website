@@ -8,15 +8,33 @@ import {
   CardMedia,
   Typography,
 } from "@mui/material";
+import { observer } from "mobx-react-lite";
+import { Context } from "@/pages/_app";
+import { useContext, useEffect, useState } from "react";
+import { price } from "@prisma/client";
 
 type ItemCardProps = {
-  item: any;
-  currency: string;
-  addToCart: (item: any) => void;
+  item: {
+    name: string;
+    prices: price[];
+    gallery: string[];
+  };
   onClick: () => void;
 };
 
-const ItemCard = ({ item, currency, addToCart, onClick }: ItemCardProps) => {
+const ItemCard = observer(({ item, onClick }: ItemCardProps) => {
+  const store = useContext(Context);
+  const [moneyValue, setMoneyValue] = useState<number | undefined>(
+    item.prices.find((price) => price.currency === store.state.currentCurrency)
+      ?.amount
+  );
+  useEffect(() => {
+    setMoneyValue(
+      item.prices.find(
+        (price) => price.currency === store.state.currentCurrency
+      )?.amount
+    );
+  }, [store.state.currentCurrency]);
   return (
     <Card
       sx={{
@@ -33,7 +51,7 @@ const ItemCard = ({ item, currency, addToCart, onClick }: ItemCardProps) => {
         <CardMedia
           component="img"
           height="76%"
-          image={item.image}
+          image={item.gallery[0]}
           alt={item.name}
         />
         <CardContent
@@ -45,13 +63,13 @@ const ItemCard = ({ item, currency, addToCart, onClick }: ItemCardProps) => {
           <Box>
             <Typography fontSize="1rem">{item.name}</Typography>
             <Typography fontSize="1rem" color="text.secondary">
-              {currency} {item.price}
+              {store.state.currentCurrency} {moneyValue}
             </Typography>
           </Box>
         </CardContent>
       </CardActionArea>
     </Card>
   );
-};
+});
 
 export default ItemCard;

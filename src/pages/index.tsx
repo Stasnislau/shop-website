@@ -10,34 +10,37 @@ const Page = observer(() => {
   const store = useContext(Context);
   const items = [
     {
-      name: "test",
-      price: 100,
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      name: "test",
-      price: 100,
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      name: "test",
-      price: 100,
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      name: "test",
-      price: 100,
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      name: "test",
-      price: 100,
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      name: "test",
-      price: 100,
-      image: "https://via.placeholder.com/150",
+      name: "Test1",
+      gallery: [
+        "https://via.placeholder.com/150",
+        "https://via.placeholder.com/150",
+      ],
+      prices: [
+        {
+          id: 1,
+          currency: "$",
+          amount: 100,
+          productId: 1,
+        },
+        {
+          id: 2,
+          currency: "€",
+          amount: 80,
+          productId: 1,
+        },
+        {
+          id: 3,
+          currency: "£",
+          amount: 70,
+          productId: 1,
+        },
+        {
+          id: 4,
+          currency: "¥",
+          amount: 100000,
+          productId: 1,
+        },
+      ],
     },
   ];
   const router = useRouter();
@@ -61,16 +64,12 @@ const Page = observer(() => {
           return (
             <Grid item md={2} lg={4} key={index}>
               {/* <Suspense fallback={<ItemLoadingComponent />}> */}
-                <ItemCard
-                  onClick={() => {
-                    router.push("/product");
-                  }}
-                  item={item}
-                  currency="$"
-                  addToCart={() => {
-                    console.log("add to cart");
-                  }}
-                />
+              <ItemCard
+                onClick={() => {
+                  router.push("/product");
+                }}
+                item={item}
+              />
               {/* </Suspense> */}
             </Grid>
           );

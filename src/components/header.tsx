@@ -73,7 +73,7 @@ const Header = observer(() => {
       console.log("fetching currencies");
       fetchCurrencies();
     });
-  }, [store.state.currentCurrency]);
+  }, [store.state.currentCurrency, store]);
   return (
     <AppBar
       position="static"
@@ -169,7 +169,7 @@ const Header = observer(() => {
                   },
                 }}
               >
-                { availableCurrencies.map((currency) => (
+                {isCurrencyMenuOpen && availableCurrencies.map((currency) => (
                   <Suspense key={currency.currencyCode} fallback={<Skeleton />}>
                     <ListItem
                       value={currency.currency}
