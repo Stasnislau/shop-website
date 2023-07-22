@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {
   Box,
   ButtonGroup,
@@ -10,6 +10,8 @@ import {
 } from "@mui/material";
 import Slider from "../../components/slider";
 import { Product } from "../../types";
+import { Context } from "../_app";
+import { observer } from "mobx-react-lite";
 
 const product: Product = {
   id: 1,
@@ -35,8 +37,12 @@ const product: Product = {
   category: "men",
 };
 
-const ProductPage = () => {
-  const currency = "$";
+const ProductPage = observer(() => {
+  const store = useContext(Context);
+  const [moneyValue, setMoneyValue] = useState<number | undefined>(
+    product.prices.find((price) => price.currency === store.state.currentCurrency)
+      ?.amount
+  );
   const [size, setSize] = useState(product.sizes[0]);
   const [color, setColor] = useState(product.colors[0]);
 
@@ -177,8 +183,7 @@ const ProductPage = () => {
               variant="h6"
               fontFamily="Raleway"
               fontWeight="700"
-            >{`${currency}${product.prices[0].amount}`}</Typography>
-            {/* TODO: change currency to be dynamic*/}
+            >{`${store.state.currentCurrency}${moneyValue}`}</Typography>
           </Box>
           <Button
             variant="contained"
@@ -194,6 +199,6 @@ const ProductPage = () => {
       </Box>
     </Box>
   );
-};
+});
 
 export default ProductPage;

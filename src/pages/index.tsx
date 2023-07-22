@@ -13,7 +13,7 @@ const Page = observer(() => {
       name: "Test1",
       gallery: [
         "https://via.placeholder.com/150",
-        "https://via.placeholder.com/150",
+        "https://via.placeholder.com/100",
       ],
       prices: [
         {
