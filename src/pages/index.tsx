@@ -40,6 +40,41 @@ const Page = observer(() => {
           amount: 100000,
           productId: 1,
         },
+        
+      ],
+    },
+    {
+      name: "Test2",
+      gallery: [
+        "https://via.placeholder.com/150",
+        "https://via.placeholder.com/100",
+      ],
+      prices: [
+        {
+          id: 1,
+          currency: "$",
+          amount: 110,
+          productId: 1,
+        },
+        {
+          id: 2,
+          currency: "€",
+          amount: 90,
+          productId: 1,
+        },
+        {
+          id: 3,
+          currency: "£",
+          amount: 80,
+          productId: 1,
+        },
+        {
+          id: 4,
+          currency: "¥",
+          amount: 5200000,
+          productId: 1,
+        },
+        
       ],
     },
   ];
@@ -59,10 +94,10 @@ const Page = observer(() => {
         {store.state.currentCategory.charAt(0).toUpperCase() +
           store.state.currentCategory.slice(1)}
       </Typography>
-      <Grid container spacing={8} height="50vh">
+      <Box sx={{ height: "80vh", display: "flex", width: "100%", flexWrap: "wrap", gap: "8%" }}>
         {items.map((item, index) => {
           return (
-            <Grid item md={2} lg={4} key={index}>
+            <Box key={index} height="49%" width="26%">
               {/* <Suspense fallback={<ItemLoadingComponent />}> */}
               <ItemCard
                 onClick={() => {
@@ -71,10 +106,10 @@ const Page = observer(() => {
                 item={item}
               />
               {/* </Suspense> */}
-            </Grid>
+            </Box>
           );
         })}
-      </Grid>
+      </Box>
     </Box>
   );
 });
