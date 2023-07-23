@@ -6,9 +6,16 @@ import ErrorMessageComponent from "./errorMessageComponent";
 const TechnicalComponent = observer(() => {
   const store = useContext(Context);
 
-  return <div>
-    {store.state.isErrorDisplayed && <ErrorMessageComponent />}
-    </div>;
+  return (
+    <div
+      style={{
+        position: "fixed",
+        
+      }}
+    >
+      {store.state.isErrorDisplayed && <ErrorMessageComponent />}
+    </div>
+  );
 });
 
 export default TechnicalComponent;

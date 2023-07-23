@@ -10,15 +10,13 @@ const ErrorMessageComponent = observer(() => {
     <Snackbar
       open={store.state.isErrorDisplayed}
       autoHideDuration={60000}
-      anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       onClose={() => {
         store.hideError();
       }}
       sx={{
-        position: "fixed",
         maxWidth: "60%",
         maxHeight: "10%",
-        left: "50%",
         boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
         transform: "translate(-50%, 0)",
         zIndex: 1,
