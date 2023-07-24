@@ -6,12 +6,14 @@ import {
   CardActions,
   CardContent,
   CardMedia,
+  IconButton,
   Typography,
 } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { Context } from "@/pages/_app";
 import { useContext, useEffect, useState } from "react";
 import { price } from "@prisma/client";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 
 type ItemCardProps = {
   item: {
@@ -28,6 +30,7 @@ const ItemCard = observer(({ item, onClick }: ItemCardProps) => {
     item.prices.find((price) => price.currency === store.state.currentCurrency)
       ?.amount
   );
+  const [isCartShown, setIsCartShown] = useState(false);
   useEffect(() => {
     setMoneyValue(
       item.prices.find(
@@ -41,20 +44,47 @@ const ItemCard = observer(({ item, onClick }: ItemCardProps) => {
         width: "100%",
         height: "100%",
       }}
+      onMouseEnter={() => {
+        setIsCartShown(true);
+      }}
+      onMouseLeave={() => {
+        setIsCartShown(false);
+      }}
       onClick={onClick}
     >
       <CardActionArea
         sx={{
           padding: 1,
-          height: "100%"
+          height: "100%",
         }}
       >
         <CardMedia
+          sx={{
+            position: "relative",
+          }}
           component="img"
           height="76%"
           image={item.gallery[0]}
           alt={item.name}
         />
+        {isCartShown && (
+          <IconButton
+            onClick={() => {
+              console.log("Clicked");
+            }}
+            sx={{
+              position: "absolute",
+              backgroundColor: "#5ECE7B",
+              bottom: "20%",
+              right: "7%",
+              ":hover": {
+                backgroundColor: "#5ECE7B80",
+              },
+            }}
+          >
+            <AddShoppingCartIcon />
+          </IconButton>
+        )}
         <CardContent
           sx={{
             padding: "0.5rem",

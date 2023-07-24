@@ -40,7 +40,6 @@ const Page = observer(() => {
           amount: 100000,
           productId: 1,
         },
-        
       ],
     },
     {
@@ -74,7 +73,72 @@ const Page = observer(() => {
           amount: 5200000,
           productId: 1,
         },
-        
+      ],
+    },
+    {
+      name: "Test3",
+      gallery: [
+        "https://via.placeholder.com/150",
+        "https://via.placeholder.com/100",
+      ],
+      prices: [
+        {
+          id: 1,
+          currency: "$",
+          amount: 100,
+          productId: 1,
+        },
+        {
+          id: 2,
+          currency: "€",
+          amount: 80,
+          productId: 1,
+        },
+        {
+          id: 3,
+          currency: "£",
+          amount: 70,
+          productId: 1,
+        },
+        {
+          id: 4,
+          currency: "¥",
+          amount: 100000,
+          productId: 1,
+        },
+      ],
+    },
+    {
+      name: "Test4",
+      gallery: [
+        "https://via.placeholder.com/150",
+        "https://via.placeholder.com/100",
+      ],
+      prices: [
+        {
+          id: 1,
+          currency: "$",
+          amount: 110,
+          productId: 1,
+        },
+        {
+          id: 2,
+          currency: "€",
+          amount: 90,
+          productId: 1,
+        },
+        {
+          id: 3,
+          currency: "£",
+          amount: 80,
+          productId: 1,
+        },
+        {
+          id: 4,
+          currency: "¥",
+          amount: 5200000,
+          productId: 1,
+        },
       ],
     },
   ];
@@ -94,7 +158,15 @@ const Page = observer(() => {
         {store.state.currentCategory.charAt(0).toUpperCase() +
           store.state.currentCategory.slice(1)}
       </Typography>
-      <Box sx={{ height: "80vh", display: "flex", width: "100%", flexWrap: "wrap", gap: "8%" }}>
+      <Box
+        sx={{
+          height: "90vh",
+          display: "flex",
+          width: "100%",
+          flexWrap: "wrap",
+          gap: "4%",
+        }}
+      >
         {items.map((item, index) => {
           return (
             <Box key={index} height="49%" width="26%">
