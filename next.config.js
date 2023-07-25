@@ -1,18 +1,23 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  reactStrictMode: false, // or remove this line completely
   images: {
-    domains: ["cdn.architect.io", "via.placeholder.com"],
+    domains: ['via.placeholder.com', 'cdn.architect.io'],
     remotePatterns: [
       {
         hostname: "via.placeholder.com",
-        protocol: 'https',
-        port: '',
-        pathname: '/account123/**',
+        protocol: "https",
+        port: "",
+        pathname: "/account123/**",
+      },
+      {
+        hostname: "cdn.architect.io",
+        protocol: "https",
+        port: "",
+        pathname: "/account123/**",
       },
     ],
   },
 };
 
-module.exports = {
-  reactStrictMode: false, // or remove this line completely
-};
+module.exports = nextConfig;

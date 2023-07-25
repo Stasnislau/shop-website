@@ -9,6 +9,7 @@ interface SliderProps {
 
 const Slider = (props: SliderProps) => {
   const { gallery } = props;
+  console.log(gallery)
   const [subPhotoIndex, setSubPhotoIndex] = useState(0);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const handleGalleryClick = (index: number) => {
@@ -90,6 +91,7 @@ const Slider = (props: SliderProps) => {
               <ArrowBackIos />
             </IconButton>
             {subPhotos.map((value, index) => (
+              
               <IconButton
                 key={gallery[value]}
                 onClick={() => handleGalleryClick(value)}

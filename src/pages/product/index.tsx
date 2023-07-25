@@ -111,7 +111,7 @@ const ProductPage = observer(() => {
               {product.sizes.map((sizeOption) => (
                 <Box
                   key={sizeOption}
-                  color={size === sizeOption ? "primary" : "secondary"}
+                  color={size === sizeOption ? "prfry" : "secondary"}
                   sx={{
                     border:
                       size === sizeOption

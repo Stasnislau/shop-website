@@ -63,7 +63,7 @@ const ItemCard = observer(({ item, onClick }: ItemCardProps) => {
             position: "relative",
           }}
           component="img"
-          height="76%"
+          height="80%"
           image={item.gallery[0]}
           alt={item.name}
         />
@@ -88,7 +88,7 @@ const ItemCard = observer(({ item, onClick }: ItemCardProps) => {
         <CardContent
           sx={{
             padding: "0.5rem",
-            height: "24%",
+            height: "20%",
           }}
         >
           <Box>
