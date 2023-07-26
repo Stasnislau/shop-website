@@ -29,7 +29,7 @@ import { useRouter } from "next/router";
 import LoadingSpinner from "./loadingSpinner";
 import { Prisma, currencies } from "@prisma/client";
 import { start } from "repl";
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+export const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 const Header = observer(() => {
   const navigate = useRouter();
   const [isCartOpen, setIsCartOpen] = useState(false);

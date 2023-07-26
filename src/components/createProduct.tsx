@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState, useContext, startTransition } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import {
@@ -19,32 +19,24 @@ import {
 } from "@mui/material";
 import { ProductToCreate, Price } from "../types";
 import CancelIcon from "@mui/icons-material/Cancel";
-import CheckIcon from "@mui/icons-material/Check";
-
+import { API_URL } from "./header";
+import { Context } from "@/pages/_app";
+import { currencies } from "@prisma/client";
 interface CreateProductProps {
   onClose: () => void;
   isOpen: boolean;
 }
-const CreateProduct: React.FC<CreateProductProps> = ({
-  onClose,
-  isOpen,
-}) => {
-  // TODO: should be fetched from the server
+
+interface currencyState {
+  symbol: string;
+  taken: boolean;
+}
+const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
   const possibleCategories = ["men", "women", "kids"];
-  const possibleCurrencies = [
-    {
-      symbol: "$",
-      taken: false,
-    },
-    {
-      symbol: "€",
-      taken: false,
-    },
-    {
-      symbol: "£",
-      taken: false,
-    },
-  ];
+
+  const [possibleCurrencies, setPossibleCurrencies] = useState<currencyState[]>(
+    []
+  );
   const possibleSizes = ["XS", "S", "M", "L", "XL", "XXL", "XXXL"];
   const possibleColors = [
     "red",
@@ -73,6 +65,34 @@ const CreateProduct: React.FC<CreateProductProps> = ({
     sizes: [] as string[],
     category: "men" as "men" | "women" | "kids",
   };
+  const store = useContext(Context);
+  useEffect(() => {
+    const fetchCurrencies = async () => {
+      try {
+        store.setIsLoading(true);
+        const response = await fetch(API_URL + "/currency/all");
+        if (!response.ok) {
+          throw new Error("Something went wrong");
+        }
+        const data = await response.json() as currencies[];
+        const newArray = [] as currencyState[];
+        data.map(item => newArray.push({
+          symbol: item.currency,
+          taken: false,
+        }))
+        setPossibleCurrencies(newArray);
+      } catch (error) {
+        console.log(error);
+        store.displayError((error as string) || "Something went wrong");
+      } finally {
+        store.setIsLoading(false);
+      }
+    };
+    startTransition(() => {
+      console.log("fetching currencies");
+      fetchCurrencies();
+    });
+  }, [store.state.currentCurrency, store]);
   const validationSchema = yup.object({
     name: yup.string().required("Name is required"),
     description: yup.string().required("Description is required"),
