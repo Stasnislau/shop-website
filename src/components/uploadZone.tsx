@@ -1,6 +1,6 @@
 import { Button, Stack, Box } from "@mui/material";
 import { useDropzone } from "react-dropzone";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { number } from "yup";
 interface fileObject {
@@ -11,6 +11,7 @@ interface fileObject {
 const UploadZone = () => {
   const [files, setFiles] = useState<fileObject[]>([]);
   const { getRootProps, getInputProps } = useDropzone({
+
     onDrop: (acceptedFiles) => {
       setFiles(
         acceptedFiles.map((file) =>
@@ -22,24 +23,27 @@ const UploadZone = () => {
     },
   });
 
-  const images = files.map((file) => (
-    <div key={file.name}>
-      <Image src={file.preview} alt="preview" />
-    </div>
-  ));
   return (
     <Stack direction="row" alignItems="center" spacing={2}>
-      <Button variant="contained" component="label">
-        Upload
-        <input
-          hidden
-          accept="image/*"
-          multiple
-          type="file"
-          {...getInputProps}
-        />
-      </Button>
-      <Box>{images}</Box>
+      <div {...getRootProps()}>
+        <Box component="label" width="100%">
+          Upload
+          <input
+            hidden
+            accept="image/*"
+            multiple
+            type="file"
+            {...getInputProps()}
+          />
+        </Box>
+      </div>
+      <Box>
+        {files.map((file) => (
+          <Box key={file.name}>
+            <Image src={file.preview} alt="preview" width="100" height="100" />
+          </Box>
+        ))}
+      </Box>
     </Stack>
   );
 };
