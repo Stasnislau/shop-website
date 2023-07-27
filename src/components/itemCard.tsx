@@ -75,7 +75,7 @@ const ItemCard = observer(({ item, onClick }: ItemCardProps) => {
             sx={{
               position: "absolute",
               backgroundColor: "#5ECE7B",
-              bottom: "20%",
+              bottom: "15%",
               right: "7%",
               ":hover": {
                 backgroundColor: "#5ECE7B80",

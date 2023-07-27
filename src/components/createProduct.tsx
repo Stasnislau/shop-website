@@ -16,12 +16,14 @@ import {
   FormControl,
   Chip,
   Stack,
+  Typography,
 } from "@mui/material";
 import { ProductToCreate, Price } from "../types";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { API_URL } from "./header";
 import { Context } from "@/pages/_app";
 import { currencies } from "@prisma/client";
+import  UploadZone from "../components/uploadZone"
 interface CreateProductProps {
   onClose: () => void;
   isOpen: boolean;
@@ -74,12 +76,14 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
         if (!response.ok) {
           throw new Error("Something went wrong");
         }
-        const data = await response.json() as currencies[];
+        const data = (await response.json()) as currencies[];
         const newArray = [] as currencyState[];
-        data.map(item => newArray.push({
-          symbol: item.currency,
-          taken: false,
-        }))
+        data.map((item) =>
+          newArray.push({
+            symbol: item.currency,
+            taken: false,
+          })
+        );
         setPossibleCurrencies(newArray);
       } catch (error) {
         console.log(error);
@@ -336,7 +340,17 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
                 value={formik.values.prices[0].amount}
                 onChange={formik.handleChange}
               />
+              <FormControl
+                sx={{
+                  width: "100%",
+                  marginBottom: 2,
+                  marginTop: 2,
+                }}
+              >
+                <UploadZone/>
+              </FormControl>
             </DialogContent>
+
             <DialogActions
               sx={{
                 justifyContent: "space-between",
