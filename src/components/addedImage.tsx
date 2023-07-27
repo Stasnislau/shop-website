@@ -4,7 +4,7 @@ import Image from "next/image";
 
 interface ComponentProps {
   source: string;
-  onDelete: () => void;
+  onDelete: (source: string) => void;
 }
 
 const AddedImage = ({ source, onDelete }: ComponentProps) => {
@@ -22,7 +22,9 @@ const AddedImage = ({ source, onDelete }: ComponentProps) => {
           top: "0.5%",
           right: "0.5%",
         }}
-        onClick={onDelete}
+        onClick={() => {
+          onDelete(source);
+        }}
       >
         <Cancel />
       </IconButton>
