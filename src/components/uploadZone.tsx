@@ -1,4 +1,4 @@
-import { Button, Stack, Box } from "@mui/material";
+import { Button, Stack, Box, Typography } from "@mui/material";
 import { useDropzone } from "react-dropzone";
 import React, { useEffect, useState } from "react";
 import AddedImage from "./addedImage";
@@ -10,6 +10,7 @@ interface fileObject {
 const UploadZone = () => {
   const [files, setFiles] = useState<fileObject[]>([]);
   const { getRootProps, getInputProps } = useDropzone({
+    multiple: true,
     onDrop: (acceptedFiles) => {
       setFiles(
         acceptedFiles.map((file) =>
@@ -25,28 +26,43 @@ const UploadZone = () => {
   };
 
   return (
-    <Stack direction="row" alignItems="center" spacing={2}>
-      <div {...getRootProps()}>
-        <Box component="label" width="100%">
-          Upload
-          <input
-            hidden
-            accept="image/*"
-            multiple
-            type="file"
-            width="100%"
-            {...getInputProps()}
-          />
-        </Box>
-      </div>
-      <Box>
+    <Box display="flex" flexDirection="column" flexGrow="1" height="100%">
+      <Box
+        {...getRootProps()}
+        sx={{
+          width: "100%",
+          backgroundColor: "red",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          position: "relative",
+          margin: "0",
+          flex: "1",
+        }}
+      >
+        <Typography fontSize="1rem">Drop photos or click to upload</Typography>
+        <input
+          hidden
+          accept="image/*"
+          type="file"
+          {...getInputProps()}
+        />
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          flexWrap: "wrap",
+          gap: "5%",
+        }}
+      >
         {files.map((file) => (
           <Box key={file.name}>
             <AddedImage source={file.preview} onDelete={onDelete} />
           </Box>
         ))}
       </Box>
-    </Stack>
+    </Box>
   );
 };
 

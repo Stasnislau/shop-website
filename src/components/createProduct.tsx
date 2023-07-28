@@ -23,7 +23,7 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import { API_URL } from "./header";
 import { Context } from "@/pages/_app";
 import { currencies } from "@prisma/client";
-import  UploadZone from "../components/uploadZone"
+import UploadZone from "../components/uploadZone";
 interface CreateProductProps {
   onClose: () => void;
   isOpen: boolean;
@@ -343,11 +343,12 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
               <FormControl
                 sx={{
                   width: "100%",
+                  minHeight: "80px",
                   marginBottom: 2,
                   marginTop: 2,
                 }}
               >
-                <UploadZone/>
+                <UploadZone />
               </FormControl>
             </DialogContent>
 
