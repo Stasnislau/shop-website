@@ -11,18 +11,22 @@ const UploadZone = () => {
   const [files, setFiles] = useState<fileObject[]>([]);
   const { getRootProps, getInputProps } = useDropzone({
     multiple: true,
+    maxFiles: 10,
+    maxSize: 3000000,
     onDrop: (acceptedFiles) => {
-      setFiles(
-        acceptedFiles.map((file) =>
+      setFiles([
+        ...files,
+        ...acceptedFiles.map((file) =>
           Object.assign(file, {
             preview: URL.createObjectURL(file),
           })
-        )
-      );
+        ),
+      ]);
     },
   });
   const onDelete = (source: string) => {
     setFiles([...files.filter((file) => file.preview !== source)]);
+    console.log(files);
   };
 
   return (
@@ -41,12 +45,7 @@ const UploadZone = () => {
         }}
       >
         <Typography fontSize="1rem">Drop photos or click to upload</Typography>
-        <input
-          hidden
-          accept="image/*"
-          type="file"
-          {...getInputProps()}
-        />
+        <input hidden accept="image/*" type="file" {...getInputProps()} />
       </Box>
       <Box
         sx={{
