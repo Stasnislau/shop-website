@@ -2,31 +2,46 @@ import { Button, Stack, Box, Typography } from "@mui/material";
 import { useDropzone } from "react-dropzone";
 import React, { useEffect, useState } from "react";
 import AddedImage from "./addedImage";
+import { FiveK } from "@mui/icons-material";
 interface fileObject {
   name: string;
   size: number;
   preview: string;
 }
+
 const UploadZone = () => {
   const [files, setFiles] = useState<fileObject[]>([]);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { getRootProps, getInputProps } = useDropzone({
     multiple: true,
     maxFiles: 10,
-    maxSize: 3000000,
+    maxSize: 10000000,
     onDrop: (acceptedFiles) => {
-      setFiles([
-        ...files,
-        ...acceptedFiles.map((file) =>
+      try {
+        const fileObjects = acceptedFiles.map((file) =>
           Object.assign(file, {
             preview: URL.createObjectURL(file),
           })
-        ),
-      ]);
+        ) as fileObject[];
+        const uniqueFiles = [] as fileObject[];
+        fileObjects.forEach((element) => {
+          files.forEach((file) => {
+            if (file.size === element.size) {
+              throw new Error("do not include same photos");
+            }
+            return null;
+          });
+          uniqueFiles.push(element);
+        });
+
+        setFiles([...files, ...uniqueFiles]);
+      } catch (error: any) {
+        setErrorMessage(error.message as string);
+      }
     },
   });
   const onDelete = (source: string) => {
     setFiles([...files.filter((file) => file.preview !== source)]);
-    console.log(files);
   };
 
   return (
@@ -61,6 +76,7 @@ const UploadZone = () => {
           </Box>
         ))}
       </Box>
+      {errorMessage && <Typography color="red">{errorMessage}</Typography>}
     </Box>
   );
 };
