@@ -1,8 +1,9 @@
-import { Button, Stack, Box, Typography } from "@mui/material";
+import { Button, Stack, Box, Typography, IconButton } from "@mui/material";
 import { useDropzone } from "react-dropzone";
 import React, { useEffect, useState } from "react";
 import AddedImage from "./addedImage";
-import { FiveK } from "@mui/icons-material";
+import { FiveK, Close } from "@mui/icons-material";
+
 interface fileObject {
   name: string;
   size: number;
@@ -27,7 +28,7 @@ const UploadZone = () => {
         fileObjects.forEach((element) => {
           files.forEach((file) => {
             if (file.size === element.size) {
-              throw new Error("do not include same photos");
+              throw new Error("There should be no duplicates");
             }
             return null;
           });
@@ -35,6 +36,7 @@ const UploadZone = () => {
         });
 
         setFiles([...files, ...uniqueFiles]);
+        setErrorMessage(null); 
       } catch (error: any) {
         setErrorMessage(error.message as string);
       }
@@ -44,22 +46,38 @@ const UploadZone = () => {
     setFiles([...files.filter((file) => file.preview !== source)]);
   };
 
+  const clearError = () => {
+    setErrorMessage(null);
+  };
+
   return (
     <Box display="flex" flexDirection="column" flexGrow="1" height="100%">
       <Box
         {...getRootProps()}
         sx={{
           width: "100%",
-          backgroundColor: "red",
+          backgroundColor: "#f5f5f5",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
           position: "relative",
           margin: "0",
           flex: "1",
+          minHeight: "150px",
+          border: "2px dashed #ccc",
+          borderRadius: "8px",
+          cursor: "pointer",
         }}
       >
-        <Typography fontSize="1rem">Drop photos or click to upload</Typography>
+        <Typography
+          fontSize="1.2rem"
+          color="#777"
+          sx={{
+            fontFamily: "Arial, sans-serif",
+          }}
+        >
+          Drag and drop photos here or click to upload
+        </Typography>
         <input hidden accept="image/*" type="file" {...getInputProps()} />
       </Box>
       <Box
@@ -67,16 +85,45 @@ const UploadZone = () => {
           display: "flex",
           flexDirection: "row",
           flexWrap: "wrap",
-          gap: "5%",
+          gap: "1rem",
+          marginTop: "1rem",
         }}
       >
         {files.map((file) => (
-          <Box key={file.name}>
+          <Box
+            key={file.name}
+            sx={{
+              overflow: "hidden",
+            }}
+          >
             <AddedImage source={file.preview} onDelete={onDelete} />
           </Box>
         ))}
       </Box>
-      {errorMessage && <Typography color="red">{errorMessage}</Typography>}
+      {errorMessage && (
+        <Box
+          sx={{
+            backgroundColor: "#ffcccc",
+            color: "#ff0000", 
+            padding: "0.5rem", 
+            borderRadius: "8px", 
+            marginTop: "1rem", 
+            display: "flex", 
+            justifyContent: "space-between", 
+            alignItems: "center", 
+          }}
+        >
+          <Typography>{errorMessage}</Typography>
+          <IconButton
+            onClick={clearError}
+            color="inherit"
+            size="small"
+            sx={{ marginLeft: "0.5rem" }} 
+          >
+            <Close /> 
+          </IconButton>
+        </Box>
+      )}
     </Box>
   );
 };
