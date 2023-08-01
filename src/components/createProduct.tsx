@@ -56,12 +56,10 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
   const initialValues = {
     name: "",
     description: "",
-    prices: [
-      {
-        currency: "",
-        amount: 0,
-      },
-    ] as Price[],
+    price: {
+      currency: "",
+      amount: 0,
+    } as Price,
     colors: [] as string[],
     gallery: [] as string[],
     sizes: [] as string[],
@@ -100,21 +98,19 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
   const validationSchema = yup.object({
     name: yup.string().required("Name is required"),
     description: yup.string().required("Description is required"),
-    prices: yup.array().of(
-      yup.object({
-        currency: yup
-          .string()
-          .required("Currency is required")
-          .test("is-taken", "Currency is already taken", (value) => {
-            const currency = possibleCurrencies.find((c) => c.symbol === value);
-            if (currency) {
-              return !currency.taken;
-            }
-            return false;
-          }),
-        amount: yup.number().required("Amount is required"),
-      })
-    ),
+    price: yup.object({
+      currency: yup
+        .string()
+        .required("Currency is required")
+        .test("is-taken", "Currency is already taken", (value) => {
+          const currency = possibleCurrencies.find((c) => c.symbol === value);
+          if (currency) {
+            return !currency.taken;
+          }
+          return false;
+        }),
+      amount: yup.number().required("Amount is required"),
+    }),
     gallery: yup.array().of(yup.string()),
     sizes: yup.array().of(yup.string()),
     category: yup
@@ -150,6 +146,7 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
               <TextField
                 margin="dense"
                 label="Description"
+                name="description"
                 fullWidth
                 value={formik.values.description}
                 onChange={formik.handleChange}
@@ -325,7 +322,7 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
                 }}
               >
                 <InputLabel>Price Currency</InputLabel>
-                <Select label="Price Currency " fullWidth>
+                <Select name="price.currency" value={formik.values.price.currency} onChange={formik.handleChange} label="Price Currency " fullWidth>
                   {possibleCurrencies.map((c, i) => (
                     <MenuItem key={i} value={c.symbol}>
                       {c.symbol}
@@ -336,8 +333,10 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
               <TextField
                 margin="dense"
                 label="Amount"
+                name="price.amount"
                 fullWidth
-                value={formik.values.prices[0].amount}
+                type="number"
+                value={formik.values.price.amount}
                 onChange={formik.handleChange}
               />
               <FormControl
@@ -348,7 +347,7 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
                   marginTop: 2,
                 }}
               >
-                <UploadZone />
+                <UploadZone onChange={formik.handleChange} name="gallery" />
               </FormControl>
             </DialogContent>
 

@@ -12,7 +12,7 @@ export interface Product {
 export interface ProductToCreate {
   name: string;
   description: string;
-  prices: Price[];
+  price: Price;
   gallery: string[];
   sizes: string[];
   colors: string[];

@@ -10,7 +10,7 @@ interface fileObject {
   preview: string;
 }
 
-const UploadZone = () => {
+const UploadZone = ({ onChange, name }: { onChange: any; name: string }) => {
   const [files, setFiles] = useState<fileObject[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { getRootProps, getInputProps } = useDropzone({
@@ -36,7 +36,7 @@ const UploadZone = () => {
         });
 
         setFiles([...files, ...uniqueFiles]);
-        setErrorMessage(null); 
+        setErrorMessage(null);
       } catch (error: any) {
         setErrorMessage(error.message as string);
       }
@@ -78,7 +78,14 @@ const UploadZone = () => {
         >
           Drag and drop photos here or click to upload
         </Typography>
-        <input hidden accept="image/*" type="file" {...getInputProps()} />
+        <input
+          name={name}
+          hidden
+          accept="image/*"
+          type="file"
+          {...getInputProps()}
+          onChange={onChange}
+        />
       </Box>
       <Box
         sx={{
@@ -104,13 +111,13 @@ const UploadZone = () => {
         <Box
           sx={{
             backgroundColor: "#ffcccc",
-            color: "#ff0000", 
-            padding: "0.5rem", 
-            borderRadius: "8px", 
-            marginTop: "1rem", 
-            display: "flex", 
-            justifyContent: "space-between", 
-            alignItems: "center", 
+            color: "#ff0000",
+            padding: "0.5rem",
+            borderRadius: "8px",
+            marginTop: "1rem",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
           }}
         >
           <Typography>{errorMessage}</Typography>
@@ -118,9 +125,9 @@ const UploadZone = () => {
             onClick={clearError}
             color="inherit"
             size="small"
-            sx={{ marginLeft: "0.5rem" }} 
+            sx={{ marginLeft: "0.5rem" }}
           >
-            <Close /> 
+            <Close />
           </IconButton>
         </Box>
       )}
