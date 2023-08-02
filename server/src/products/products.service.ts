@@ -15,9 +15,9 @@ export class ProductsService {
           name: body.name,
           description: body.description,
           prices: {
-            create: prices
+            create: prices,
           },
-          gallery: [...body.gallery],
+          gallery: { create: body.gallery.map((data) => ({ data })) },
           sizes: [...body.sizes],
           colors: [...body.colors],
           category: body.category,
@@ -97,7 +97,7 @@ export class ProductsService {
       const product = await this.prisma.product.delete({
         where: { id: Number(id) },
       });
-      return "Product deleted"
+      return "Product deleted";
     } catch (error) {
       console.log(error);
     }
