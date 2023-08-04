@@ -13,7 +13,7 @@ export interface ProductToCreate {
   name: string;
   description: string;
   price: Price;
-  gallery: string[];
+  gallery: Buffer[];
   sizes: string[];
   colors: string[];
   category: "men" | "women" | "kids";

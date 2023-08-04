@@ -61,7 +61,7 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
       amount: 0,
     } as Price,
     colors: [] as string[],
-    gallery: [] as string[],
+    gallery: [] as Buffer[],
     sizes: [] as string[],
     category: "men" as "men" | "women" | "kids",
   };
@@ -111,7 +111,14 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
         }),
       amount: yup.number().required("Amount is required"),
     }),
-    gallery: yup.array().of(yup.string()),
+    gallery: yup
+      .array()
+      .of(
+        yup
+          .mixed()
+          .test("isBuffer", "Invalid buffer", (value) => Buffer.isBuffer(value))
+      )
+      .required(),
     sizes: yup.array().of(yup.string()),
     category: yup
       .string()
@@ -322,7 +329,13 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
                 }}
               >
                 <InputLabel>Price Currency</InputLabel>
-                <Select name="price.currency" value={formik.values.price.currency} onChange={formik.handleChange} label="Price Currency " fullWidth>
+                <Select
+                  name="price.currency"
+                  value={formik.values.price.currency}
+                  onChange={formik.handleChange}
+                  label="Price Currency "
+                  fullWidth
+                >
                   {possibleCurrencies.map((c, i) => (
                     <MenuItem key={i} value={c.symbol}>
                       {c.symbol}
@@ -347,7 +360,11 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
                   marginTop: 2,
                 }}
               >
-                <UploadZone onChange={formik.handleChange} name="gallery" />
+                <UploadZone
+                  onChange={(value: Buffer[]) => {
+                    formik.setFieldValue("gallery", value);
+                  }}
+                />
               </FormControl>
             </DialogContent>
 

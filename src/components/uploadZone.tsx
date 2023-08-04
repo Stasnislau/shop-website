@@ -3,21 +3,23 @@ import { useDropzone } from "react-dropzone";
 import React, { useEffect, useState } from "react";
 import AddedImage from "./addedImage";
 import { FiveK, Close } from "@mui/icons-material";
+import fileToBuffer from "@/assets/bufferConverter";
 
-interface fileObject {
-  name: string;
-  size: number;
+interface fileObject extends File {
   preview: string;
 }
-
-const UploadZone = ({ onChange, name }: { onChange: any; name: string }) => {
+const UploadZone = ({ onChange }: { onChange: (value: Buffer[]) => void }) => {
   const [files, setFiles] = useState<fileObject[]>([]);
+  async function filesToBuffers(files: fileObject[]): Promise<Buffer[]> {
+    const buffersArray = await Promise.all(files.map(fileToBuffer));
+    return buffersArray;
+  }
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { getRootProps, getInputProps } = useDropzone({
     multiple: true,
     maxFiles: 10,
     maxSize: 10000000,
-    onDrop: (acceptedFiles) => {
+    onDrop: async (acceptedFiles) => {
       try {
         const fileObjects = acceptedFiles.map((file) =>
           Object.assign(file, {
@@ -34,14 +36,21 @@ const UploadZone = ({ onChange, name }: { onChange: any; name: string }) => {
           });
           uniqueFiles.push(element);
         });
-
         setFiles([...files, ...uniqueFiles]);
+
         setErrorMessage(null);
       } catch (error: any) {
         setErrorMessage(error.message as string);
       }
     },
   });
+  useEffect(() => {
+    const func = async () => {
+      const newData = await filesToBuffers(files);
+      onChange(newData);
+    };
+    func();
+  }, [files]);
   const onDelete = (source: string) => {
     setFiles([...files.filter((file) => file.preview !== source)]);
   };
@@ -78,14 +87,7 @@ const UploadZone = ({ onChange, name }: { onChange: any; name: string }) => {
         >
           Drag and drop photos here or click to upload
         </Typography>
-        <input
-          name={name}
-          hidden
-          accept="image/*"
-          type="file"
-          {...getInputProps()}
-          onChange={onChange}
-        />
+        <input hidden accept="image/*" type="file" {...getInputProps()} />
       </Box>
       <Box
         sx={{
