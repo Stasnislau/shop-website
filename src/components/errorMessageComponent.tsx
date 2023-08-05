@@ -19,7 +19,7 @@ const ErrorMessageComponent = observer(() => {
         maxHeight: "10%",
         boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
         transform: "translate(-50%, 0)",
-        zIndex: 1,
+        zIndex: 2,
       }}
     >
       <Alert

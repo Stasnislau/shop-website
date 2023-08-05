@@ -125,8 +125,30 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
       .oneOf(["men", "women", "kids"])
       .required("Category is required"),
   });
-  const onSubmit = (values: ProductToCreate) => {
-    console.log(values);
+  const onSubmit = async (values: ProductToCreate) => {
+    try {
+      store.setIsLoading(true);
+      const response = await fetch(API_URL + "/products/create", {
+        method: "Post",
+      });
+      if (!response.ok) {
+        throw new Error("Something went wrong");
+      }
+      const data = (await response.json()) as currencies[];
+      const newArray = [] as currencyState[];
+      data.map((item) =>
+        newArray.push({
+          symbol: item.currency,
+          taken: false,
+        })
+      );
+      setPossibleCurrencies(newArray);
+    } catch (error) {
+      console.log(error);
+      store.displayError((error as string) || "Something went wrong");
+    } finally {
+      store.setIsLoading(false);
+    }
   };
   const formik = useFormik({
     initialValues,

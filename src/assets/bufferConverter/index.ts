@@ -1,5 +1,4 @@
 function fileToBuffer(file: File): Promise<Buffer> {
-  console.log(file, "File blyat");
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
 
