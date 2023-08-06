@@ -130,6 +130,7 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
       store.setIsLoading(true);
       const response = await fetch(API_URL + "/products/create", {
         method: "Post",
+        body: JSON.stringify(values)
       });
       if (!response.ok) {
         throw new Error("Something went wrong");
