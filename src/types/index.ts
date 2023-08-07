@@ -1,13 +1,4 @@
-export interface Product {
-  id: number;
-  name: string;
-  description: string;
-  prices: Price[];
-  gallery: string[];
-  sizes: string[];
-  colors: string[];
-  category: "men" | "women" | "kids";
-}
+import { product, Image } from "@prisma/client";
 
 export interface ProductToCreate {
   name: string;
@@ -22,4 +13,9 @@ export interface ProductToCreate {
 export interface Price {
   currency: string;
   amount: number;
+}
+
+export interface extendedProduct extends product {
+  prices: Price[];
+  gallery: string[]
 }

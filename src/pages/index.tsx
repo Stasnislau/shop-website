@@ -1,147 +1,46 @@
 import { Grid, Card, Box, Typography, Container } from "@mui/material";
 import ItemCard from "@/components/itemCard";
 import { useRouter } from "next/router";
-import { Suspense, useContext } from "react";
+import {
+  Suspense,
+  startTransition,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import ItemLoadingComponent from "@/components/itemLoadingComponent";
 import { observer } from "mobx-react-lite";
 import { Context } from "../pages/_app";
+import { API_URL } from "@/components/header";
+import { extendedProduct } from "@/types";
 
 const Page = observer(() => {
   const store = useContext(Context);
-  const items = [
-    {
-      name: "Test1",
-      gallery: [
-        "https://via.placeholder.com/150",
-        "https://via.placeholder.com/100",
-      ],
-      prices: [
-        {
-          id: 1,
-          currency: "$",
-          amount: 100,
-          productId: 1,
-        },
-        {
-          id: 2,
-          currency: "€",
-          amount: 80,
-          productId: 1,
-        },
-        {
-          id: 3,
-          currency: "£",
-          amount: 70,
-          productId: 1,
-        },
-        {
-          id: 4,
-          currency: "¥",
-          amount: 100000,
-          productId: 1,
-        },
-      ],
-    },
-    {
-      name: "Test2",
-      gallery: [
-        "https://via.placeholder.com/150",
-        "https://via.placeholder.com/100",
-      ],
-      prices: [
-        {
-          id: 1,
-          currency: "$",
-          amount: 110,
-          productId: 1,
-        },
-        {
-          id: 2,
-          currency: "€",
-          amount: 90,
-          productId: 1,
-        },
-        {
-          id: 3,
-          currency: "£",
-          amount: 80,
-          productId: 1,
-        },
-        {
-          id: 4,
-          currency: "¥",
-          amount: 5200000,
-          productId: 1,
-        },
-      ],
-    },
-    {
-      name: "Test3",
-      gallery: [
-        "https://via.placeholder.com/150",
-        "https://via.placeholder.com/100",
-      ],
-      prices: [
-        {
-          id: 1,
-          currency: "$",
-          amount: 100,
-          productId: 1,
-        },
-        {
-          id: 2,
-          currency: "€",
-          amount: 80,
-          productId: 1,
-        },
-        {
-          id: 3,
-          currency: "£",
-          amount: 70,
-          productId: 1,
-        },
-        {
-          id: 4,
-          currency: "¥",
-          amount: 100000,
-          productId: 1,
-        },
-      ],
-    },
-    {
-      name: "Test4",
-      gallery: [
-        "https://via.placeholder.com/150",
-        "https://via.placeholder.com/100",
-      ],
-      prices: [
-        {
-          id: 1,
-          currency: "$",
-          amount: 110,
-          productId: 1,
-        },
-        {
-          id: 2,
-          currency: "€",
-          amount: 90,
-          productId: 1,
-        },
-        {
-          id: 3,
-          currency: "£",
-          amount: 80,
-          productId: 1,
-        },
-        {
-          id: 4,
-          currency: "¥",
-          amount: 5200000,
-          productId: 1,
-        },
-      ],
-    },
-  ];
+  const [currentProducts, setCurrentProducts] = useState<extendedProduct[]>([]);
+  useEffect(() => {
+    const fetchCurrencies = async () => {
+      try {
+        store.setIsLoading(true);
+        const response = await fetch(
+          API_URL + `/products/category/${store.state.currentCategory}`
+        );
+        if (!response.ok) {
+          throw new Error("Something went wrong");
+        }
+        const data = (await response.json()) as extendedProduct[];
+        setCurrentProducts(data);
+      } catch (error) {
+        console.log(error);
+        store.displayError((error as string) || "Something went wrong");
+      } finally {
+        store.setIsLoading(false);
+      }
+    };
+    startTransition(() => {
+      console.log("fetching currencies");
+      fetchCurrencies();
+    });
+  }, [store.state.currentCategory, store]);
   const router = useRouter();
   return (
     <Box
@@ -167,17 +66,17 @@ const Page = observer(() => {
           gap: "4%",
         }}
       >
-        {items.map((item, index) => {
+        {currentProducts.map((item, index) => {
           return (
             <Box key={index} height="49%" width="26%">
-              {/* <Suspense fallback={<ItemLoadingComponent />}> */}
-              <ItemCard
-                onClick={() => {
-                  router.push("/product");
-                }}
-                item={item}
-              />
-              {/* </Suspense> */}
+              <Suspense fallback={<ItemLoadingComponent />}>
+                <ItemCard
+                  onClick={() => {
+                    router.push("/product");
+                  }}
+                  item={item}
+                />
+              </Suspense>
             </Box>
           );
         })}
