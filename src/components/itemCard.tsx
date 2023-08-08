@@ -12,15 +12,12 @@ import {
 import { observer } from "mobx-react-lite";
 import { Context } from "@/pages/_app";
 import { useContext, useEffect, useState } from "react";
-import { price } from "@prisma/client";
+import { price, product } from "@prisma/client";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import { extendedProduct } from "@/types";
 
 type ItemCardProps = {
-  item: {
-    name: string;
-    prices: price[];
-    gallery: string[];
-  };
+  item: extendedProduct;
   onClick: () => void;
 };
 

@@ -2,7 +2,7 @@ export interface ProductDTO {
   id: number;
   name: string;
   description: string;
-  prices: Price[];
+  price: Price;
   gallery: Buffer[];
   sizes: string[];
   colors: string[];

@@ -9,11 +9,11 @@ import {
   Icon,
 } from "@mui/material";
 import Slider from "../../components/slider";
-import { Product } from "../../types";
 import { Context } from "../_app";
 import { observer } from "mobx-react-lite";
+import { extendedProduct } from "@/types";
 
-const product: Product = {
+const product: extendedProduct = {
   id: 1,
   name: "Product 1",
   description: "This is a product",
@@ -35,13 +35,15 @@ const product: Product = {
     "https://via.placeholder.com/10",
   ],
   category: "men",
+  createdAt: new Date()
 };
 
 const ProductPage = observer(() => {
   const store = useContext(Context);
   const [moneyValue, setMoneyValue] = useState<number | undefined>(
-    product.prices.find((price) => price.currency === store.state.currentCurrency)
-      ?.amount
+    product.prices.find(
+      (price) => price.currency === store.state.currentCurrency
+    )?.amount
   );
   const [size, setSize] = useState(product.sizes[0]);
   const [color, setColor] = useState(product.colors[0]);

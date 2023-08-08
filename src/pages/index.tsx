@@ -18,7 +18,7 @@ const Page = observer(() => {
   const store = useContext(Context);
   const [currentProducts, setCurrentProducts] = useState<extendedProduct[]>([]);
   useEffect(() => {
-    const fetchCurrencies = async () => {
+    const fetchByCategory = async () => {
       try {
         store.setIsLoading(true);
         const response = await fetch(
@@ -37,8 +37,7 @@ const Page = observer(() => {
       }
     };
     startTransition(() => {
-      console.log("fetching currencies");
-      fetchCurrencies();
+      fetchByCategory();
     });
   }, [store.state.currentCategory, store]);
   const router = useRouter();

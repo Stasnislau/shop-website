@@ -5,25 +5,25 @@ import { ProductDTO } from "./dto";
 export class ProductsController {
   constructor(private productService: ProductsService) {}
   @Post("create")
-  createProduct(@Body() body: ProductDTO) {
-    return this.productService.createProduct(body);
+  async createProduct(@Body() body: ProductDTO) {
+    return await this.productService.createProduct(body);
   }
   @Get("all")
-  getAllProducts() {
-    return this.productService.getAllProducts();
+  async getAllProducts() {
+    return await this.productService.getAllProducts();
   }
   @Get("specific/:id")
-  getSpecificProduct(@Param("id") id: string) {
-    return this.productService.getSpecificProduct(id);
+  async getSpecificProduct(@Param("id") id: string) {
+    return await this.productService.getSpecificProduct(id);
   }
 
   @Get("category/:category")
-  getByCategory(@Param("category") category: "men" | "women" | "kids") {
-    return this.productService.getByCategory(category);
+  async getByCategory(@Param("category") category: "men" | "women" | "kids") {
+    return await this.productService.getByCategory(category);
   }
 
   @Delete("delete/:id")
-  deleteProduct(@Param("id") id: string) {
-    return this.productService.deleteProduct(id);
+  async deleteProduct(@Param("id") id: string) {
+    return await this.productService.deleteProduct(id);
   }
 }

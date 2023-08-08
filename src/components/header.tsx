@@ -70,7 +70,6 @@ const Header = observer(() => {
       }
     };
     startTransition(() => {
-      console.log("fetching currencies");
       fetchCurrencies();
     });
   }, [store.state.currentCurrency, store]);

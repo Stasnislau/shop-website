@@ -91,7 +91,6 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
       }
     };
     startTransition(() => {
-      console.log("fetching currencies");
       fetchCurrencies();
     });
   }, [store.state.currentCurrency, store]);
@@ -130,7 +129,10 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
       store.setIsLoading(true);
       const response = await fetch(API_URL + "/products/create", {
         method: "Post",
-        body: JSON.stringify(values)
+        body: JSON.stringify(values),
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
       if (!response.ok) {
         throw new Error("Something went wrong");

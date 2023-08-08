@@ -6,7 +6,7 @@ export class ProductsService {
   constructor(private prisma: PrismaService) {}
   async createProduct(body: ProductDTO) {
     try {
-      const prices = (await this.calculatePrice(body.prices[0])) as Price[];
+      const prices = (await this.calculatePrice(body.price)) as Price[];
       if (prices.length === 0) {
         throw new Error("Something went wrong");
       }
@@ -71,22 +71,36 @@ export class ProductsService {
     }
   }
 
-  getByCategory(category: "men" | "women" | "kids") {
+  async getByCategory(category: "men" | "women" | "kids") {
     try {
-      const products = this.prisma.product.findMany({
+      const products = await this.prisma.product.findMany({
         where: { category },
-        select: {
-          id: true,
-          name: true,
-          description: true,
-          prices: true,
-          gallery: true,
-          sizes: true,
-          colors: true,
-          category: true,
+        include: {
+          gallery: {
+            select: {
+              id: true,
+              data: true,
+            },
+          },
+          prices: {
+            select: {
+              currency: true,
+              amount: true,
+            },
+          },
         },
       });
-      return products;
+      const productsToReturn = products.map((product) => ({
+        ...product,
+        gallery: product.gallery.map((data) => {
+          const blob = new Blob([data.data], {
+            type: "application/octet-binary",
+          });
+          return URL.createObjectURL(blob);
+        }),
+      }));
+
+      return productsToReturn;
     } catch (error) {
       console.log(error);
     }
@@ -107,10 +121,9 @@ export class ProductsService {
     try {
       const newPrices = [] as Price[];
       const currencies = await this.prisma.currencies.findMany();
-
-      const currentCurrency = currencies.find(
-        (currency) => currency.currency === price.currency
-      );
+      const currentCurrency = currencies.find((item) => {
+        return item.currency === price.currency;
+      });
       currencies.forEach((item) => {
         if (item.currency === price.currency) {
           newPrices.push(price);
