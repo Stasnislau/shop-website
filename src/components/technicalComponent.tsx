@@ -10,6 +10,7 @@ const TechnicalComponent = observer(() => {
     <div
       style={{
         position: "fixed",
+        zIndex: 5000,
         
       }}
     >
