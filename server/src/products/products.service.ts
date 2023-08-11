@@ -17,7 +17,10 @@ export class ProductsService {
           prices: {
             create: prices,
           },
-          gallery: { create: body.gallery.map((data) => ({ data })) },
+          gallery: {
+            create: body.gallery.map((data) => ({ data: Buffer.from(data) })),
+          },
+
           sizes: [...body.sizes],
           colors: [...body.colors],
           category: body.category,
@@ -147,3 +150,5 @@ export class ProductsService {
     }
   }
 }
+
+// TODO: какая то непонятная херня вылетает как консоль лог и пишет что не может создать, бо дали JSON
