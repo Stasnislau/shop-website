@@ -96,10 +96,11 @@ export class ProductsService {
       const productsToReturn = products.map((product) => ({
         ...product,
         gallery: product.gallery.map((data) => {
-          const blob = new Blob([data.data], {
-            type: "application/octet-binary",
-          });
-          return URL.createObjectURL(blob);
+          const blob = new Blob([data.data], { type: "image/jpeg" });
+          console.log("server blob", blob)
+          const imageUrl = URL.createObjectURL(blob);
+          console.log("server url", imageUrl)
+          return imageUrl;
         }),
       }));
 
@@ -111,7 +112,7 @@ export class ProductsService {
 
   async deleteProduct(id: string) {
     try {
-      const product = await this.prisma.product.delete({
+      await this.prisma.product.delete({
         where: { id: Number(id) },
       });
       return "Product deleted";
@@ -150,5 +151,3 @@ export class ProductsService {
     }
   }
 }
-
-// TODO: какая то непонятная херня вылетает как консоль лог и пишет что не может создать, бо дали JSON
