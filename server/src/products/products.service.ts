@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { Price, ProductDTO } from "./dto";
 import { PrismaService } from "../prisma/prisma.service";
+import cloudinary from "../cloudinary";
 @Injectable({})
 export class ProductsService {
   constructor(private prisma: PrismaService) {}
@@ -10,6 +11,14 @@ export class ProductsService {
       if (prices.length === 0) {
         throw new Error("Something went wrong");
       }
+      const promises = body.gallery.map(async (image) => {
+        const res = await cloudinary.uploader.upload(image, {
+          folder: "products",
+        });
+        return res.secure_url;
+      });
+
+      const gallery = await Promise.all(promises);
       const product = await this.prisma.product.create({
         data: {
           name: body.name,
@@ -17,7 +26,7 @@ export class ProductsService {
           prices: {
             create: prices,
           },
-          gallery: [...body.gallery],
+          gallery: [...gallery],
 
           sizes: [...body.sizes],
           colors: [...body.colors],
