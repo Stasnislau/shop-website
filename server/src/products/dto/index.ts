@@ -3,7 +3,7 @@ export interface ProductDTO {
   name: string;
   description: string;
   price: Price;
-  gallery: Buffer[];
+  gallery: string[];
   sizes: string[];
   colors: string[];
   category: "men" | "women" | "kids";

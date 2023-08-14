@@ -66,6 +66,7 @@ const Page = observer(() => {
         }}
       >
         {currentProducts.map((item, index) => {
+          console.log(item.gallery);
           return (
             <Box key={index} height="49%" width="26%">
               <Suspense fallback={<ItemLoadingComponent />}>

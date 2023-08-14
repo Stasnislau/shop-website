@@ -15,7 +15,7 @@ model product {
   name        String
   description String
   prices      price[]
-  gallery     Image[]
+  gallery     String[]
   sizes       String[]
   colors      String[]
   category    String
@@ -50,11 +50,4 @@ model currencies {
   currency     String
   exchangeRate Float // x/USD 
   currencyCode String
-}
-
-model Image {
-  id        Int     @id @default(autoincrement())
-  data      Bytes
-  product   product @relation(fields: [productId], references: [id])
-  productId Int
 }

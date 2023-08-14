@@ -17,9 +17,7 @@ export class ProductsService {
           prices: {
             create: prices,
           },
-          gallery: {
-            create: body.gallery.map((data) => ({ data: Buffer.from(data) })),
-          },
+          gallery: [...body.gallery],
 
           sizes: [...body.sizes],
           colors: [...body.colors],
@@ -79,12 +77,6 @@ export class ProductsService {
       const products = await this.prisma.product.findMany({
         where: { category },
         include: {
-          gallery: {
-            select: {
-              id: true,
-              data: true,
-            },
-          },
           prices: {
             select: {
               currency: true,
@@ -93,18 +85,8 @@ export class ProductsService {
           },
         },
       });
-      const productsToReturn = products.map((product) => ({
-        ...product,
-        gallery: product.gallery.map((data) => {
-          const blob = new Blob([data.data], { type: "image/jpeg" });
-          console.log("server blob", blob)
-          const imageUrl = URL.createObjectURL(blob);
-          console.log("server url", imageUrl)
-          return imageUrl;
-        }),
-      }));
 
-      return productsToReturn;
+      return products;
     } catch (error) {
       console.log(error);
     }
