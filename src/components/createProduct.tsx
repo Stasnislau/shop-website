@@ -35,7 +35,6 @@ interface currencyState {
 }
 const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
   const possibleCategories = ["men", "women", "kids"];
-
   const [possibleCurrencies, setPossibleCurrencies] = useState<currencyState[]>(
     []
   );
@@ -70,7 +69,9 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
     const fetchCurrencies = async () => {
       try {
         store.setIsLoading(true);
-        const response = await fetch(API_URL + "/currency/all");
+        const response = await fetch(API_URL + "/currency/all", {
+          method: "GET",
+        });
         if (!response.ok) {
           throw new Error("Something went wrong");
         }
@@ -120,7 +121,6 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
   const onSubmit = async (values: ProductToCreate) => {
     try {
       store.setIsLoading(true);
-      console.log(values)
       const response = await fetch(API_URL + "/products/create", {
         method: "POST",
         body: JSON.stringify(values),
@@ -131,15 +131,6 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
       if (!response.ok) {
         throw new Error("Something went wrong");
       }
-      const data = (await response.json()) as currencies[];
-      const newArray = [] as currencyState[];
-      data.map((item) =>
-        newArray.push({
-          symbol: item.currency,
-          taken: false,
-        })
-      );
-      setPossibleCurrencies(newArray);
     } catch (error) {
       console.log(error);
       store.displayError((error as string) || "Something went wrong");
