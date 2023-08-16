@@ -18,7 +18,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { ProductToCreate, Price } from "../types";
+import { ProductToCreate, Price, fileObject } from "../types";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { API_URL } from "./header";
 import { Context } from "@/pages/_app";
@@ -61,7 +61,7 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
       amount: 0,
     } as Price,
     colors: [] as string[],
-    gallery: [] as Buffer[],
+    gallery: [] as fileObject[],
     sizes: [] as string[],
     category: "men" as "men" | "women" | "kids",
   };
@@ -110,14 +110,7 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
         }),
       amount: yup.number().required("Amount is required"),
     }),
-    gallery: yup
-      .array()
-      .of(
-        yup
-          .mixed()
-          .test("isBuffer", "Invalid buffer", (value) => Buffer.isBuffer(value))
-      )
-      .required(),
+    gallery: yup.array().of(yup.mixed().required("Image is required")),
     sizes: yup.array().of(yup.string()),
     category: yup
       .string()
@@ -127,8 +120,9 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
   const onSubmit = async (values: ProductToCreate) => {
     try {
       store.setIsLoading(true);
+      console.log(values)
       const response = await fetch(API_URL + "/products/create", {
-        method: "Post",
+        method: "POST",
         body: JSON.stringify(values),
         headers: {
           "Content-Type": "application/json",
@@ -386,8 +380,9 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
                 }}
               >
                 <UploadZone
-                  onChange={(value: Buffer[]) => {
+                  onChange={(value: string[]) => {
                     formik.setFieldValue("gallery", value);
+                    console.log(value)
                   }}
                 />
               </FormControl>

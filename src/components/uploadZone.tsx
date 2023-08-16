@@ -3,22 +3,15 @@ import { useDropzone } from "react-dropzone";
 import React, { useEffect, useState } from "react";
 import AddedImage from "./addedImage";
 import { FiveK, Close } from "@mui/icons-material";
-import fileToBuffer from "@/assets/bufferConverter";
-
-interface fileObject extends File {
-  preview: string;
-}
-const UploadZone = ({ onChange }: { onChange: (value: Buffer[]) => void }) => {
+import { fileObject } from "@/types";
+import convertBase64 from "@/assets/convertBase64";
+const UploadZone = ({ onChange }: { onChange: (value: string[]) => void }) => {
   const [files, setFiles] = useState<fileObject[]>([]);
-  async function filesToBuffers(files: fileObject[]): Promise<Buffer[]> {
-    const buffersArray = await Promise.all(files.map(fileToBuffer));
-    return buffersArray;
-  }
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { getRootProps, getInputProps } = useDropzone({
     multiple: true,
     maxFiles: 10,
-    maxSize: 10000000,
+    maxSize: 5000000,
     onDrop: async (acceptedFiles) => {
       try {
         const fileObjects = acceptedFiles.map((file) =>
@@ -46,8 +39,14 @@ const UploadZone = ({ onChange }: { onChange: (value: Buffer[]) => void }) => {
   });
   useEffect(() => {
     const func = async () => {
-      const newData = await filesToBuffers(files);
-      onChange(newData);
+      try {
+        const filesBase64 = await Promise.all(
+          files.map(async (file) => convertBase64(file))
+        );
+        onChange(filesBase64 as string[]);
+      } catch (error) {
+        console.log(error);
+      }
     };
     func();
   }, [files]);

@@ -1,3 +1,6 @@
+export interface fileObject extends File {
+  preview: string;
+}
 export interface ProductDTO {
   id: number;
   name: string;

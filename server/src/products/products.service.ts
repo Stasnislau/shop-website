@@ -8,16 +8,29 @@ export class ProductsService {
   async createProduct(body: ProductDTO) {
     try {
       const prices = (await this.calculatePrice(body.price)) as Price[];
-      if (prices.length === 0) {
+      if (
+        prices.length === 0 ||
+        !prices ||
+        !body.gallery ||
+        !body.gallery.length
+      ) {
         throw new Error("Something went wrong");
       }
       const promises = body.gallery.map(async (image) => {
-        const res = await cloudinary.uploader.upload(image, {
-          folder: "products",
-        });
+        const res = await cloudinary.uploader.upload(
+          image,
+          {
+            folder: "products",
+            resource_type: "image",
+          },
+          (error, result) => {
+            if (error) {
+              throw new Error("The image could not be uploaded");
+            }
+          }
+        );
         return res.secure_url;
       });
-
       const gallery = await Promise.all(promises);
       const product = await this.prisma.product.create({
         data: {
