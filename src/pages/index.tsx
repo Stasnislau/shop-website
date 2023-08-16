@@ -21,6 +21,7 @@ const Page = observer(() => {
     const fetchByCategory = async () => {
       try {
         store.setIsLoading(true);
+        setCurrentProducts([]);
         const response = await fetch(
           API_URL + `/products/category/${store.state.currentCategory}`
         );
