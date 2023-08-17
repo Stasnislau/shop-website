@@ -27,10 +27,17 @@ const Page = observer(() => {
   const store = useContext(Context);
 
   const [currentProducts, setCurrentProducts] = useState<extendedProduct[]>([]);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [productsToShow, setProductsToShow] = useState<extendedProduct[]>([]);
+  useEffect(() => {
+    setProductsToShow(
+      currentProducts.slice((currentPage - 1) * 6, currentPage * 6)
+    )
+  }, [currentPage, currentProducts]);
+    
   useEffect(() => {
     setPaginationCount(Math.ceil(currentProducts.length / 6));
   }, [currentProducts]);
-
   useEffect(() => {
     const fetchByCategory = async () => {
       try {
@@ -80,7 +87,7 @@ const Page = observer(() => {
           gap: "4%",
         }}
       >
-        {currentProducts.map((item, index) => {
+        {productsToShow.map((item, index) => {
           console.log(item.gallery);
           return (
             <Box key={index} height="49%" width="30%">
@@ -106,6 +113,9 @@ const Page = observer(() => {
       >
         {currentProducts.length > 0 && (
           <Pagination
+            onChange={(event, value) => {
+              setCurrentPage(value);
+            }}
             count={paginationCount}
             variant="outlined"
             shape="rounded"
