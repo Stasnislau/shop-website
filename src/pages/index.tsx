@@ -1,4 +1,11 @@
-import { Grid, Card, Box, Typography, Container } from "@mui/material";
+import {
+  Grid,
+  Card,
+  Box,
+  Typography,
+  Container,
+  Pagination,
+} from "@mui/material";
 import ItemCard from "@/components/itemCard";
 import { useRouter } from "next/router";
 import {
@@ -13,10 +20,17 @@ import { observer } from "mobx-react-lite";
 import { Context } from "../pages/_app";
 import { API_URL } from "@/components/header";
 import { extendedProduct } from "@/types";
+import { set } from "mobx";
 
 const Page = observer(() => {
+  const [paginationCount, setPaginationCount] = useState<number>(1);
   const store = useContext(Context);
+
   const [currentProducts, setCurrentProducts] = useState<extendedProduct[]>([]);
+  useEffect(() => {
+    setPaginationCount(Math.ceil(currentProducts.length / 6));
+  }, [currentProducts]);
+
   useEffect(() => {
     const fetchByCategory = async () => {
       try {
@@ -69,7 +83,7 @@ const Page = observer(() => {
         {currentProducts.map((item, index) => {
           console.log(item.gallery);
           return (
-            <Box key={index} height="49%" width="26%">
+            <Box key={index} height="49%" width="30%">
               <Suspense fallback={<ItemLoadingComponent />}>
                 <ItemCard
                   onClick={() => {
@@ -81,6 +95,22 @@ const Page = observer(() => {
             </Box>
           );
         })}
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          marginTop: "2%",
+        }}
+      >
+        {currentProducts.length > 0 && (
+          <Pagination
+            count={paginationCount}
+            variant="outlined"
+            shape="rounded"
+          />
+        )}
       </Box>
     </Box>
   );
