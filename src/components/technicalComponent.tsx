@@ -2,6 +2,7 @@ import { observer } from "mobx-react-lite";
 import { useContext } from "react";
 import { Context } from "../pages/_app";
 import ErrorMessageComponent from "./errorMessageComponent";
+import LoadingSpinner from "./loadingSpinner";
 
 const TechnicalComponent = observer(() => {
   const store = useContext(Context);
@@ -15,6 +16,7 @@ const TechnicalComponent = observer(() => {
       }}
     >
       {store.state.isErrorDisplayed && <ErrorMessageComponent />}
+      {/* {store.state.isLoading && <LoadingSpinner />} */}
     </div>
   );
 });

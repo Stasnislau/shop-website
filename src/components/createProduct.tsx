@@ -16,7 +16,6 @@ import {
   FormControl,
   Chip,
   Stack,
-  Typography,
 } from "@mui/material";
 import { ProductToCreate, Price, fileObject } from "../types";
 import CancelIcon from "@mui/icons-material/Cancel";
@@ -151,43 +150,61 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
           <form onSubmit={formik.handleSubmit}>
             <DialogTitle>Create Product</DialogTitle>
             <DialogContent>
-              <TextField
-                autoFocus
-                margin="dense"
-                label="Name"
-                name="name"
-                fullWidth
-                value={formik.values.name}
-                onChange={formik.handleChange}
-              />
-              <TextField
-                margin="dense"
-                label="Description"
-                name="description"
-                fullWidth
-                onBlur={formik.handleBlur}
-                value={formik.values.description}
-                onChange={formik.handleChange}
-              />
-              <TextField
-                margin="dense"
-                label="Category"
-                name="category"
-                onBlur={formik.handleBlur}
-                select
-                fullWidth
-                value={formik.values.category}
-                onChange={formik.handleChange}
-                sx={{
-                  marginBottom: 2,
-                }}
-              >
-                {possibleCategories.map((c, i) => (
-                  <MenuItem key={i} value={c}>
-                    {c}
-                  </MenuItem>
-                ))}
-              </TextField>
+              <FormControl fullWidth>
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  label="Name"
+                  name="name"
+                  fullWidth
+                  value={formik.values.name}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+                {formik.touched.name && formik.errors.name ? (
+                  <Box sx={{ color: "red" }}>{formik.errors.name}</Box>
+                ) : null}
+              </FormControl>
+
+              <FormControl fullWidth>
+                <TextField
+                  margin="dense"
+                  label="Description"
+                  name="description"
+                  fullWidth
+                  onBlur={formik.handleBlur}
+                  value={formik.values.description}
+                  onChange={formik.handleChange}
+                />
+                {formik.touched.description && formik.errors.description ? (
+                  <Box sx={{ color: "red" }}>{formik.errors.description}</Box>
+                ) : null}
+              </FormControl>
+
+              <FormControl fullWidth>
+                <TextField
+                  margin="dense"
+                  label="Category"
+                  name="category"
+                  onBlur={formik.handleBlur}
+                  select
+                  fullWidth
+                  value={formik.values.category}
+                  onChange={formik.handleChange}
+                  sx={{
+                    marginBottom: 2,
+                  }}
+                >
+                  {possibleCategories.map((c, i) => (
+                    <MenuItem key={i} value={c}>
+                      {c}
+                    </MenuItem>
+                  ))}
+                </TextField>
+                {formik.touched.category && formik.errors.category ? (
+                  <Box sx={{ color: "red" }}>{formik.errors.category}</Box>
+                ) : null}
+              </FormControl>
               <FormControl
                 sx={{
                   width: "100%",
@@ -262,6 +279,9 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
                   ))}
                 </Select>
               </FormControl>
+              {formik.touched.colors && formik.errors.colors ? (
+                <Box sx={{ color: "red" }}>{formik.errors.colors}</Box>
+              ) : null}
               <FormControl
                 sx={{
                   width: "100%",
@@ -336,6 +356,9 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
                   ))}
                 </Select>
               </FormControl>
+              {formik.touched.sizes && formik.errors.sizes ? (
+                <Box sx={{ color: "red" }}>{formik.errors.sizes}</Box>
+              ) : null}
               <FormControl
                 sx={{
                   width: "100%",
@@ -358,52 +381,64 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
                   ))}
                 </Select>
               </FormControl>
-              <TextField
-                margin="dense"
-                label="Amount"
-                name="price.amount"
-                onBlur={formik.handleBlur}
-                fullWidth
-                type="number"
-                value={formik.values.price.amount}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  if (value.length > 10) {
-                    e.target.value = value.slice(0, 10);
-                  }
-                  if (value.length === 0) {
-                    e.target.value = "0";
-                  }
-                  if (
-                    value.length > 1 &&
-                    value[0] === "0" &&
-                    value[1] !== "."
-                  ) {
-                    e.target.value = value.slice(1);
-                  }
-                  if (value.includes(".")) {
-                    const split = value.split(".");
-                    if (split[1].length > 2) {
-                      e.target.value = split[0] + "." + split[1].slice(0, 2);
+              {formik.touched.price?.currency &&
+              formik.errors.price?.currency ? (
+                <Box sx={{ color: "red" }}>{formik.errors.price.currency}</Box>
+              ) : null}
+              <FormControl fullWidth>
+                <TextField
+                  margin="dense"
+                  label="Amount"
+                  name="price.amount"
+                  onBlur={formik.handleBlur}
+                  fullWidth
+                  type="number"
+                  value={formik.values.price.amount}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (value.length > 10) {
+                      e.target.value = value.slice(0, 10);
                     }
-                  }
-                  formik.handleChange(e);
-                }}
-              />
-              <FormControl
-                sx={{
-                  width: "100%",
-                  minHeight: "80px",
-                  marginBottom: 2,
-                  marginTop: 2,
-                }}
-              >
-                <UploadZone
-                  onChange={(value: string[]) => {
-                    formik.setFieldValue("gallery", value);
-                    console.log(value);
+                    if (value.length === 0) {
+                      e.target.value = "0";
+                    }
+                    if (
+                      value.length > 1 &&
+                      value[0] === "0" &&
+                      value[1] !== "."
+                    ) {
+                      e.target.value = value.slice(1);
+                    }
+                    if (value.includes(".")) {
+                      const split = value.split(".");
+                      if (split[1].length > 2) {
+                        e.target.value = split[0] + "." + split[1].slice(0, 2);
+                      }
+                    }
+                    formik.handleChange(e);
                   }}
                 />
+                {formik.touched.price?.amount && formik.errors.price?.amount ? (
+                  <Box sx={{ color: "red" }}>{formik.errors.price.amount}</Box>
+                ) : null}
+                <FormControl
+                  sx={{
+                    width: "100%",
+                    minHeight: "80px",
+                    marginBottom: 2,
+                    marginTop: 2,
+                  }}
+                >
+                  <UploadZone
+                    onChange={(value: string[]) => {
+                      formik.setFieldValue("gallery", value);
+                      console.log(value);
+                    }}
+                  />
+                  {/* {formik.touched.gallery && formik.errors.gallery ? (
+                   <Box sx={{ color: "red" }}>{formik.errors.gallery}</Box>
+                  ) : null} */}
+                </FormControl>
               </FormControl>
             </DialogContent>
 
