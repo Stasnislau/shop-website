@@ -21,6 +21,7 @@ import { Context } from "../pages/_app";
 import { API_URL } from "@/components/header";
 import { extendedProduct } from "@/types";
 import { set } from "mobx";
+import NothingToDisplay from "@/components/nothingToDisplay";
 
 const Page = observer(() => {
   const [paginationCount, setPaginationCount] = useState<number>(1);
@@ -32,9 +33,9 @@ const Page = observer(() => {
   useEffect(() => {
     setProductsToShow(
       currentProducts.slice((currentPage - 1) * 6, currentPage * 6)
-    )
+    );
   }, [currentPage, currentProducts]);
-    
+
   useEffect(() => {
     setPaginationCount(Math.ceil(currentProducts.length / 6));
   }, [currentProducts]);
@@ -87,21 +88,35 @@ const Page = observer(() => {
           gap: "4%",
         }}
       >
-        {productsToShow.map((item, index) => {
-          console.log(item.gallery);
-          return (
-            <Box key={index} height="49%" width="30%">
-              <Suspense fallback={<ItemLoadingComponent />}>
-                <ItemCard
-                  onClick={() => {
-                    router.push("/product");
-                  }}
-                  item={item}
-                />
-              </Suspense>
-            </Box>
-          );
-        })}
+        {currentProducts.length > 0 ? (
+          productsToShow.map((item, index) => {
+            console.log(item.gallery);
+            return (
+              <Box key={index} height="49%" width="30%">
+                <Suspense fallback={<ItemLoadingComponent />}>
+                  <ItemCard
+                    onClick={() => {
+                      router.push("/product");
+                    }}
+                    item={item}
+                  />
+                </Suspense>
+              </Box>
+            );
+          })
+        ) : (
+          <Box
+            height="100%"
+            width="100%"
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <NothingToDisplay />
+          </Box>
+        )}
       </Box>
       <Box
         sx={{
