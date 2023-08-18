@@ -165,6 +165,7 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
                 label="Description"
                 name="description"
                 fullWidth
+                onBlur={formik.handleBlur}
                 value={formik.values.description}
                 onChange={formik.handleChange}
               />
@@ -172,6 +173,7 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
                 margin="dense"
                 label="Category"
                 name="category"
+                onBlur={formik.handleBlur}
                 select
                 fullWidth
                 value={formik.values.category}
@@ -197,6 +199,7 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
                   name="colors"
                   multiple
                   fullWidth
+                  onBlur={formik.handleBlur}
                   MenuProps={{
                     anchorOrigin: {
                       vertical: "bottom",
@@ -269,6 +272,7 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
                 <Select
                   name="sizes"
                   multiple
+                  onBlur={formik.handleBlur}
                   fullWidth
                   MenuProps={{
                     anchorOrigin: {
@@ -341,6 +345,7 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
                 <InputLabel>Price Currency</InputLabel>
                 <Select
                   name="price.currency"
+                  onBlur={formik.handleBlur}
                   value={formik.values.price.currency}
                   onChange={formik.handleChange}
                   label="Price Currency "
@@ -357,10 +362,33 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
                 margin="dense"
                 label="Amount"
                 name="price.amount"
+                onBlur={formik.handleBlur}
                 fullWidth
                 type="number"
                 value={formik.values.price.amount}
-                onChange={formik.handleChange}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (value.length > 10) {
+                    e.target.value = value.slice(0, 10);
+                  }
+                  if (value.length === 0) {
+                    e.target.value = "0";
+                  }
+                  if (
+                    value.length > 1 &&
+                    value[0] === "0" &&
+                    value[1] !== "."
+                  ) {
+                    e.target.value = value.slice(1);
+                  }
+                  if (value.includes(".")) {
+                    const split = value.split(".");
+                    if (split[1].length > 2) {
+                      e.target.value = split[0] + "." + split[1].slice(0, 2);
+                    }
+                  }
+                  formik.handleChange(e);
+                }}
               />
               <FormControl
                 sx={{
@@ -373,7 +401,7 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
                 <UploadZone
                   onChange={(value: string[]) => {
                     formik.setFieldValue("gallery", value);
-                    console.log(value)
+                    console.log(value);
                   }}
                 />
               </FormControl>
