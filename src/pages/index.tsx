@@ -30,6 +30,7 @@ const Page = observer(() => {
   const [currentProducts, setCurrentProducts] = useState<extendedProduct[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [productsToShow, setProductsToShow] = useState<extendedProduct[]>([]);
+  const LoadingCards = [1, 2, 3, 4, 5, 6];
   useEffect(() => {
     setProductsToShow(
       currentProducts.slice((currentPage - 1) * 6, currentPage * 6)
@@ -88,6 +89,15 @@ const Page = observer(() => {
           gap: "4%",
         }}
       >
+        {" "}
+        {store.state.isLoading &&
+          LoadingCards.map((item, index) => {
+            return (
+              <Box key={index} height="49%" width="30%">
+                <ItemLoadingComponent />
+              </Box>
+            );
+          })}
         {currentProducts.length > 0 ? (
           productsToShow.map((item, index) => {
             console.log(item.gallery);
