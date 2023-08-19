@@ -36,6 +36,9 @@ export default class Store {
   setIsLoading = (newValue: boolean) => {
     this.state.isLoading = newValue;
   };
+  setIsBeingSubmitted = (newValue: boolean) => {
+    this.state.isBeingSubmitted = newValue;
+  };
   displayError = (message: string) => {
     this.state.isErrorDisplayed = true;
     this.state.errorMessage = message;

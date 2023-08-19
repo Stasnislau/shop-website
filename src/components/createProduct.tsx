@@ -109,7 +109,10 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
           }
           return false;
         }),
-      amount: yup.number().required("Amount is required"),
+      amount: yup
+        .number()
+        .min(0.01, "Price must be greater than 0")
+        .required("Price is required"),
     }),
     gallery: yup
       .array()
@@ -133,7 +136,7 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
   });
   const onSubmit = async (values: ProductToCreate) => {
     try {
-      store.setIsLoading(true);
+      store.setIsBeingSubmitted(true);
       const response = await fetch(API_URL + "/products/create", {
         method: "POST",
         body: JSON.stringify(values),
@@ -143,12 +146,15 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
       });
       if (!response.ok) {
         throw new Error("Something went wrong");
+      } else {
+        store.displaySuccess("Product created successfully");
+        formik.resetForm();
+        onClose();
       }
     } catch (error) {
-      console.log(error);
       store.displayError((error as string) || "Something went wrong");
     } finally {
-      store.setIsLoading(false);
+      store.setIsBeingSubmitted(false);
     }
   };
   const formik = useFormik({
@@ -156,10 +162,6 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
     validationSchema,
     onSubmit,
   });
-  useEffect(() => {
-    console.log(formik.errors);
-  }, [formik.errors]);
-
   return (
     <>
       {isOpen ? (
@@ -295,10 +297,11 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
                     </MenuItem>
                   ))}
                 </Select>
+                {formik.touched.colors && formik.errors.colors ? (
+                  <Box sx={{ color: "red" }}>{formik.errors.colors}</Box>
+                ) : null}
               </FormControl>
-              {formik.touched.colors && formik.errors.colors ? (
-                <Box sx={{ color: "red" }}>{formik.errors.colors}</Box>
-              ) : null}
+
               <FormControl
                 sx={{
                   width: "100%",
@@ -372,10 +375,11 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
                     </MenuItem>
                   ))}
                 </Select>
+                {formik.touched.sizes && formik.errors.sizes ? (
+                  <Box sx={{ color: "red" }}>{formik.errors.sizes}</Box>
+                ) : null}
               </FormControl>
-              {formik.touched.sizes && formik.errors.sizes ? (
-                <Box sx={{ color: "red" }}>{formik.errors.sizes}</Box>
-              ) : null}
+
               <FormControl
                 sx={{
                   width: "100%",
@@ -414,7 +418,6 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
                   fullWidth
                   type="number"
                   value={formik.values.price.amount}
-                  
                   onChange={(e) => {
                     const value = e.target.value;
                     if (value.length > 10) {
@@ -437,6 +440,10 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
                       }
                     }
                     formik.handleChange(e);
+                  }}
+                  inputProps={{
+                    min: 0,
+                    step: "any",
                   }}
                 />
                 {formik.touched.price?.amount && formik.errors.price?.amount ? (
