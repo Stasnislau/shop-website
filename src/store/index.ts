@@ -4,8 +4,11 @@ export interface stateInterface {
   currentCurrency: string;
   currentCategory: "men" | "women" | "kids";
   isLoading: boolean;
+  isBeingSubmitted: boolean;
   isErrorDisplayed: boolean;
   errorMessage: string | null;
+  isSuccessDisplayed: boolean;
+  successMessage: string | null;
 }
 export default class Store {
   state: stateInterface;
@@ -15,8 +18,11 @@ export default class Store {
       currentCurrency: "$",
       currentCategory: "men",
       isLoading: false,
+      isBeingSubmitted: false,
       isErrorDisplayed: false,
       errorMessage: null,
+      isSuccessDisplayed: false,
+      successMessage: null,
     };
     makeAutoObservable(this);
   }
@@ -37,5 +43,13 @@ export default class Store {
   hideError = () => {
     this.state.isErrorDisplayed = false;
     this.state.errorMessage = null;
+  };
+  displaySuccess = (message: string) => {
+    this.state.isSuccessDisplayed = true;
+    this.state.successMessage = message;
+  };
+  hideSuccess = () => {
+    this.state.isSuccessDisplayed = false;
+    this.state.successMessage = null;
   };
 }
