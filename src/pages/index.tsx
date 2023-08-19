@@ -58,6 +58,7 @@ const Page = observer(() => {
         store.displayError((error as string) || "Something went wrong");
       } finally {
         store.setIsLoading(false);
+        setCurrentPage(1);
       }
     };
     startTransition(() => {
@@ -98,9 +99,8 @@ const Page = observer(() => {
               </Box>
             );
           })}
-        {currentProducts.length > 0 ? (
+        {currentProducts.length > 0 &&
           productsToShow.map((item, index) => {
-            console.log(item.gallery);
             return (
               <Box key={index} height="49%" width="30%">
                 <Suspense fallback={<ItemLoadingComponent />}>
@@ -113,8 +113,8 @@ const Page = observer(() => {
                 </Suspense>
               </Box>
             );
-          })
-        ) : (
+          })}
+        {currentProducts.length === 0 && !store.state.isLoading && (
           <Box
             height="100%"
             width="100%"

@@ -63,6 +63,7 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
     sizes: [] as string[],
     category: "men" as "men" | "women" | "kids",
   };
+
   const store = useContext(Context);
   useEffect(() => {
     const fetchCurrencies = async () => {
@@ -110,8 +111,21 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
         }),
       amount: yup.number().required("Amount is required"),
     }),
-    gallery: yup.array().of(yup.mixed().required("Image is required")),
-    sizes: yup.array().of(yup.string()),
+    gallery: yup
+      .array()
+      .of(yup.string())
+      .min(1, "At least one image is required")
+      .required("At least one image is required"),
+    colors: yup
+      .array()
+      .of(yup.string())
+      .min(1, "At least one color is required")
+      .required("At least one color is required"),
+    sizes: yup
+      .array()
+      .of(yup.string())
+      .min(1, "At least one size is required")
+      .required("At least one size is required"),
     category: yup
       .string()
       .oneOf(["men", "women", "kids"])
@@ -142,6 +156,9 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
     validationSchema,
     onSubmit,
   });
+  useEffect(() => {
+    console.log(formik.errors);
+  }, [formik.errors]);
 
   return (
     <>
@@ -290,7 +307,7 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
               >
                 <InputLabel>Sizes</InputLabel>
                 <Select
-                  name="sizes"
+                  name="sizes[]"
                   multiple
                   onBlur={formik.handleBlur}
                   fullWidth
@@ -380,11 +397,14 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
                     </MenuItem>
                   ))}
                 </Select>
+                {formik.touched.price?.currency &&
+                formik.errors.price?.currency ? (
+                  <Box sx={{ color: "red" }}>
+                    {formik.errors.price.currency}
+                  </Box>
+                ) : null}
               </FormControl>
-              {formik.touched.price?.currency &&
-              formik.errors.price?.currency ? (
-                <Box sx={{ color: "red" }}>{formik.errors.price.currency}</Box>
-              ) : null}
+
               <FormControl fullWidth>
                 <TextField
                   margin="dense"
@@ -394,6 +414,7 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
                   fullWidth
                   type="number"
                   value={formik.values.price.amount}
+                  
                   onChange={(e) => {
                     const value = e.target.value;
                     if (value.length > 10) {
@@ -432,12 +453,14 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
                   <UploadZone
                     onChange={(value: string[]) => {
                       formik.setFieldValue("gallery", value);
-                      console.log(value);
                     }}
+                    onBlur={formik.handleBlur}
                   />
-                  {/* {formik.touched.gallery && formik.errors.gallery ? (
-                   <Box sx={{ color: "red" }}>{formik.errors.gallery}</Box>
-                  ) : null} */}
+                  {formik.touched.gallery && formik.errors.gallery ? (
+                    <Box sx={{ color: "red" }}>
+                      {formik.errors.gallery as String}
+                    </Box>
+                  ) : null}
                 </FormControl>
               </FormControl>
             </DialogContent>

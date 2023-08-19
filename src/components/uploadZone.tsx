@@ -5,7 +5,13 @@ import AddedImage from "./addedImage";
 import { FiveK, Close } from "@mui/icons-material";
 import { fileObject } from "@/types";
 import convertBase64 from "@/assets/convertBase64";
-const UploadZone = ({ onChange }: { onChange: (value: string[]) => void }) => {
+const UploadZone = ({
+  onChange,
+  onBlur,
+}: {
+  onChange: (value: string[]) => void;
+  onBlur: (e: React.FocusEvent<any, Element>) => void;
+}) => {
   const [files, setFiles] = useState<fileObject[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { getRootProps, getInputProps } = useDropzone({
@@ -86,7 +92,7 @@ const UploadZone = ({ onChange }: { onChange: (value: string[]) => void }) => {
         >
           Drag and drop photos here or click to upload
         </Typography>
-        <input hidden accept="image/*" type="file" {...getInputProps()} />
+        <input hidden accept="image/*" type="file" {...getInputProps()} onBlur={onBlur}/>
       </Box>
       <Box
         sx={{
