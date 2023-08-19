@@ -16,7 +16,7 @@ const TechnicalComponent = observer(() => {
       }}
     >
       {store.state.isErrorDisplayed && <ErrorMessageComponent />}
-      {/* {store.state.isLoading && <LoadingSpinner />} */}
+      {store.state.isBeingSubmitted && <LoadingSpinner />}
     </div>
   );
 });
