@@ -35,7 +35,7 @@ const SuccessMessageComponent = observer(() => {
             color="inherit"
             size="small"
             onClick={() => {
-              store.hideError();
+              store.hideSuccess();
             }}
           >
             <Close fontSize="inherit" />
