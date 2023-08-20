@@ -18,8 +18,10 @@ const SuccessMessageComponent = observer(() => {
         maxWidth: "60%",
         maxHeight: "10%",
         boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-        transform: "translate(-50%, 0)",
         zIndex: 2,
+        transition: "all 0.8s ease-in-out",
+        transform: `translate(-50%, ${
+          store.state.isErrorDisplayed ? 0 : 50}px)`,
       }}
     >
       <Alert
