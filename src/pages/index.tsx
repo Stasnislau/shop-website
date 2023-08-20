@@ -106,7 +106,7 @@ const Page = observer(() => {
                 <Suspense fallback={<ItemLoadingComponent />}>
                   <ItemCard
                     onClick={() => {
-                      router.push("/product");
+                      router.push(`/product/${item.id}`);
                     }}
                     item={item}
                   />
