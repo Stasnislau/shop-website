@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { use, useContext, useEffect, useState, startTransition } from "react";
 import {
   Box,
   ButtonGroup,
@@ -7,46 +7,59 @@ import {
   IconButton,
   Typography,
   Icon,
+  Skeleton,
 } from "@mui/material";
 import Slider from "../../components/slider";
 import { Context } from "../_app";
 import { observer } from "mobx-react-lite";
 import { extendedProduct } from "@/types";
-
-const product: extendedProduct = {
-  id: 1,
-  name: "Product 1",
-  description: "This is a product",
-  prices: [
-    {
-      currency: "$",
-      amount: 100,
-    },
-  ],
-  sizes: ["S", "M", "L", "XL"],
-  colors: ["red", "green", "blue"],
-  gallery: [
-    "https://via.placeholder.com/500",
-    "https://via.placeholder.com/300",
-    "https://via.placeholder.com/150",
-    "https://via.placeholder.com/100",
-    "https://via.placeholder.com/50",
-    "https://via.placeholder.com/25",
-    "https://via.placeholder.com/10",
-  ],
-  category: "men",
-  createdAt: new Date()
-};
+import { API_URL } from "@/components/header";
+import { useRouter } from "next/router";
 
 const ProductPage = observer(() => {
+  const router = useRouter();
+
+  const { id } = router.query;
+
   const store = useContext(Context);
-  const [moneyValue, setMoneyValue] = useState<number | undefined>(
-    product.prices.find(
-      (price) => price.currency === store.state.currentCurrency
-    )?.amount
+  const [product, setProduct] = useState<extendedProduct>(
+    {} as extendedProduct
   );
-  const [size, setSize] = useState(product.sizes[0]);
-  const [color, setColor] = useState(product.colors[0]);
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        store.setIsLoading(true);
+        const res = await fetch(`${API_URL}/products/specific/${id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error("Something went wrong");
+        }
+        setProduct(data);
+        setMoneyValue(
+          product.prices.find(
+            (price) => price.currency === store.state.currentCurrency
+          )?.amount
+        );
+      } catch (error) {
+        console.log(error);
+        store.displayError((error as string) || "Something went wrong");
+      } finally {
+        store.setIsLoading(false);
+      }
+    };
+    startTransition(() => {
+      fetchProduct();
+    });
+  }, [id]);
+
+  const [moneyValue, setMoneyValue] = useState<number | undefined>(undefined);
+  const [size, setSize] = useState<string>("");
+  const [color, setColor] = useState<string>("");
 
   const handleSizeChange = (newSize: string) => {
     setSize(newSize);
@@ -80,7 +93,9 @@ const ProductPage = observer(() => {
             height: "100%",
           }}
         >
-          <Slider gallery={product.gallery} />
+          {!store.state.isLoading ? null : ( // <Slider gallery={product.gallery} /> TODO: need to fix this
+            <Skeleton variant="rectangular" width="100%" height="100%" />
+          )}
         </Box>
         <Box sx={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
           <Box>
@@ -110,32 +125,38 @@ const ProductPage = observer(() => {
                 borderRadius: "0",
               }}
             >
-              {product.sizes.map((sizeOption) => (
-                <Box
-                  key={sizeOption}
-                  color={size === sizeOption ? "prfry" : "secondary"}
-                  sx={{
-                    border:
-                      size === sizeOption
-                        ? "1px solid black"
-                        : "2px solid black",
-                    outline: size === sizeOption ? "1px solid green" : "none",
-                    width: "2.5rem",
-                    height: "2rem",
-                    margin: "0.25rem",
-                    cursor: "pointer",
-                    display: "flex",
-                    backgroundColor: size === sizeOption ? "black" : "inherit",
-                    color: size === sizeOption ? "white" : "black",
-                    textAlign: "center",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                  onClick={() => handleSizeChange(sizeOption)}
-                >
-                  {sizeOption}
-                </Box>
-              ))}
+              {!store.state.isLoading ? (
+                product &&
+                product?.sizes?.map((sizeOption) => (
+                  <Box
+                    key={sizeOption}
+                    color={size === sizeOption ? "primary" : "secondary"}
+                    sx={{
+                      border:
+                        size === sizeOption
+                          ? "1px solid black"
+                          : "2px solid black",
+                      outline: size === sizeOption ? "1px solid green" : "none",
+                      width: "2.5rem",
+                      height: "2rem",
+                      margin: "0.25rem",
+                      cursor: "pointer",
+                      display: "flex",
+                      backgroundColor:
+                        size === sizeOption ? "black" : "inherit",
+                      color: size === sizeOption ? "white" : "black",
+                      textAlign: "center",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                    onClick={() => handleSizeChange(sizeOption)}
+                  >
+                    {sizeOption}
+                  </Box>
+                ))
+              ) : (
+                <Skeleton variant="rectangular" width="2.5rem" height="2rem" />
+              )}
             </ButtonGroup>
           </Box>
 
@@ -156,21 +177,31 @@ const ProductPage = observer(() => {
                 boxShadow: "none",
               }}
             >
-              {product.colors.map((colorOption) => (
-                <Box
-                  key={colorOption}
-                  sx={{
-                    width: "1.5rem",
-                    height: "1.5rem",
-                    backgroundColor: colorOption,
-                    margin: "0.25rem",
-                    cursor: "pointer",
-                    border: color === colorOption ? "1px solid black" : "none",
-                    outline: color === colorOption ? "1px solid green" : "none",
-                  }}
-                  onClick={() => handleColorChange(colorOption)}
+              {!store.state.isLoading ? (
+                product?.colors?.map((colorOption) => (
+                  <Box
+                    key={colorOption}
+                    sx={{
+                      width: "1.5rem",
+                      height: "1.5rem",
+                      backgroundColor: colorOption,
+                      margin: "0.25rem",
+                      cursor: "pointer",
+                      border:
+                        color === colorOption ? "1px solid black" : "none",
+                      outline:
+                        color === colorOption ? "1px solid green" : "none",
+                    }}
+                    onClick={() => handleColorChange(colorOption)}
+                  />
+                ))
+              ) : (
+                <Skeleton
+                  variant="rectangular"
+                  width="1.5rem"
+                  height="1.5rem"
                 />
-              ))}
+              )}
             </ButtonGroup>
           </Box>
           <Box>

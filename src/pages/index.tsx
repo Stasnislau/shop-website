@@ -20,7 +20,6 @@ import { observer } from "mobx-react-lite";
 import { Context } from "../pages/_app";
 import { API_URL } from "@/components/header";
 import { extendedProduct } from "@/types";
-import { set } from "mobx";
 import NothingToDisplay from "@/components/nothingToDisplay";
 
 const Page = observer(() => {

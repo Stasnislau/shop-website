@@ -1,13 +1,16 @@
-import { useEffect, useState } from "react";
-import { Box, IconButton } from "@mui/material";
+import { useContext, useEffect, useState } from "react";
+import { Box, IconButton, Skeleton } from "@mui/material";
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
 import Image from "next/image";
+import { observer } from "mobx-react-lite";
+import { Context } from "@/pages/_app";
 
 interface SliderProps {
   gallery: string[];
 }
 
-const Slider = (props: SliderProps) => {
+const Slider = observer((props: SliderProps) => {
+  const store = useContext(Context);
   const { gallery } = props;
   const [subPhotoIndex, setSubPhotoIndex] = useState(0);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
@@ -71,12 +74,16 @@ const Slider = (props: SliderProps) => {
           alignItems: "center",
         }}
       >
+        { store.state.isLoading ? 
         <Image
           src={gallery[currentPhotoIndex]}
           alt="Product"
           width={500}
           height={500}
         />
+        :
+        <Skeleton variant="rectangular" width={500} height={500} />
+        }
         {gallery.length > 1 && (
           <Box
             sx={{
@@ -90,7 +97,6 @@ const Slider = (props: SliderProps) => {
               <ArrowBackIos />
             </IconButton>
             {subPhotos.map((value, index) => (
-              
               <IconButton
                 key={gallery[value]}
                 onClick={() => handleGalleryClick(value)}
@@ -133,6 +139,6 @@ const Slider = (props: SliderProps) => {
       </Box>
     </Box>
   );
-};
+});
 
 export default Slider;
