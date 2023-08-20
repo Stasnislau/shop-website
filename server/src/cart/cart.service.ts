@@ -5,6 +5,20 @@ import { cart, product, cart_item } from "@prisma/client";
 @Injectable()
 export class CartService {
   constructor(private PrismaService: PrismaService) {}
+  async createCart() {
+    try {
+      const cart = await this.PrismaService.cart.create({
+        data: {
+          items: {
+            create: [],
+          },
+        },
+      });
+      return cart.id;
+    } catch (error) {
+      console.log(error);
+    }
+  }
   async addCart(body: cart_item) {
     try {
       const { cartId, productId, quantity } = body;

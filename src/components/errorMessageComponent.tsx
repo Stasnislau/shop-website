@@ -52,7 +52,7 @@ const ErrorMessageComponent = observer(() => {
             width: "80%",
           }}
         >
-          {`Error: ${store.state.errorMessage}`}
+          {`${store.state.errorMessage}`}
         </Typography>
       </Alert>
     </Snackbar>

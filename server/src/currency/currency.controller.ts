@@ -5,7 +5,7 @@ import { CurrencyService } from "./currency.service";
 export class CurrencyController {
   constructor(private currencyService: CurrencyService) {}
   @Get("all")
-  getAllCurrencies() {
-    return this.currencyService.getAllCurrencies();
+  async getAllCurrencies() {
+    return await this.currencyService.getAllCurrencies();
   }
 }

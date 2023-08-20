@@ -14,20 +14,23 @@ import { cart_item } from "@prisma/client";
 export class CartItemController {
   constructor(private cartItemService: CartItemService) {}
   @Get("specific/:id")
-  getCartItem(@Param("id") id: number) {
-    this.cartItemService.getCartItem(id);
+  async getCartItem(@Param("id") id: number) {
+    return await this.cartItemService.getCartItem(id);
   }
   @Post("add")
-  createCartItem(@Param("cartId") cartId: number, @Body() cartItem: cart_item) {
-    this.cartItemService.addCartItem(cartItem, cartId);
+  async createCartItem(
+    @Param("cartId") cartId: number,
+    @Body() cartItem: cart_item
+  ) {
+    return await this.cartItemService.addCartItem(cartItem, cartId);
   }
   @Put("update/:id")
-  updateCartItem(@Param("id") id: number, @Body() value: number) {
-    this.cartItemService.changeQuantity(id, value);
+  async updateCartItem(@Param("id") id: number, @Body() value: number) {
+    return await this.cartItemService.changeQuantity(id, value);
   }
 
   @Delete("delete/:id")
-  deleteCartItem(@Param("id") id: number) {
-    this.cartItemService.deleteCartItem(id);
+  async deleteCartItem(@Param("id") id: number) {
+    return await this.cartItemService.deleteCartItem(id);
   }
 }

@@ -144,6 +144,8 @@ const Page = observer(() => {
             count={paginationCount}
             variant="outlined"
             shape="rounded"
+            color="primary"
+            
           />
         )}
       </Box>

@@ -1,13 +1,40 @@
 import { observer } from "mobx-react-lite";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { Context } from "../pages/_app";
 import ErrorMessageComponent from "./errorMessageComponent";
 import LoadingSpinner from "./loadingSpinner";
 import SuccessMessageComponent from "./successMessageComponent";
+import { API_URL } from "./header";
 
 const TechnicalComponent = observer(() => {
   const store = useContext(Context);
-
+  const createCart = async () => {
+    try {
+      const response = await fetch(`${API_URL}/cart/create`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message);
+      }
+      localStorage.setItem("cartId", String(data));
+      store.setCartId(data.id);
+    } catch (error) {
+      store.displayError(error as string);
+    }
+  };
+  useEffect(() => {
+    (async () => {
+      if (!localStorage.getItem("cartId")) {
+        await createCart();
+      } else {
+        store.setCartId(localStorage.getItem("cartId") as string);
+      }
+    })();
+  }, [store.state.cartId]);
   return (
     <div
       style={{
