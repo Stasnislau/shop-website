@@ -40,11 +40,6 @@ const ProductPage = observer(() => {
           throw new Error("Something went wrong");
         }
         setProduct(data);
-        setMoneyValue(
-          product.prices.find(
-            (price) => price.currency === store.state.currentCurrency
-          )?.amount
-        );
       } catch (error) {
         console.log(error);
         store.displayError((error as string) || "Something went wrong");
@@ -56,6 +51,14 @@ const ProductPage = observer(() => {
       fetchProduct();
     });
   }, [id]);
+  useEffect(() => {
+    if (!product) return;
+    setMoneyValue(
+      product?.prices?.find(
+        (price) => price.currency === store.state.currentCurrency
+      )?.amount
+    );
+  }, [product, store.state.currentCurrency]);
 
   const [moneyValue, setMoneyValue] = useState<number | undefined>(undefined);
   const [size, setSize] = useState<string>("");
