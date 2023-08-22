@@ -50,7 +50,7 @@ const ProductPage = observer(() => {
     startTransition(() => {
       fetchProduct();
     });
-  }, [id]);
+  }, [id, store]);
   useEffect(() => {
     if (!product) return;
     setMoneyValue(
@@ -112,7 +112,15 @@ const ProductPage = observer(() => {
             </Typography>
           </Box>
 
-          <Box sx={{ display: "flex", flexDirection: "column" }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+            }}
+          >
             <Typography
               variant="h6"
               fontFamily="Roboto Condensed"
