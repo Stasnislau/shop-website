@@ -12,6 +12,7 @@ interface SliderProps {
 const Slider = observer((props: SliderProps) => {
   const store = useContext(Context);
   const { gallery } = props;
+  const [galleryPhotos, setGalleryPhotos] = useState<string[]>([]);
   const [subPhotoIndex, setSubPhotoIndex] = useState(0);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const handleGalleryClick = (index: number) => {
@@ -34,8 +35,8 @@ const Slider = observer((props: SliderProps) => {
     const indexes = [] as number[];
     let numberOfDisplayed = 0;
     let tempIndex = subPhotoIndex;
-    if (gallery.length <= 4) {
-      gallery.forEach((photo, index) => {
+    if (galleryPhotos.length <= 4) {
+      galleryPhotos.forEach((photo, index) => {
         if (index !== currentPhotoIndex) {
           indexes.push(index);
         }
@@ -44,11 +45,11 @@ const Slider = observer((props: SliderProps) => {
     }
     while (numberOfDisplayed < 3) {
       if (tempIndex === currentPhotoIndex) {
-        tempIndex = tempIndex === gallery.length - 1 ? 0 : tempIndex + 1;
+        tempIndex = tempIndex === galleryPhotos.length - 1 ? 0 : tempIndex + 1;
         continue;
       }
       indexes.push(tempIndex);
-      tempIndex = tempIndex === gallery.length - 1 ? 0 : tempIndex + 1;
+      tempIndex = tempIndex === galleryPhotos.length - 1 ? 0 : tempIndex + 1;
       numberOfDisplayed++;
     }
     return indexes;
@@ -57,6 +58,11 @@ const Slider = observer((props: SliderProps) => {
   useEffect(() => {
     setSubPhoto(findSubPhotos());
   }, [currentPhotoIndex, subPhotoIndex]);
+
+  useEffect(() => {
+    if (!gallery) return;
+    setGalleryPhotos(gallery);
+  }, [gallery]);
 
   return (
     <Box
@@ -74,17 +80,17 @@ const Slider = observer((props: SliderProps) => {
           alignItems: "center",
         }}
       >
-        { store.state.isLoading ? 
-        <Image
-          src={gallery[currentPhotoIndex]}
-          alt="Product"
-          width={500}
-          height={500}
-        />
-        :
-        <Skeleton variant="rectangular" width={500} height={500} />
-        }
-        {gallery.length > 1 && (
+        {!store.state.isLoading ? (
+          <Image
+            src={galleryPhotos[currentPhotoIndex]}
+            alt="Product"
+            width={500}
+            height={500}
+          />
+        ) : (
+          <Skeleton variant="rectangular" width={500} height={500} />
+        )}
+        {galleryPhotos.length > 1 && (
           <Box
             sx={{
               display: "flex",
@@ -98,7 +104,7 @@ const Slider = observer((props: SliderProps) => {
             </IconButton>
             {subPhotos.map((value, index) => (
               <IconButton
-                key={gallery[value]}
+                key={galleryPhotos[value]}
                 onClick={() => handleGalleryClick(value)}
                 sx={{
                   paddingTop: "0",
@@ -112,14 +118,14 @@ const Slider = observer((props: SliderProps) => {
                 }}
               >
                 <Image
-                  src={gallery[value]}
+                  src={galleryPhotos[value]}
                   alt="Product"
                   width={100}
                   height={100}
                 />
               </IconButton>
             ))}
-            {gallery.length > 3 && (
+            {galleryPhotos.length > 3 && (
               <Box
                 sx={{
                   display: "flex",

@@ -96,7 +96,9 @@ const ProductPage = observer(() => {
             height: "100%",
           }}
         >
-          {!store.state.isLoading ? null : ( // <Slider gallery={product.gallery} /> TODO: need to fix this
+          {!store.state.isLoading ? (
+            product && <Slider gallery={product.gallery} />
+          ) : (
             <Skeleton variant="rectangular" width="100%" height="100%" />
           )}
         </Box>
