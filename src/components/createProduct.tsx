@@ -72,21 +72,22 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
         const response = await fetch(API_URL + "/currency/all", {
           method: "GET",
         });
-        if (!response.ok) {
-          throw new Error("Something went wrong");
+        const data = await response.json();
+        
+        if (response.status !== 200) {
+          throw new Error(data.message);
         }
-        const data = (await response.json()) as currencies[];
         const newArray = [] as currencyState[];
-        data.map((item) =>
+        data.map((item: currencies) =>
           newArray.push({
             symbol: item.currency,
             taken: false,
           })
         );
         setPossibleCurrencies(newArray);
-      } catch (error) {
+      } catch (error: any) {
         console.log(error);
-        store.displayError((error as string) || "Something went wrong");
+        store.displayError(error.message);
       } finally {
         store.setIsLoading(false);
       }

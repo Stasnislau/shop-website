@@ -26,10 +26,10 @@ import Cart from "./cart";
 import CreateProduct from "./createProduct";
 import { Context } from "@/pages/_app";
 import { useRouter } from "next/router";
-import LoadingSpinner from "./loadingSpinner";
 import { Prisma, currencies } from "@prisma/client";
 import { start } from "repl";
-export const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+export const API_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 const Header = observer(() => {
   const navigate = useRouter();
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -56,15 +56,14 @@ const Header = observer(() => {
     const fetchCurrencies = async () => {
       try {
         store.setIsLoading(true);
-        const response = await fetch(API_URL + "/currency/all");
-        if (!response.ok) {
-          throw new Error("Something went wrong");
-        }
+        const response = (await fetch(API_URL + "/currency/all"));
         const data = await response.json();
+        if (response.status !== 200) {
+          throw new Error(data.message);
+        }
         setAvailableCurrencies(data);
-      } catch (error) {
-        console.log(error);
-        store.displayError((error as string) || "Something went wrong");
+      } catch (error: any) {
+        store.displayError(error.message);
       } finally {
         store.setIsLoading(false);
       }
@@ -168,25 +167,29 @@ const Header = observer(() => {
                   },
                 }}
               >
-                {isCurrencyMenuOpen && availableCurrencies.map((currency) => (
-                  <Suspense key={currency.currencyCode} fallback={<Skeleton />}>
-                    <ListItem
-                      value={currency.currency}
-                      onClick={() => handleCurrencySelect(currency.currency)}
-                      sx={{
-                        py: 1,
-                        px: 2,
-                        fontSize: "1rem",
-                        backgroundColor:
-                          store.state.currentCurrency === currency.currency
-                            ? "#EEEEEE"
-                            : "#fff",
-                      }}
+                {isCurrencyMenuOpen &&
+                  availableCurrencies.map((currency) => (
+                    <Suspense
+                      key={currency.currencyCode}
+                      fallback={<Skeleton />}
                     >
-                      {currency.currency} {currency.currencyCode}
-                    </ListItem>
-                  </Suspense>
-                ))}
+                      <ListItem
+                        value={currency.currency}
+                        onClick={() => handleCurrencySelect(currency.currency)}
+                        sx={{
+                          py: 1,
+                          px: 2,
+                          fontSize: "1rem",
+                          backgroundColor:
+                            store.state.currentCurrency === currency.currency
+                              ? "#EEEEEE"
+                              : "#fff",
+                        }}
+                      >
+                        {currency.currency} {currency.currencyCode}
+                      </ListItem>
+                    </Suspense>
+                  ))}
               </List>
             )}
           </IconButton>
