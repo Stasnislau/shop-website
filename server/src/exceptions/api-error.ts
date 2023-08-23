@@ -1,9 +1,8 @@
-class ApiError extends Error {
-  status: number;
+import { HttpException } from "@nestjs/common";
+
+class ApiError extends HttpException {
   constructor(status: number, message: string) {
-    super(message);
-    this.status = status;
-    this.message = message;
+    super(message, status);
   }
 
   static badRequest(message: string) {
@@ -25,7 +24,12 @@ class ApiError extends Error {
   static notImplemented(message: string) {
     return new ApiError(501, message);
   }
+  static badGateway(message: string) {
+    return new ApiError(502, message);
+  }
   static serverUnavailable(message: string) {
     return new ApiError(503, message);
   }
 }
+
+export default ApiError;
