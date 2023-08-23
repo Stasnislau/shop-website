@@ -125,7 +125,7 @@ const Slider = observer((props: SliderProps) => {
                   cursor: "pointer",
                   borderRadius: "0",
                   width: "20%",
-                  height: "10%",
+                  height: "10rem",
                   outline:
                     currentPhotoIndex + 1 + value === currentPhotoIndex
                       ? "1px solid green"
@@ -137,6 +137,7 @@ const Slider = observer((props: SliderProps) => {
                   alt="Product"
                   width="100%"
                   height="100%"
+                  style={{ objectFit: "cover" }}
                 />
               </IconButton>
             ))}
@@ -145,12 +146,19 @@ const Slider = observer((props: SliderProps) => {
                 sx={{
                   display: "flex",
                   flexDirection: "column",
+                  width: "5%",
                   alignItems: "center",
                   marginLeft: "1rem",
                   marginRight: "1rem",
                 }}
               >
-                <IconButton onClick={handleSubPhotoDownClick}>
+                <IconButton
+                  onClick={handleSubPhotoDownClick}
+                  sx={{
+                    cursor: "pointer",
+                    width: "100%",
+                  }}
+                >
                   <ArrowForwardIos />
                 </IconButton>
               </Box>
