@@ -52,31 +52,32 @@ export class ProductsService {
     return product;
   }
   async getAllProducts() {
-    if (!this.prisma.product) {
-      throw ApiError.serverUnavailable("Unable to connect to database");
+    try {
+      const products = await this.prisma.product.findMany({
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          prices: true,
+          gallery: true,
+          sizes: true,
+          colors: true,
+          category: true,
+        },
+      });
+      if (!products) {
+        return ApiError.notFound("No products found");
+      }
+      return products;
+    } catch (error) {
+      console.log(error);
     }
-    const products = await this.prisma.product.findMany({
-      select: {
-        id: true,
-        name: true,
-        description: true,
-        prices: true,
-        gallery: true,
-        sizes: true,
-        colors: true,
-        category: true,
-      },
-    });
-    // if (!products) {
-    //   throw ApiError.notFound("No products found");
-    // }
-    return products;
   }
   async getSpecificProduct(id: string) {
     try {
       console.log(id);
       if (!id || isNaN(Number(id)) || Number(id) < 1) {
-        throw new Error("provided id is not valid");
+        return ApiError.badRequest("provided id is not valid");
       }
       const product = await this.prisma.product.findUnique({
         where: { id: Number(id) },
@@ -91,6 +92,9 @@ export class ProductsService {
           category: true,
         },
       });
+      if (!product) {
+        return ApiError.notFound("No product found");
+      }
       return product;
     } catch (error) {
       console.log(error);
@@ -98,6 +102,9 @@ export class ProductsService {
   }
 
   async getByCategory(category: "men" | "women" | "kids") {
+    if (!category) {
+      return ApiError.badRequest("Invalid request body");
+    }
     const products = await this.prisma.product.findMany({
       where: { category },
       include: {
@@ -123,6 +130,7 @@ export class ProductsService {
       return "Product deleted";
     } catch (error) {
       console.log(error);
+      return ApiError.internal("Product not deleted");
     }
   }
 

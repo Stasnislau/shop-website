@@ -1,35 +1,62 @@
-import { Body, Controller, Get, Post, Delete, Param } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Delete,
+  Param,
+  UseFilters,
+} from "@nestjs/common";
+import { HttpExceptionFilter } from "src/http-exception.filter";
+import ApiError from "src/exceptions/api-error";
 import { ProductsService } from "./products.service";
 import { ProductDTO } from "./dto";
-import ApiError from "src/exceptions/api-error";
 @Controller("products")
 export class ProductsController {
   constructor(private productService: ProductsService) {}
+  @UseFilters(new HttpExceptionFilter())
   @Post("create")
   async createProduct(@Body() body: ProductDTO) {
-    return await this.productService.createProduct(body);
+    const product = await this.productService.createProduct(body);
+    if (product instanceof ApiError) {
+      throw product;
+    }
+    return product;
   }
+  @UseFilters(new HttpExceptionFilter())
   @Get("all")
   async getAllProducts() {
-    // const products = await this.productService.getAllProducts();
-    const products = []
-    if (!products || products.length === 0) {
-      throw ApiError.notFound("No products found");
+    const products = await this.productService.getAllProducts();
+    if (products instanceof ApiError) {
+      throw products;
     }
     return products;
   }
+  @UseFilters(new HttpExceptionFilter())
   @Get("specific/:id")
   async getSpecificProduct(@Param("id") id: string) {
-    return await this.productService.getSpecificProduct(id);
+    const product = await this.productService.getSpecificProduct(id);
+    if (product instanceof ApiError) {
+      throw product;
+    }
+    return product;
   }
-
+  @UseFilters(new HttpExceptionFilter())
   @Get("category/:category")
   async getByCategory(@Param("category") category: "men" | "women" | "kids") {
-    return await this.productService.getByCategory(category);
+    const products = await this.productService.getByCategory(category);
+    if (products instanceof ApiError) {
+      throw products;
+    }
+    return products;
   }
-
+  @UseFilters(new HttpExceptionFilter())
   @Delete("delete/:id")
   async deleteProduct(@Param("id") id: string) {
-    return await this.productService.deleteProduct(id);
+    const response = await this.productService.deleteProduct(id);
+    if (response instanceof ApiError) {
+      throw response;
+    }
+    return response;
   }
 }
