@@ -23,3 +23,9 @@ export interface extendedProduct extends product {
 export interface fileObject extends File {
   preview: string;
 }
+
+export interface CustomError {
+  status: number;
+  message?: string;
+  name: string;
+}
