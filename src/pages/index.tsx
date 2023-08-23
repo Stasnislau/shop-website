@@ -47,14 +47,13 @@ const Page = observer(() => {
         const response = await fetch(
           API_URL + `/products/category/${store.state.currentCategory}`
         );
+        const data = await response.json();
         if (!response.ok) {
-          throw new Error("Something went wrong");
+          throw new Error(data.message)
         }
-        const data = (await response.json()) as extendedProduct[];
         setCurrentProducts(data);
-      } catch (error) {
-        console.log(error);
-        store.displayError((error as string) || "Something went wrong");
+      } catch (error: any) {
+        store.displayError(error.message as string);
       } finally {
         store.setIsLoading(false);
         setCurrentPage(1);
@@ -144,7 +143,6 @@ const Page = observer(() => {
             variant="outlined"
             shape="rounded"
             color="primary"
-            
           />
         )}
       </Box>

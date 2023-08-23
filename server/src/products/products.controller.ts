@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Post, Delete, Param } from "@nestjs/common";
 import { ProductsService } from "./products.service";
 import { ProductDTO } from "./dto";
+import ApiError from "src/exceptions/api-error";
 @Controller("products")
 export class ProductsController {
   constructor(private productService: ProductsService) {}
@@ -10,7 +11,12 @@ export class ProductsController {
   }
   @Get("all")
   async getAllProducts() {
-    return await this.productService.getAllProducts();
+    // const products = await this.productService.getAllProducts();
+    const products = []
+    if (!products || products.length === 0) {
+      throw ApiError.notFound("No products found");
+    }
+    return products;
   }
   @Get("specific/:id")
   async getSpecificProduct(@Param("id") id: string) {
