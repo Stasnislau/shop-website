@@ -98,6 +98,7 @@ const Slider = observer((props: SliderProps) => {
               flexDirection: "row",
               alignItems: "center",
               marginTop: "1rem",
+              width: "65%",
             }}
           >
             {galleryPhotos.length > 4 && (
@@ -106,57 +107,66 @@ const Slider = observer((props: SliderProps) => {
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
-                  marginLeft: "1rem",
-                  marginRight: "1rem",
-                }}
-              >
-                <IconButton onClick={handleSubPhotoUpClick}>
-                  <ArrowBackIos />
-                </IconButton>
-              </Box>
-            )}
-
-            {subPhotos.map((value, index) => (
-              <IconButton
-                key={galleryPhotos[value]}
-                onClick={() => handleGalleryClick(value)}
-                sx={{
-                  paddingTop: "0",
-                  cursor: "pointer",
-                  borderRadius: "0",
-                  width: "20%",
-                  height: "10rem",
-                  outline:
-                    currentPhotoIndex + 1 + value === currentPhotoIndex
-                      ? "1px solid green"
-                      : "none",
-                }}
-              >
-                <img
-                  src={galleryPhotos[value]}
-                  alt="Product"
-                  width="100%"
-                  height="100%"
-                  style={{ objectFit: "cover" }}
-                />
-              </IconButton>
-            ))}
-            {galleryPhotos.length > 4 && (
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  width: "5%",
-                  alignItems: "center",
-                  marginLeft: "1rem",
-                  marginRight: "1rem",
+                  width: "10%",
+                  margin: "0",
                 }}
               >
                 <IconButton
                   onClick={handleSubPhotoDownClick}
                   sx={{
+                    padding: "0",
                     cursor: "pointer",
                     width: "100%",
+                  }}
+                >
+                  <ArrowBackIos />
+                </IconButton>
+              </Box>
+            )}
+            <Box sx={{ display: "flex", flexDirection: "row", width: "80%", justifyContent: "space-between" }}>
+              {subPhotos.map((value, index) => (
+                <IconButton
+                  key={galleryPhotos[value]}
+                  onClick={() => handleGalleryClick(value)}
+                  sx={{
+                    paddingTop: "0",
+                    cursor: "pointer",
+                    borderRadius: "0",
+                    width: "33.3%",
+                    height: "10rem",
+                    outline:
+                      currentPhotoIndex + 1 + value === currentPhotoIndex
+                        ? "1px solid green"
+                        : "none",
+                  }}
+                >
+                  <img
+                    src={galleryPhotos[value]}
+                    alt="Product"
+                    width="100%"
+                    height="100%"
+                    style={{ objectFit: "cover" }}
+                  />
+                </IconButton>
+              ))}
+            </Box>
+            {galleryPhotos.length > 4 && (
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  width: "10%",
+                  alignItems: "center",
+                  margin: "0",
+                }}
+              >
+                <IconButton
+                  onClick={handleSubPhotoUpClick}
+                  sx={{
+                    padding: "0",
+                    cursor: "pointer",
+                    width: "100%",
+                    height: "100%",
                   }}
                 >
                   <ArrowForwardIos />
