@@ -41,6 +41,8 @@ model cart_item {
   cart      cart    @relation(fields: [cartId], references: [id])
   cartId    Int
   product   product @relation(fields: [productId], references: [id])
+  chosenSize String
+  chosenColor String
   productId Int
   quantity  Int
 }
