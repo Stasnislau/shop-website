@@ -40,8 +40,8 @@ const ProductPage = observer(() => {
           throw new Error(data.message);
         }
         setProduct(data);
-      } catch (error) {
-        store.displayError((error as string) || "Something went wrong");
+      } catch (error: any) {
+        store.displayError(error.message);
       } finally {
         store.setIsLoading(false);
       }

@@ -23,7 +23,7 @@ const TechnicalComponent = observer(() => {
       localStorage.setItem("cartId", String(data));
       store.setCartId(data.id);
     } catch (error: any) {
-      store.displayError(error.message as string);
+      store.displayError(error.message);
     }
   };
   useEffect(() => {

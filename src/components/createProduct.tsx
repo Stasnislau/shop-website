@@ -152,8 +152,8 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
         formik.resetForm();
         onClose();
       }
-    } catch (error) {
-      store.displayError((error as string) || "Something went wrong");
+    } catch (error: any) {
+      store.displayError(error.message);
     } finally {
       store.setIsBeingSubmitted(false);
     }

@@ -53,7 +53,7 @@ const Page = observer(() => {
         }
         setCurrentProducts(data);
       } catch (error: any) {
-        store.displayError(error.message as string);
+        store.displayError(error.message);
       } finally {
         store.setIsLoading(false);
         setCurrentPage(1);
