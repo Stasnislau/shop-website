@@ -132,6 +132,9 @@ const ProductPage = observer(() => {
                 backgroundColor: "inherit",
                 boxShadow: "none",
                 borderRadius: "0",
+                display: "flex",
+                flexDirection: "row",
+                flexWrap: "wrap",
               }}
             >
               {!store.state.isLoading ? (
@@ -184,6 +187,10 @@ const ProductPage = observer(() => {
               sx={{
                 backgroundColor: "inherit",
                 boxShadow: "none",
+                borderRadius: "0",
+                display: "flex",
+                flexDirection: "row",
+                flexWrap: "wrap",
               }}
             >
               {!store.state.isLoading ? (
