@@ -17,13 +17,13 @@ const TechnicalComponent = observer(() => {
         },
       });
       const data = await response.json();
-      if (!response.ok) {
+      if (response.status !== 200) {
         throw new Error(data.message);
       }
       localStorage.setItem("cartId", String(data));
       store.setCartId(data.id);
-    } catch (error) {
-      store.displayError(error as string);
+    } catch (error: any) {
+      store.displayError(error.message as string);
     }
   };
   useEffect(() => {

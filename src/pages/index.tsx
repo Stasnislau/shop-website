@@ -48,8 +48,8 @@ const Page = observer(() => {
           API_URL + `/products/category/${store.state.currentCategory}`
         );
         const data = await response.json();
-        if (!response.ok) {
-          throw new Error(data.message)
+        if (response.status !== 200) {
+          throw new Error(data.message);
         }
         setCurrentProducts(data);
       } catch (error: any) {
