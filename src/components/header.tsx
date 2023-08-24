@@ -47,6 +47,7 @@ const Header = observer(() => {
     event: React.SyntheticEvent,
     newValue: "men" | "women" | "kids"
   ) => {
+    navigate.push("/");
     store.setCurrentCategory(newValue);
   };
   useEffect(() => {
