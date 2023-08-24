@@ -1,14 +1,5 @@
 import { use, useContext, useEffect, useState, startTransition } from "react";
-import {
-  Box,
-  ButtonGroup,
-  Button,
-  Grid,
-  IconButton,
-  Typography,
-  Icon,
-  Skeleton,
-} from "@mui/material";
+import { Box, ButtonGroup, Button, Typography, Skeleton } from "@mui/material";
 import Slider from "../../components/slider";
 import { Context } from "../_app";
 import { observer } from "mobx-react-lite";
@@ -58,6 +49,12 @@ const ProductPage = observer(() => {
       )?.amount
     );
   }, [product, store.state.currentCurrency]);
+
+  useEffect(() => {
+    if (!product) return;
+    setSize(product?.sizes?.[0]);
+    setColor(product?.colors?.[0]);
+  }, [product]);
 
   const [moneyValue, setMoneyValue] = useState<number | undefined>(undefined);
   const [size, setSize] = useState<string>("");

@@ -112,7 +112,7 @@ const Slider = observer((props: SliderProps) => {
                 }}
               >
                 <IconButton
-                  onClick={handleSubPhotoDownClick}
+                  onClick={handleSubPhotoUpClick}
                   sx={{
                     padding: "0",
                     cursor: "pointer",
@@ -161,7 +161,7 @@ const Slider = observer((props: SliderProps) => {
                 }}
               >
                 <IconButton
-                  onClick={handleSubPhotoUpClick}
+                  onClick={handleSubPhotoDownClick}
                   sx={{
                     padding: "0",
                     cursor: "pointer",
