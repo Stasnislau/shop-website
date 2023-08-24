@@ -36,12 +36,11 @@ const ProductPage = observer(() => {
           },
         });
         const data = await res.json();
-        if (!res.ok) {
-          throw new Error("Something went wrong");
+        if (res.status !== 200) {
+          throw new Error(data.message);
         }
         setProduct(data);
       } catch (error) {
-        console.log(error);
         store.displayError((error as string) || "Something went wrong");
       } finally {
         store.setIsLoading(false);
