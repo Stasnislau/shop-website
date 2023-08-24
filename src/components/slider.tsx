@@ -86,7 +86,7 @@ const Slider = observer((props: SliderProps) => {
             src={galleryPhotos[currentPhotoIndex]}
             alt="Product"
             width="65%"
-            height="54%"
+            height="450rem"
           />
         ) : (
           <Skeleton variant="rectangular" width="60%" height="54%" />
