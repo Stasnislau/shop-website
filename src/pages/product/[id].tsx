@@ -68,7 +68,37 @@ const ProductPage = observer(() => {
     setColor(newColor);
   };
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
+    if (!product) return;
+    if (!size || !color) {
+      store.displayError("Please select a size and a color");
+      return;
+    }
+    try {
+      store.setIsBeingSubmitted(true);
+      const res = await fetch(`${API_URL}/cart/add`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          cartId: store.state.cartId,
+          productId: product.id,
+          chosenSize: size,
+          chosenColor: color,
+
+        }),
+      });
+      const data = await res.json();
+      if (res.status !== 200) {
+        throw new Error(data.message);
+      }
+      store.displaySuccess(data.message);
+    } catch (error: any) {
+      store.displayError(error.message);
+    } finally {
+      store.setIsBeingSubmitted(false);
+    }
     
   };
 
