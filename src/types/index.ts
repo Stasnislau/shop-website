@@ -1,4 +1,4 @@
-import { product} from "@prisma/client";
+import { product } from "@prisma/client";
 
 export interface ProductToCreate {
   name: string;
@@ -17,7 +17,7 @@ export interface Price {
 
 export interface extendedProduct extends product {
   prices: Price[];
-  gallery: string[]
+  gallery: string[];
 }
 
 export interface fileObject extends File {
@@ -28,4 +28,18 @@ export interface CustomError {
   status: number;
   message?: string;
   name: string;
+}
+
+export interface CartItem {
+  id: number;
+  cartId: number;
+  chosenSize: string;
+  chosenColor: string;
+  quantity: number;
+  productId: number;
+  product: extendedProduct
+}
+export interface ExtendedCartItem {
+  id: number;
+  items: CartItem[];
 }
