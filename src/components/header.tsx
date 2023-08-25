@@ -17,6 +17,7 @@ import {
   ListItem,
   Typography,
   Skeleton,
+  Badge,
 } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import AddIcon from "@mui/icons-material/Add";
@@ -57,7 +58,7 @@ const Header = observer(() => {
     const fetchCurrencies = async () => {
       try {
         store.setIsLoading(true);
-        const response = (await fetch(API_URL + "/currency/all"));
+        const response = await fetch(API_URL + "/currency/all");
         const data = await response.json();
         if (response.status !== 200) {
           throw new Error(data.message);
@@ -198,8 +199,25 @@ const Header = observer(() => {
             onMouseEnter={() => setIsCartOpen(true)}
             onMouseLeave={() => setIsCartOpen(false)}
           >
-            <Image src={cartIcon} alt="cart icon" />
-            <Cart currency={store.state.currentCurrency} open={isCartOpen} />
+            <Badge badgeContent={store.state.itemsInCart} sx={
+              {
+                "& .MuiBadge-badge": {
+                  backgroundColor: "#1D1F22",
+                  color: "#fff",
+                  top: "-10%",
+                  right: "-10%",
+                  fontSize: "0.75rem",
+                  minWidth: "1.5rem",
+                  minHeight: "1.5rem",
+                  padding: "0 0.5rem",
+                  borderRadius: "50%",
+                }
+                
+              }
+            }>
+              <Image src={cartIcon} alt="cart icon" />
+            </Badge>
+            <Cart open={isCartOpen} />
           </IconButton>
         </Box>
       </Box>

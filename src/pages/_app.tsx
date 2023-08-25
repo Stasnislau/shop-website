@@ -19,6 +19,9 @@ const theme = createTheme({
     text: {
       primary: "#000000",
     },
+    common: {
+      black: "#1D1F22"
+    }
   },
 });
 const store = new Store();

@@ -1,4 +1,4 @@
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState, useContext } from "react";
 import {
   Box,
   Button,
@@ -7,52 +7,70 @@ import {
   ListItemAvatar,
   ListItemSecondaryAction,
   ListItemText,
+  Skeleton,
   Typography,
 } from "@mui/material";
 import Image from "next/image";
-// import { Product } from "./types";
-import LoadingComponent from "./itemLoadingComponent";
+import { API_URL } from "./header";
+import { Context } from "@/pages/_app";
+import { CartItem, ExtendedCartItem } from "@/types";
+import { observer } from "mobx-react-lite";
 
-const products = [
-  {
-    id: 1,
-    name: "Product 1",
-    price: 100,
-    image: "../../public/tess.svg",
-    quantity: 1,
-  },
-  {
-    id: 2,
-    name: "Product 2",
-    price: 200,
-    image: "../../public/tess.svg",
-
-    quantity: 2,
-  },
-  {
-    id: 3,
-    name: "Product 3",
-    price: 300,
-    image: "../../public/tess.svg",
-    quantity: 3,
-  },
-];
 type CartProps = {
-  //   items: any[]; // Product[];
   open: boolean;
-  currency: string;
 };
 
-const Cart = ({ open, currency }: CartProps) => {
-  const items = products.filter((item) => item.quantity > 0);
-  let numItems = 0;
-  items.forEach((item) => {
-    numItems += item.quantity;
-  });
-  const total = items.reduce(
-    (acc, item) => acc + item.price * item.quantity,
-    0
+const Cart = observer(({ open }: CartProps) => {
+  const store = useContext(Context);
+  const [products, setProducts] = useState<ExtendedCartItem>(
+    {} as ExtendedCartItem
   );
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    async function getCart() {
+      try {
+        setLoading(true);
+        const res = await fetch(`${API_URL}/cart/get/${store.state.cartId}`);
+        const data = await res.json();
+        if (res.status < 200 || res.status > 299) {
+          throw new Error(data.message);
+        }
+        setProducts(data);
+        console.log(data);
+      } catch (error: any) {
+        console.log(error.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+    if (store.state.cartId) getCart();
+  }, [store.state.cartId]);
+  const [items, setItems] = useState<CartItem[]>([]);
+  useEffect(() => {
+    if (!products) return;
+    const items = products?.items?.filter((item) => item.quantity > 0);
+    setItems(items);
+  }, [products]);
+  useEffect(() => {
+    if (!items) return;
+    items.forEach((item) => {
+      store.setItemsInCart(store.state.itemsInCart + item.quantity);
+    });
+  }, [items]);
+  const [totalPrice, setTotalPrice] = useState(0);
+  useEffect(() => {
+    if (!items) return;
+    items.forEach((item) => {
+      setTotalPrice(
+        (prev) =>
+          prev +
+          (item?.product?.prices?.find(
+            (price) => price.currency === store?.state?.currentCurrency
+          )?.amount ?? 0) *
+            (item?.quantity ?? 0)
+      );
+    });
+  }, [items]);
 
   return !open ? null : (
     <Box
@@ -78,29 +96,40 @@ const Cart = ({ open, currency }: CartProps) => {
       >
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <Typography fontSize="2ram" fontFamily="Raleway" color="#1D1F22">
-            <b>My bag</b>, {numItems} items
+            <b>My bag</b>, {store.state.itemsInCart} items
           </Typography>
         </Box>
 
         <List>
           {items.map((item) => (
             <ListItem key={item.id}>
-              <Suspense fallback={<LoadingComponent />}>
+              <Suspense fallback={ <Skeleton />}>
                 <ListItemAvatar>
                   <Image
-                    src={item.image}
-                    alt={item.name}
+                    src={item.product.gallery[0]}
+                    alt={item.product.name}
                     width={64}
                     height={64}
                   />
                 </ListItemAvatar>
                 <ListItemText
-                  primary={item.name}
-                  secondary={`$${item.price} x ${item.quantity}`}
+                  primary={item.product.name}
+                  secondary={`${
+                    item.product.prices.find(
+                      (price) =>
+                        price.currency === store?.state?.currentCurrency
+                    )?.amount
+                  } x ${item.quantity}`}
                 />
                 <ListItemSecondaryAction>
                   <Typography variant="body1">
-                    ${item.price * item.quantity}
+                    {store.state.currentCurrency}{" "}
+                    {item?.quantity ??
+                      0 *
+                        (item?.product?.prices?.find(
+                          (price) =>
+                            price.currency === store?.state?.currentCurrency
+                        )?.amount ?? 0)}
                   </Typography>
                 </ListItemSecondaryAction>
               </Suspense>
@@ -112,8 +141,8 @@ const Cart = ({ open, currency }: CartProps) => {
           <Typography fontSize="1rem">Total: </Typography>
           <Typography fontSize="1rem">
             {" "}
-            {currency}
-            {total}
+            {store.state.currentCurrency}
+            {totalPrice}
           </Typography>
         </Box>
         <Box
@@ -150,6 +179,6 @@ const Cart = ({ open, currency }: CartProps) => {
       </Box>
     </Box>
   );
-};
+});
 
 export default Cart;

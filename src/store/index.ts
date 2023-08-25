@@ -10,6 +10,7 @@ export interface stateInterface {
   isSuccessDisplayed: boolean;
   successMessage: string | null;
   cartId: string;
+  itemsInCart: number;
 }
 export default class Store {
   state: stateInterface;
@@ -25,6 +26,7 @@ export default class Store {
       isSuccessDisplayed: false,
       successMessage: null,
       cartId: "",
+      itemsInCart: 0,
     };
     makeAutoObservable(this);
   }
@@ -60,4 +62,7 @@ export default class Store {
   setCartId = (id: string) => {
     this.state.cartId = id;
   };
+  setItemsInCart = (items: number) => {
+    this.state.itemsInCart = items;
+  }
 }
