@@ -3,4 +3,3 @@ export interface CustomError {
     message?: string;
     name: string;
   }
-  

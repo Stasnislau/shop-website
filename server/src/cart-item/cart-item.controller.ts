@@ -9,6 +9,7 @@ import {
 } from "@nestjs/common";
 import { CartItemService } from "./cart-item.service";
 import { cart_item } from "@prisma/client";
+import { cartItemDto } from "./dto";
 
 @Controller("cart-item")
 export class CartItemController {
@@ -25,8 +26,8 @@ export class CartItemController {
     return await this.cartItemService.addCartItem(cartItem, cartId);
   }
   @Put("update/:id")
-  async updateCartItem(@Param("id") id: number, @Body() value: number) {
-    return await this.cartItemService.changeQuantity(id, value);
+  async updateCartItem(@Param("id") id: number, @Body() value: cartItemDto ) {
+    return await this.cartItemService.update(id, value);
   }
 
   @Delete("delete/:id")

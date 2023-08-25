@@ -21,7 +21,7 @@ export class CartService {
   }
   async addCart(body: cart_item) {
     try {
-      const { cartId, productId, quantity } = body;
+      const { cartId, productId, quantity, chosenColor, chosenSize } = body;
       const cart = await this.PrismaService.cart.findUnique({
         where: { id: cartId },
         select: {
@@ -35,6 +35,8 @@ export class CartService {
               create: {
                 productId,
                 quantity,
+                chosenColor,
+                chosenSize,
               },
             },
           },
@@ -46,6 +48,8 @@ export class CartService {
             cartId,
             productId,
             quantity,
+            chosenColor,
+            chosenSize,
           },
         });
         if (!cartItem) {
