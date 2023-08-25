@@ -86,14 +86,14 @@ const ProductPage = observer(() => {
           productId: product.id,
           chosenSize: size,
           chosenColor: color,
-
+          quantity: 1,
         }),
       });
       const data = await res.json();
-      if (res.status !== 200) {
+      if (res.status < 200 && res.status >= 300) {
         throw new Error(data.message);
       }
-      store.displaySuccess(data.message);
+      store.displaySuccess("Product added to cart");
     } catch (error: any) {
       store.displayError(error.message);
     } finally {

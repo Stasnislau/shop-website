@@ -75,7 +75,6 @@ export class ProductsService {
   }
   async getSpecificProduct(id: string) {
     try {
-      console.log(id);
       if (!id || isNaN(Number(id)) || Number(id) < 1) {
         return ApiError.badRequest("provided id is not valid");
       }

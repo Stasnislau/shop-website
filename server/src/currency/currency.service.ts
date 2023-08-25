@@ -20,7 +20,6 @@ export class CurrencyService {
       return currencies;
     } catch (error: any) {
       console.log(error.message);
-      return ApiError.internal("Internal Server Error");
     }
   }
 }

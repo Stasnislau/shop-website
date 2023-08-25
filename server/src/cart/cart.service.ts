@@ -23,7 +23,7 @@ export class CartService {
     try {
       const { cartId, productId, quantity, chosenColor, chosenSize } = body;
       const cart = await this.PrismaService.cart.findUnique({
-        where: { id: cartId },
+        where: { id: Number(cartId) },
         select: {
           id: true,
         },
@@ -45,7 +45,7 @@ export class CartService {
       } else {
         const cartItem = await this.PrismaService.cart_item.create({
           data: {
-            cartId,
+            cartId: Number(cartId),
             productId,
             quantity,
             chosenColor,
@@ -56,7 +56,7 @@ export class CartService {
           return null;
         }
         const cart = await this.PrismaService.cart.update({
-          where: { id: cartId },
+          where: { id: Number(cartId) },
           data: {
             items: {
               connect: {

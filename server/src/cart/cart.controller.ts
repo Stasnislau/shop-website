@@ -8,7 +8,7 @@ import {
   Param,
 } from "@nestjs/common";
 import { CartService } from "./cart.service";
-import { cart_item, cart } from "@prisma/client";
+import { cart_item } from "@prisma/client";
 
 @Controller("cart")
 export class CartController {
