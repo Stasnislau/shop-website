@@ -123,7 +123,15 @@ const Slider = observer((props: SliderProps) => {
                 </IconButton>
               </Box>
             )}
-            <Box sx={{ display: "flex", flexDirection: "row", width: "80%", justifyContent: "space-between" }}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                width: "80%",
+                justifyContent:
+                  galleryPhotos.length > 4 ? "space-between" : "normal",
+              }}
+            >
               {subPhotos.map((value, index) => (
                 <IconButton
                   key={galleryPhotos[value]}
