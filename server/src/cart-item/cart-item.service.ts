@@ -58,6 +58,9 @@ export class CartItemService {
       const cartItem = await this.prismaService.cart_item.delete({
         where: { id },
       });
+      if (!cartItem) {
+        throw ApiError.badRequest("Cannot delete cart item");
+      }
       return cartItem;
     } catch (error) {
       console.log(error);
@@ -65,14 +68,18 @@ export class CartItemService {
   }
   async update(cartItemId: number, body: cartItemDto) {
     try {
+      const { quantity, chosenColor, chosenSize } = body;
       const cartItem = await this.prismaService.cart_item.update({
         where: { id: cartItemId },
         data: {
-          quantity: body.quantity,
-          chosenColor: body.chosenColor,
-          chosenSize: body.chosenSize,
+          quantity,
+          chosenColor,
+          chosenSize,
         },
       });
+      if (!cartItem) {
+        return ApiError.badRequest("Cannot update cart item");
+      }
       return cartItem;
     } catch (error) {
       console.log(error);

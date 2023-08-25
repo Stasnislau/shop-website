@@ -69,7 +69,7 @@ const ProductPage = observer(() => {
   };
 
   const handleAddToCart = () => {
-    console.log(`Added ${product.name} to cart`);
+    
   };
 
   return (

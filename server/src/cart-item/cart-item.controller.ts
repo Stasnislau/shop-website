@@ -10,28 +10,45 @@ import {
 import { CartItemService } from "./cart-item.service";
 import { cart_item } from "@prisma/client";
 import { cartItemDto } from "./dto";
+import ApiError from "src/exceptions/api-error";
 
 @Controller("cart-item")
 export class CartItemController {
   constructor(private cartItemService: CartItemService) {}
   @Get("specific/:id")
   async getCartItem(@Param("id") id: number) {
-    return await this.cartItemService.getCartItem(id);
+    const item = await this.cartItemService.getCartItem(id);
+    if (item instanceof ApiError) {
+      throw item;
+    }
+    return item;
   }
   @Post("add")
   async createCartItem(
     @Param("cartId") cartId: number,
     @Body() cartItem: cart_item
   ) {
-    return await this.cartItemService.addCartItem(cartItem, cartId);
+    const item = await this.cartItemService.addCartItem(cartItem, cartId);
+    if (item instanceof ApiError) {
+      throw item;
+    }
+    return item;
   }
   @Put("update/:id")
-  async updateCartItem(@Param("id") id: number, @Body() value: cartItemDto ) {
-    return await this.cartItemService.update(id, value);
+  async updateCartItem(@Param("id") id: number, @Body() values: cartItemDto) {
+    const cart = await this.cartItemService.update(id, values);
+    if (cart instanceof ApiError) {
+      throw cart;
+    }
+    return cart;
   }
 
   @Delete("delete/:id")
   async deleteCartItem(@Param("id") id: number) {
-    return await this.cartItemService.deleteCartItem(id);
+    const result = await this.cartItemService.deleteCartItem(id);
+    if (result instanceof ApiError) {
+      throw result;
+    }
+    return result;
   }
 }
