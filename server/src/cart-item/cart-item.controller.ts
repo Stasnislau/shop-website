@@ -23,7 +23,7 @@ export class CartItemController {
     }
     return item;
   }
-  @Post("add")
+  @Post("add/:cartId")
   async createCartItem(
     @Param("cartId") cartId: number,
     @Body() cartItem: cart_item

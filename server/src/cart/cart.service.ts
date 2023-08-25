@@ -77,7 +77,21 @@ export class CartService {
         where: { id },
         select: {
           id: true,
-          items: true,
+          items: {
+            include: {
+              product: {
+                select: {
+                  id: true,
+                  name: true,
+                  description: true,
+                  prices: true,
+                  gallery: true,
+                  sizes: true,
+                  colors: true,
+                },
+              },
+            },
+          },
         },
       });
       return cart;
