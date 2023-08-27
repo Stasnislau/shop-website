@@ -15,6 +15,9 @@ import { API_URL } from "./header";
 import { Context } from "@/pages/_app";
 import { CartItem, ExtendedCartItem } from "@/types";
 import { observer } from "mobx-react-lite";
+import SmallCartItem from "./smallCartItem";
+import { Stroller } from "@mui/icons-material";
+import { debounce } from "@mui/material/utils";
 
 type CartProps = {
   open: boolean;
@@ -25,6 +28,87 @@ const Cart = observer(({ open }: CartProps) => {
   const [products, setProducts] = useState<ExtendedCartItem>(
     {} as ExtendedCartItem
   );
+  const onRemove = async (id: number) => {
+    try {
+      store.setIsBeingSubmitted(true);
+      const res = await fetch(`${API_URL}/cart/remove/${id}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+
+      if (res.status < 200 || res.status > 299) {
+        throw new Error(data.message);
+      }
+      setProducts(data);
+    } catch (error: any) {
+      store.displayError(error.message);
+    } finally {
+      store.setIsBeingSubmitted(false);
+    }
+  };
+  const onQuantityChange = async (id: number, quantity: number) => {
+    try {
+      store.setIsBeingSubmitted(true);
+      const res = await fetch(`${API_URL}/cart/update/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ quantity }),
+      });
+      const data = await res.json();
+      if (res.status < 200 || res.status > 299) {
+        throw new Error(data.message);
+      }
+      setProducts(data);
+    } catch (error: any) {
+      store.displayError(error.message);
+    } finally {
+      store.setIsBeingSubmitted(false);
+    }
+  };
+  const onSizeChange = async (id: number, size: string) => {
+    try {
+      store.setIsBeingSubmitted(true);
+      const res = await fetch(`${API_URL}/cart/update/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ size }),
+      });
+      const data = await res.json();
+      if (res.status < 200 || res.status > 299) {
+        throw new Error(data.message);
+      }
+      setProducts(data);
+    } catch (error: any) {
+      store.displayError(error.message);
+    } finally {
+      store.setIsBeingSubmitted(false);
+    }
+  };
+  const onColorChange = async (id: number, color: string) => {
+    try {
+      store.setIsBeingSubmitted(true);
+      const res = await fetch(`${API_URL}/cart/update/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ color }),
+      });
+      const data = await res.json();
+      if (res.status < 200 || res.status > 299) {
+        throw new Error(data.message);
+      }
+      setProducts(data);
+    } catch (error: any) {
+      store.displayError(error.message);
+    } finally {
+      store.setIsBeingSubmitted(false);
+    }
+  };
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     async function getCart() {
@@ -80,17 +164,16 @@ const Cart = observer(({ open }: CartProps) => {
         right: 0,
         backgroundColor: "rgba(0, 0, 0, 0.5)",
         zIndex: 1,
-        width: "min(22.5%, max-content)",
-        Height: "40%",
+        width: "350px",
       }}
     >
       <Box
         sx={{
           backgroundColor: "white",
-          overflowY: "auto",
-          width: "100%",
-          p: 2,
+          boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
           padding: "1rem",
+          maxHeight: "50vh",
+          overflowY: "hidden"
         }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -100,40 +183,35 @@ const Cart = observer(({ open }: CartProps) => {
           </Typography>
         </Box>
 
-        <List>
+        <List sx={{
+          maxHeight: "30vh",
+          overflowY: "scroll",
+        }}>
           {items.map((item) => (
-            <ListItem key={item.id}>
-              <Suspense fallback={ <Skeleton />}>
-                <ListItemAvatar>
-                  <Image
-                    src={item.product.gallery[0]}
-                    alt={item.product.name}
-                    width={64}
-                    height={64}
-                  />
-                </ListItemAvatar>
-                <ListItemText
-                  primary={item.product.name}
-                  secondary={`${
-                    item.product.prices.find(
-                      (price) =>
-                        price.currency === store?.state?.currentCurrency
-                    )?.amount
-                  } x ${item.quantity}`}
-                />
-                <ListItemSecondaryAction>
-                  <Typography variant="body1">
-                    {store.state.currentCurrency}{" "}
-                    {item?.quantity ??
-                      0 *
-                        (item?.product?.prices?.find(
-                          (price) =>
-                            price.currency === store?.state?.currentCurrency
-                        )?.amount ?? 0)}
-                  </Typography>
-                </ListItemSecondaryAction>
-              </Suspense>
-            </ListItem>
+            <SmallCartItem
+              item={{
+                id: item.id,
+                quantity: item.quantity,
+                image: item.product.gallery[0],
+                name: item.product.name,
+                description: item.product.description,
+                price: item.product.prices.find(
+                  (price) => price.currency === store.state.currentCurrency
+                )!,
+                sizes: item.product.sizes,
+                chosenSize: item.chosenSize,
+                colors: item.product.colors,
+                chosenColor: item.chosenColor,
+              }}
+              technicalProps={{
+                isLoading: loading,
+                onRemove: onRemove,
+                onQuantityChange: onQuantityChange,
+                onSizeChange: onSizeChange,
+                onColorChange: onColorChange,
+              }}
+              key={item.id}
+            />
           ))}
         </List>
 
@@ -142,7 +220,7 @@ const Cart = observer(({ open }: CartProps) => {
           <Typography fontSize="1rem">
             {" "}
             {store.state.currentCurrency}
-            {totalPrice}
+            {totalPrice.toFixed(2)}
           </Typography>
         </Box>
         <Box
@@ -150,7 +228,7 @@ const Cart = observer(({ open }: CartProps) => {
             display: "flex",
             justifyContent: "space-between",
             mt: 2,
-            rowGap: 3,
+            rowGap: 2,
           }}
         >
           <Button

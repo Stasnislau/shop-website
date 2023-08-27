@@ -2,7 +2,6 @@ import { useContext, useState } from "react";
 import { observer } from "mobx-react-lite";
 import {
   Box,
-  Button,
   ButtonGroup,
   IconButton,
   ListItem,
@@ -58,16 +57,11 @@ const ProductItem = observer(
       onUpdateItem(item.id, size, newColor);
     };
     return (
-      <ListItem
-        disablePadding
-        sx={{
-          padding: "1rem 0",
-        }}
-      >
+      <ListItem disablePadding >
         <IconButton
           aria-label="delete"
           onClick={() => onDeleteItem(item.id)}
-          sx={{ position: "absolute", top: 0, right: 0, zIndex: 1 }}
+          sx={{ position: "absolute", top: 0, right: 0}}
         >
           <Delete />
         </IconButton>
