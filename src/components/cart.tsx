@@ -17,7 +17,7 @@ import { Context } from "@/pages/_app";
 import { CartItem, ExtendedCartItem } from "@/types";
 import { observer } from "mobx-react-lite";
 import SmallCartItem from "./smallCartItem";
-import { Stroller } from "@mui/icons-material";
+import { useRouter } from "next/router";
 
 type CartProps = {
   open: boolean;
@@ -25,6 +25,7 @@ type CartProps = {
 
 const Cart = observer(({ open }: CartProps) => {
   const store = useContext(Context);
+  const router = useRouter();
   const [products, setProducts] = useState<ExtendedCartItem>(
     {} as ExtendedCartItem
   );
@@ -136,6 +137,7 @@ const Cart = observer(({ open }: CartProps) => {
   }, [products]);
   useEffect(() => {
     if (!items) return;
+    store.setItemsInCart(0);
     items.forEach((item) => {
       store.setItemsInCart(store.state.itemsInCart + item.quantity);
     });
@@ -145,7 +147,6 @@ const Cart = observer(({ open }: CartProps) => {
     if (!items) return;
     setTotalPrice(0);
     items.forEach((item) => {
-
       setTotalPrice(
         (prev) =>
           prev +
@@ -227,7 +228,12 @@ const Cart = observer(({ open }: CartProps) => {
         </List>
 
         <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
-          <Typography fontSize="1rem" fontFamily="Roboto" fontWeight="500" color="black">
+          <Typography
+            fontSize="1rem"
+            fontFamily="Roboto"
+            fontWeight="500"
+            color="black"
+          >
             Total:{" "}
           </Typography>
           <Typography
@@ -253,6 +259,9 @@ const Cart = observer(({ open }: CartProps) => {
             variant="outlined"
             sx={{
               width: "45%",
+            }}
+            onClick={() => {
+              router.push("/cart");
             }}
           >
             View Bag
