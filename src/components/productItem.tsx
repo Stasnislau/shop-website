@@ -17,17 +17,20 @@ import {
   Delete,
 } from "@mui/icons-material";
 import { Context } from "../pages/_app";
+import { Price } from "@/types";
 
 type ProductItemProps = {
   item: {
     id: number;
     name: string;
     description: string;
-    price: number;
+    price: Price;
     sizes: string[];
     colors: string[];
     image: string;
     quantity: number;
+    chosenSize: string;
+    chosenColor: string;
   };
   onRemoveItem: (id: number) => void;
   onAddItem: (id: number) => void;
@@ -43,8 +46,8 @@ const ProductItem = observer(
     onUpdateItem,
     onDeleteItem,
   }: ProductItemProps) => {
-    const [size, setSize] = useState(item.sizes[0]);
-    const [color, setColor] = useState(item.colors[0]);
+    const [size, setSize] = useState(item.chosenSize);
+    const [color, setColor] = useState(item.chosenColor);
     const store = useContext(Context);
 
     const handleSizeChange = (newSize: string) => {
@@ -57,19 +60,19 @@ const ProductItem = observer(
       onUpdateItem(item.id, size, newColor);
     };
     return (
-      <ListItem disablePadding >
+      <ListItem disablePadding>
         <IconButton
           aria-label="delete"
           onClick={() => onDeleteItem(item.id)}
-          sx={{ position: "absolute", top: 0, right: 0}}
+          sx={{ position: "absolute", top: 0, right: 0 }}
         >
           <Delete />
         </IconButton>
         <Box sx={{ display: "flex", flexDirection: "column" }}>
           <ListItemText primary={item.name} secondary={item.description} />
-          <ListItemText
-            primary={`${store.state.currentCurrency}${item.price}`}
-          />
+          <Typography fontFamily="Raleway" fontWeight="700">
+            {store.state.currentCurrency} {item.price.amount}
+          </Typography>
           <ListItemText primary={"Size:"} />
           <Box sx={{ display: "flex", flexDirection: "column" }}>
             <ButtonGroup

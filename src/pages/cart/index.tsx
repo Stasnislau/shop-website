@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
 import {
   Box,
   Button,
@@ -8,35 +8,36 @@ import {
   Divider,
 } from "@mui/material";
 import ProductItem from "@/components/productItem";
+import { API_URL } from "@/components/header";
+import { Context } from "@/pages/_app";
+import { observer } from "mobx-react-lite";
+import { CartItem } from "@/types";
 
-const CartPage = () => {
-  const [items, setItems] = useState([
-    {
-      id: 1,
-      name: "Product 1",
-      description: "Description",
-      price: 100,
-      image: "https://via.placeholder.com/150",
-      sizes: ["S", "M", "L", "XL"],
-      colors: ["Red", "Blue", "Green"],
-      size: "M",
-      color: "Red",
-      quantity: 1,
-    },
-    {
-      id: 2,
-      name: "Product 2",
-      description: "Description",
-      price: 200,
-      image: "https://via.placeholder.com/150",
-      sizes: ["S", "M", "L", "XL"],
-      colors: ["Red", "Blue", "Green"],
-      size: "L",
-      color: "Blue",
-      quantity: 2,
-    },
-  ]);
-  const currency = "$";
+const CartPage = observer(() => {
+  const store = useContext(Context);
+  const [items, setItems] = useState<CartItem[]>([]);
+  const [needsToBeUpdated, setNeedsToBeUpdated] = useState(true);
+  const [totalPrice, setTotalPrice] = useState(0);
+  useEffect(() => {
+    async function getCart() {
+      if (!needsToBeUpdated) return;
+      try {
+        store.setIsLoading(true);
+        const res = await fetch(`${API_URL}/cart/get/${store.state.cartId}`);
+        const data = await res.json();
+        if (res.status < 200 || res.status > 299) {
+          throw new Error(data.message);
+        }
+        const items = data.items.filter((item: CartItem) => item.quantity > 0);
+        setItems(items);
+      } catch (error: any) {
+        console.log(error.message);
+      } finally {
+        store.setIsLoading(false);
+      }
+    }
+    if ((store.state.cartId, needsToBeUpdated)) getCart();
+  }, [store.state.cartId, needsToBeUpdated]);
   const handleAddItem = (id: number) => {
     setItems((prevItems) =>
       prevItems.map((item) =>
@@ -62,10 +63,20 @@ const CartPage = () => {
   const handleDeleteItem = (id: number) => {
     setItems((prevItems) => prevItems.filter((item) => item.id !== id));
   };
-  const totalPrice = items.reduce(
-    (total, item) => total + item.price * item.quantity,
-    0
-  );
+  useEffect(() => {
+    if (!items) return;
+    setTotalPrice(0);
+    items.forEach((item) => {
+      setTotalPrice(
+        (prev) =>
+          prev +
+          (item?.product?.prices?.find(
+            (price) => price.currency === store?.state?.currentCurrency
+          )?.amount ?? 0) *
+            (item?.quantity ?? 0)
+      );
+    });
+  }, [items, store.state.currentCurrency]);
   const totalTax = totalPrice * 0.2;
 
   return (
@@ -103,7 +114,20 @@ const CartPage = () => {
         {items.map((item) => (
           <ProductItem
             key={item.id}
-            item={item}
+            item={{
+              id: item.id,
+              name: item.product.name,
+              description: item.product.description,
+              price: item.product.prices.find(
+                (price) => price.currency === store.state.currentCurrency
+              )!,
+              sizes: item.product.sizes,
+              colors: item.product.colors,
+              image: item.product.gallery[0],
+              quantity: item.quantity,
+              chosenSize: item.chosenSize,
+              chosenColor: item.chosenColor,
+            }}
             onRemoveItem={handleRemoveItem}
             onAddItem={handleAddItem}
             onUpdateItem={handleUpdateItem}
@@ -116,7 +140,6 @@ const CartPage = () => {
           display: "flex",
           flexDirection: "column",
           marginTop: "1rem",
-
           fontSize: "1.2rem",
           width: "max-content",
         }}
@@ -134,7 +157,7 @@ const CartPage = () => {
               fontWeight: 700,
             }}
           >
-            {currency}
+            {store.state.currentCurrency}
             {(totalPrice * 0.21).toFixed(2)}
           </Typography>
         </Box>
@@ -160,14 +183,14 @@ const CartPage = () => {
             justifyContent: "space-between",
           }}
         >
-          <Typography fontFamily="Raleway">Total:{" "}</Typography>
+          <Typography fontFamily="Raleway">Total: </Typography>
           <Typography
             fontFamily="Raleway"
             sx={{
               fontWeight: 700,
             }}
           >
-            {currency}
+            {store.state.currentCurrency}
             {totalPrice.toFixed(2)}
           </Typography>
         </Box>
@@ -193,6 +216,6 @@ const CartPage = () => {
       </Box>
     </Box>
   );
-};
+});
 
 export default CartPage;
