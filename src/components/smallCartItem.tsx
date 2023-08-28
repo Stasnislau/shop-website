@@ -6,7 +6,7 @@ import {
   Box,
   Typography,
   IconButton,
-  Icon,
+  Divider,
   ListItem,
   ListItemText,
   ButtonGroup,
@@ -18,21 +18,62 @@ const SmallCartItem = observer((props: SmallCartItemProps) => {
   const { item, technicalProps } = props;
   const store = useContext(Context);
   return (
-    <ListItem disablePadding>
+    <ListItem disablePadding sx={
+      {
+        position: "relative",
+      }
+    }>
       <IconButton
         aria-label="delete"
         onClick={() => technicalProps.onRemove(item.id)}
-        sx={{ position: "absolute", top: 0, right: 0, zIndex: 1 }}
+        sx={{
+          position: "absolute",
+          top: 0,
+          right: 0,
+          zIndex: 1,
+          gap: "0.5rem",
+        }}
       >
         <Delete />
       </IconButton>
       <Box sx={{ display: "flex", flexDirection: "row" }}>
-        <Box sx={{ display: "flex", flexDirection: "column", width: "48%" }}>
-          <ListItemText primary={item.name} secondary={item.description} />
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            width: "34%",
+            gap: "0",
+            position: "relative",
+          }}
+        >
           <ListItemText
+            primary={item.name}
+            secondary={item.description}
+            sx={{
+              maxHeight: "1.5rem",
+              overflow: "hidden",
+              margin: "0",
+              padding: "0",
+            }}
+          />
+          <ListItemText
+            sx={{
+              maxHeight: "1.5rem",
+              overflow: "hidden",
+              margin: "0",
+              padding: "0",
+            }}
             primary={`${store.state.currentCurrency}${item.price.amount}`}
           />
-          <ListItemText primary={"Size: "} />
+          <ListItemText
+            sx={{
+              maxHeight: "1.5rem",
+              overflow: "hidden",
+              margin: "0",
+              padding: "0",
+            }}
+            primary={"Size: "}
+          />
           <ButtonGroup
             variant="contained"
             aria-label="size"
@@ -115,9 +156,9 @@ const SmallCartItem = observer((props: SmallCartItemProps) => {
           sx={{
             display: "flex",
             flexDirection: "column",
-            height: "100%",
-            justifyContent: "center",
-            width: "8%",
+            justifyContent: "space-between",
+            alignItems: "center",
+            width: "15%",
           }}
         >
           <IconButton
@@ -125,6 +166,8 @@ const SmallCartItem = observer((props: SmallCartItemProps) => {
             sx={{
               borderRadius: "0",
               border: "1px solid black",
+              width: "24px",
+              height: "24px",
             }}
             onClick={() =>
               technicalProps.onQuantityChange(item.id, item.quantity + 1)
@@ -132,13 +175,13 @@ const SmallCartItem = observer((props: SmallCartItemProps) => {
           >
             <Add />
           </IconButton>
-          <Typography variant="h6">
-            {item.quantity}
-          </Typography>
+          <Typography variant="h6">{item.quantity}</Typography>
           <IconButton
             sx={{
               border: "1px solid black",
               borderRadius: 0,
+              width: "24px",
+              height: "24px",
             }}
             aria-label="remove"
             onClick={() =>
@@ -149,8 +192,15 @@ const SmallCartItem = observer((props: SmallCartItemProps) => {
             <Remove />
           </IconButton>
         </Box>
-        <Box sx={{ display: "flex", flexDirection: "column", width: "40%", justifyContext: "flex-end"}}>
-          <img src={item.image} alt={item.name} width="120px" />
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            width: "47%",
+            justifyContext: "flex-end",
+          }}
+        >
+          <img src={item.image} alt={item.name} width="120px" height="100%" />
         </Box>
       </Box>
     </ListItem>

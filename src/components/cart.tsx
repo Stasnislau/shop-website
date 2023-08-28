@@ -2,6 +2,7 @@ import { Suspense, useEffect, useState, useContext } from "react";
 import {
   Box,
   Button,
+  Divider,
   List,
   ListItem,
   ListItemAvatar,
@@ -17,7 +18,6 @@ import { CartItem, ExtendedCartItem } from "@/types";
 import { observer } from "mobx-react-lite";
 import SmallCartItem from "./smallCartItem";
 import { Stroller } from "@mui/icons-material";
-import { debounce } from "@mui/material/utils";
 
 type CartProps = {
   open: boolean;
@@ -160,7 +160,7 @@ const Cart = observer(({ open }: CartProps) => {
     <Box
       sx={{
         position: "absolute",
-        top: "105%",
+        top: "100%",
         right: 0,
         backgroundColor: "rgba(0, 0, 0, 0.5)",
         zIndex: 1,
@@ -172,8 +172,8 @@ const Cart = observer(({ open }: CartProps) => {
           backgroundColor: "white",
           boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
           padding: "1rem",
-          maxHeight: "50vh",
-          overflowY: "hidden"
+          maxHeight: "60vh",
+          overflowY: "hidden",
         }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -183,41 +183,58 @@ const Cart = observer(({ open }: CartProps) => {
           </Typography>
         </Box>
 
-        <List sx={{
-          maxHeight: "30vh",
-          overflowY: "scroll",
-        }}>
+        <List
+          sx={{
+            maxHeight: "40vh",
+            overflowY: "scroll",
+          }}
+        >
           {items.map((item) => (
-            <SmallCartItem
-              item={{
-                id: item.id,
-                quantity: item.quantity,
-                image: item.product.gallery[0],
-                name: item.product.name,
-                description: item.product.description,
-                price: item.product.prices.find(
-                  (price) => price.currency === store.state.currentCurrency
-                )!,
-                sizes: item.product.sizes,
-                chosenSize: item.chosenSize,
-                colors: item.product.colors,
-                chosenColor: item.chosenColor,
-              }}
-              technicalProps={{
-                isLoading: loading,
-                onRemove: onRemove,
-                onQuantityChange: onQuantityChange,
-                onSizeChange: onSizeChange,
-                onColorChange: onColorChange,
-              }}
-              key={item.id}
-            />
+            <Box sx={{ position: "relative" }} key={item.id}>
+              <SmallCartItem
+                item={{
+                  id: item.id,
+                  quantity: item.quantity,
+                  image: item.product.gallery[0],
+                  name: item.product.name,
+                  description: item.product.description,
+                  price: item.product.prices.find(
+                    (price) => price.currency === store.state.currentCurrency
+                  )!,
+                  sizes: item.product.sizes,
+                  chosenSize: item.chosenSize,
+                  colors: item.product.colors,
+                  chosenColor: item.chosenColor,
+                }}
+                technicalProps={{
+                  isLoading: loading,
+                  onRemove: onRemove,
+                  onQuantityChange: onQuantityChange,
+                  onSizeChange: onSizeChange,
+                  onColorChange: onColorChange,
+                }}
+              />
+              <Divider
+                sx={{
+                  margin: "1rem 0",
+                  width: "100%",
+                  position: "relative",
+                }}
+              />
+            </Box>
           ))}
         </List>
 
         <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
-          <Typography fontSize="1rem">Total: </Typography>
-          <Typography fontSize="1rem">
+          <Typography fontSize="1rem" fontFamily="Roboto" fontWeight="500" color="black">
+            Total:{" "}
+          </Typography>
+          <Typography
+            fontSize="1rem"
+            fontFamily="Raleway"
+            fontWeight="700"
+            color="black"
+          >
             {" "}
             {store.state.currentCurrency}
             {totalPrice.toFixed(2)}
