@@ -120,7 +120,6 @@ const Cart = observer(({ open }: CartProps) => {
           throw new Error(data.message);
         }
         setProducts(data);
-        console.log(data);
       } catch (error: any) {
         console.log(error.message);
       } finally {
@@ -144,7 +143,9 @@ const Cart = observer(({ open }: CartProps) => {
   const [totalPrice, setTotalPrice] = useState(0);
   useEffect(() => {
     if (!items) return;
+    setTotalPrice(0);
     items.forEach((item) => {
+
       setTotalPrice(
         (prev) =>
           prev +
@@ -154,7 +155,7 @@ const Cart = observer(({ open }: CartProps) => {
             (item?.quantity ?? 0)
       );
     });
-  }, [items]);
+  }, [items, store.state.currentCurrency]);
 
   return !open ? null : (
     <Box

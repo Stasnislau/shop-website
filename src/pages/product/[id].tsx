@@ -130,10 +130,10 @@ const ProductPage = observer(() => {
         </Box>
         <Box sx={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
           <Box>
-            <Typography fontFamily="Raleway" variant="h5" fontWeight="700">
+            <Typography fontFamily="Raleway" variant="h5" fontWeight="600">
               {product.name}
             </Typography>
-            <Typography variant="h5" fontFamily="Raleway">
+            <Typography variant="h5" fontFamily="Raleway" fontWeight="400">
               {product.description}
             </Typography>
           </Box>
