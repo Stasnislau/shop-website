@@ -18,11 +18,12 @@ const SmallCartItem = observer((props: SmallCartItemProps) => {
   const { item, technicalProps } = props;
   const store = useContext(Context);
   return (
-    <ListItem disablePadding sx={
-      {
+    <ListItem
+      disablePadding
+      sx={{
         position: "relative",
-      }
-    }>
+      }}
+    >
       <IconButton
         aria-label="delete"
         onClick={() => technicalProps.onRemove(item.id)}
@@ -36,14 +37,15 @@ const SmallCartItem = observer((props: SmallCartItemProps) => {
       >
         <Delete />
       </IconButton>
-      <Box sx={{ display: "flex", flexDirection: "row" }}>
+      <Box sx={{ display: "flex", flexDirection: "row", width: "100%" }}>
         <Box
           sx={{
             display: "flex",
             flexDirection: "column",
-            width: "34%",
             gap: "0",
             position: "relative",
+            overflowX: "hidden",
+            maxWidth: "34%",
           }}
         >
           <ListItemText
@@ -67,7 +69,7 @@ const SmallCartItem = observer((props: SmallCartItemProps) => {
           />
           <ListItemText
             sx={{
-              maxHeight: "1.5rem",
+              maxHeight: "2rem",
               overflow: "hidden",
               margin: "0",
               padding: "0",
@@ -82,6 +84,8 @@ const SmallCartItem = observer((props: SmallCartItemProps) => {
               backgroundColor: "inherit",
               boxShadow: "none",
               borderRadius: "0",
+              overflowX: "hidden",
+              flexWrap: "nowrap",
             }}
           >
             {item.sizes.map((sizeOption) => (
@@ -97,8 +101,8 @@ const SmallCartItem = observer((props: SmallCartItemProps) => {
                       : "2px solid black",
                   outline:
                     item.chosenSize === sizeOption ? "1px solid green" : "none",
-                  width: "1rem",
-                  height: "1rem",
+                  width: "1.5rem",
+                  height: "1.5rem",
                   margin: "0.25rem",
                   fontSize: "0.5rem",
                   cursor: "pointer",
@@ -109,6 +113,7 @@ const SmallCartItem = observer((props: SmallCartItemProps) => {
                   textAlign: "center",
                   alignItems: "center",
                   justifyContent: "center",
+                  flexShrink: 0,
                 }}
                 onClick={() => technicalProps.onSizeChange(item.id, sizeOption)}
               >
@@ -125,6 +130,8 @@ const SmallCartItem = observer((props: SmallCartItemProps) => {
               backgroundColor: "inherit",
               boxShadow: "none",
               borderRadius: "0",
+              overflowX: "hidden",
+              flexWrap: "nowrap",
             }}
           >
             {item.colors.map((colorOption) => (
@@ -144,6 +151,8 @@ const SmallCartItem = observer((props: SmallCartItemProps) => {
                     item.chosenColor === colorOption
                       ? "1px solid green"
                       : "none",
+
+                  flexShrink: 0,
                 }}
                 onClick={() =>
                   technicalProps.onColorChange(item.id, colorOption)
