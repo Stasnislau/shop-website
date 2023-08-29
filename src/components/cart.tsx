@@ -291,7 +291,3 @@ const Cart = observer(({ open }: CartProps) => {
 
 export default Cart;
 
-// TODO: fix the bug with the cart not updating when the user adds an item to the cart PRIORITY: MEDIUM
-// TODO: add update for cart with debouncing so that the cart doesn't update on every change PRIORITY: LOW
-// TODO: finish integrating the cart with the backend PRIORITY: HIGH
-// TODO: баг, при смене категории не меняется цена PRIORITY: HIGH

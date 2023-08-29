@@ -28,7 +28,7 @@ export default class Store {
       successMessage: null,
       cartId: "",
       itemsInCart: 0,
-      shouldUpdateCart: false,
+      shouldUpdateCart: true,
     };
     makeAutoObservable(this);
   }
