@@ -9,6 +9,18 @@ export class CartItemService {
   async addCartItem(body: cart_item, cartId: number) {
     try {
       const { productId, quantity, chosenColor, chosenSize } = body;
+      if (quantity < 1) {
+        return ApiError.badRequest("Quantity cannot be less than 1");
+      }
+      const isAlreadyInCart = await this.prismaService.cart_item.findFirst({
+        where: {
+          cartId: Number(cartId),
+          productId: Number(productId),
+        },
+      });
+      if (isAlreadyInCart) {
+        return ApiError.badRequest("Item already in cart");
+      }
       const cartItem = await this.prismaService.cart_item.create({
         data: {
           cartId,
@@ -69,6 +81,9 @@ export class CartItemService {
   async update(cartItemId: number, body: cartItemDto) {
     try {
       const { quantity, chosenColor, chosenSize } = body;
+      if (quantity < 1) {
+        return ApiError.badRequest("Quantity cannot be less than 1");
+      }
       const cartItem = await this.prismaService.cart_item.update({
         where: { id: cartItemId },
         data: {

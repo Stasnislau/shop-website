@@ -50,6 +50,15 @@ export class CartService {
         }
         return newCart.id;
       } else {
+        const isAlreadyInCart = await this.PrismaService.cart_item.findFirst({
+          where: {
+            cartId: Number(cartId),
+            productId: Number(productId),
+          },
+        });
+        if (isAlreadyInCart) {
+          return ApiError.badRequest("Item already in cart");
+        }
         const cartItem = await this.PrismaService.cart_item.create({
           data: {
             cartId: Number(cartId),

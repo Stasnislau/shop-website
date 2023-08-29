@@ -90,9 +90,10 @@ const ProductPage = observer(() => {
         }),
       });
       const data = await res.json();
-      if (res.status < 200 && res.status >= 300) {
+      if (res.status < 200 || res.status >= 300) {
         throw new Error(data.message);
       }
+      store.setShouldUpdateCart(true);
       store.displaySuccess("Product added to cart");
     } catch (error: any) {
       store.displayError(error.message);
