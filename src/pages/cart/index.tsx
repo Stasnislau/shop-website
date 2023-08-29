@@ -102,6 +102,7 @@ const CartPage = observer(() => {
           Cart
         </Box>
       </Typography>
+      <Divider />
       <List
         sx={{
           display: "flex",
@@ -110,108 +111,112 @@ const CartPage = observer(() => {
           overflowY: "auto",
         }}
       >
-        <Divider />
-        {items.map((item) => (
-          <ProductItem
-            key={item.id}
-            item={{
-              id: item.id,
-              name: item.product.name,
-              description: item.product.description,
-              price: item.product.prices.find(
-                (price) => price.currency === store.state.currentCurrency
-              )!,
-              sizes: item.product.sizes,
-              colors: item.product.colors,
-              image: item.product.gallery[0],
-              quantity: item.quantity,
-              chosenSize: item.chosenSize,
-              chosenColor: item.chosenColor,
-            }}
-            onRemoveItem={handleRemoveItem}
-            onAddItem={handleAddItem}
-            onUpdateItem={handleUpdateItem}
-            onDeleteItem={handleDeleteItem}
-          />
+        {items.map((item, index) => (
+          <Box key={index}>
+            <ProductItem
+              key={item.id}
+              item={{
+                id: item.id,
+                name: item.product.name,
+                description: item.product.description,
+                price: item.product.prices.find(
+                  (price) => price.currency === store.state.currentCurrency
+                )!,
+                sizes: item.product.sizes,
+                colors: item.product.colors,
+                image: item.product.gallery[0],
+                quantity: item.quantity,
+                chosenSize: item.chosenSize,
+                chosenColor: item.chosenColor,
+              }}
+              onRemoveItem={handleRemoveItem}
+              onAddItem={handleAddItem}
+              onUpdateItem={handleUpdateItem}
+              onDeleteItem={handleDeleteItem}
+            />
+            {index !== items.length - 1 && <Divider />}
+          </Box>
         ))}
       </List>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          marginTop: "1rem",
-          fontSize: "1.2rem",
-          width: "max-content",
-        }}
-      >
+      <Box>
+        <Divider sx={{ width: "100%" }} />
         <Box
           sx={{
             display: "flex",
-            justifyContent: "space-between",
+            flexDirection: "column",
+            marginTop: "1rem",
+            fontSize: "1.2rem",
+            width: "max-content",
           }}
         >
-          <Typography fontFamily="Raleway">Tax 21%: </Typography>
-          <Typography
-            fontFamily="Raleway"
+          <Box
             sx={{
-              fontWeight: 700,
+              display: "flex",
+              justifyContent: "space-between",
             }}
           >
-            {store.state.currentCurrency}
-            {(totalPrice * 0.21).toFixed(2)}
-          </Typography>
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-          }}
-        >
-          <Typography fontFamily="Raleway">Quantity: </Typography>
-          <Typography
-            fontFamily="Raleway"
+            <Typography fontFamily="Raleway">Tax 21%: </Typography>
+            <Typography
+              fontFamily="Raleway"
+              sx={{
+                fontWeight: 700,
+              }}
+            >
+              {store.state.currentCurrency}
+              {(totalPrice * 0.21).toFixed(2)}
+            </Typography>
+          </Box>
+          <Box
             sx={{
-              fontWeight: 700,
+              display: "flex",
+              flexDirection: "row",
             }}
           >
-            {items.reduce((total, item) => total + item.quantity, 0)}
-          </Typography>
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
-          <Typography fontFamily="Raleway">Total: </Typography>
-          <Typography
-            fontFamily="Raleway"
+            <Typography fontFamily="Raleway">Quantity: </Typography>
+            <Typography
+              fontFamily="Raleway"
+              sx={{
+                fontWeight: 700,
+              }}
+            >
+              {items.reduce((total, item) => total + item.quantity, 0)}
+            </Typography>
+          </Box>
+          <Box
             sx={{
-              fontWeight: 700,
+              display: "flex",
+              justifyContent: "space-between",
             }}
           >
-            {store.state.currentCurrency}
-            {totalPrice.toFixed(2)}
-          </Typography>
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-
-            justifyContent: "flex-start",
-            marginTop: "2rem",
-          }}
-        >
-          <Button
-            variant="contained"
-            color="primary"
+            <Typography fontFamily="Raleway">Total: </Typography>
+            <Typography
+              fontFamily="Raleway"
+              sx={{
+                fontWeight: 700,
+              }}
+            >
+              {store.state.currentCurrency}
+              {totalPrice.toFixed(2)}
+            </Typography>
+          </Box>
+          <Box
             sx={{
-              color: "white",
-              width: "100%",
+              display: "flex",
+              justifyContent: "flex-start",
+              marginTop: "2rem",
             }}
           >
-            Order
-          </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              sx={{
+                color: "white",
+                width: "100%",
+              }}
+            >
+              Order
+            </Button>
+          </Box>
         </Box>
       </Box>
     </Box>

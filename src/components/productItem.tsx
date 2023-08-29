@@ -226,14 +226,6 @@ const ProductItem = observer(
             />
           </Box>
         </ListItemSecondaryAction>
-        <Divider
-          sx={{
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            width: "100%",
-          }}
-        />
       </ListItem>
     );
   }
