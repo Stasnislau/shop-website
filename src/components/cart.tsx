@@ -26,13 +26,14 @@ type CartProps = {
 const Cart = observer(({ open }: CartProps) => {
   const store = useContext(Context);
   const router = useRouter();
+  const [shouldUpdate, setShouldUpdate] = useState(true);
   const [products, setProducts] = useState<ExtendedCartItem>(
     {} as ExtendedCartItem
   );
   const onRemove = async (id: number) => {
     try {
       store.setIsBeingSubmitted(true);
-      const res = await fetch(`${API_URL}/cart/remove/${id}`, {
+      const res = await fetch(`${API_URL}/cart-item/delete/${id}`, {
         method: "DELETE",
       });
       const data = await res.json();
@@ -40,7 +41,7 @@ const Cart = observer(({ open }: CartProps) => {
       if (res.status < 200 || res.status > 299) {
         throw new Error(data.message);
       }
-      setProducts(data);
+      setShouldUpdate(true);
     } catch (error: any) {
       store.displayError(error.message);
     } finally {
@@ -50,7 +51,7 @@ const Cart = observer(({ open }: CartProps) => {
   const onQuantityChange = async (id: number, quantity: number) => {
     try {
       store.setIsBeingSubmitted(true);
-      const res = await fetch(`${API_URL}/cart/update/${id}`, {
+      const res = await fetch(`${API_URL}/cart-item/update/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -71,7 +72,7 @@ const Cart = observer(({ open }: CartProps) => {
   const onSizeChange = async (id: number, size: string) => {
     try {
       store.setIsBeingSubmitted(true);
-      const res = await fetch(`${API_URL}/cart/update/${id}`, {
+      const res = await fetch(`${API_URL}/cart-item/update/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -92,7 +93,7 @@ const Cart = observer(({ open }: CartProps) => {
   const onColorChange = async (id: number, color: string) => {
     try {
       store.setIsBeingSubmitted(true);
-      const res = await fetch(`${API_URL}/cart/update/${id}`, {
+      const res = await fetch(`${API_URL}/cart-item/update/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -121,14 +122,15 @@ const Cart = observer(({ open }: CartProps) => {
           throw new Error(data.message);
         }
         setProducts(data);
+        setShouldUpdate(false);
       } catch (error: any) {
         console.log(error.message);
       } finally {
         setLoading(false);
       }
     }
-    if (store.state.cartId) getCart();
-  }, [store.state.cartId]);
+    if (store.state.cartId && shouldUpdate) getCart();
+  }, [store.state.cartId, shouldUpdate]);
   const [items, setItems] = useState<CartItem[]>([]);
   useEffect(() => {
     if (!products) return;
@@ -191,40 +193,42 @@ const Cart = observer(({ open }: CartProps) => {
             overflowY: "scroll",
           }}
         >
-          {items.map((item) => (
-            <Box sx={{ position: "relative" }} key={item.id}>
-              <SmallCartItem
-                item={{
-                  id: item.id,
-                  quantity: item.quantity,
-                  image: item.product.gallery[0],
-                  name: item.product.name,
-                  description: item.product.description,
-                  price: item.product.prices.find(
-                    (price) => price.currency === store.state.currentCurrency
-                  )!,
-                  sizes: item.product.sizes,
-                  chosenSize: item.chosenSize,
-                  colors: item.product.colors,
-                  chosenColor: item.chosenColor,
-                }}
-                technicalProps={{
-                  isLoading: loading,
-                  onRemove: onRemove,
-                  onQuantityChange: onQuantityChange,
-                  onSizeChange: onSizeChange,
-                  onColorChange: onColorChange,
-                }}
-              />
-              <Divider
-                sx={{
-                  margin: "1rem 0",
-                  width: "100%",
-                  position: "relative",
-                }}
-              />
-            </Box>
-          ))}
+          {items &&
+            items.length > 0 &&
+            items.map((item) => (
+              <Box sx={{ position: "relative" }} key={item.id}>
+                <SmallCartItem
+                  item={{
+                    id: item.id,
+                    quantity: item.quantity,
+                    image: item.product.gallery[0],
+                    name: item.product.name,
+                    description: item.product.description,
+                    price: item.product.prices.find(
+                      (price) => price.currency === store.state.currentCurrency
+                    )!,
+                    sizes: item.product.sizes,
+                    chosenSize: item.chosenSize,
+                    colors: item.product.colors,
+                    chosenColor: item.chosenColor,
+                  }}
+                  technicalProps={{
+                    isLoading: loading,
+                    onRemove: onRemove,
+                    onQuantityChange: onQuantityChange,
+                    onSizeChange: onSizeChange,
+                    onColorChange: onColorChange,
+                  }}
+                />
+                <Divider
+                  sx={{
+                    margin: "1rem 0",
+                    width: "100%",
+                    position: "relative",
+                  }}
+                />
+              </Box>
+            ))}
         </List>
 
         <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>

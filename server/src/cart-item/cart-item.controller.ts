@@ -15,9 +15,9 @@ import ApiError from "src/exceptions/api-error";
 @Controller("cart-item")
 export class CartItemController {
   constructor(private cartItemService: CartItemService) {}
-  @Get("specific/:id")
-  async getCartItem(@Param("id") id: number) {
-    const item = await this.cartItemService.getCartItem(id);
+  @Get("get/:id")
+  async getCartItem(@Param("id") id: string) {
+    const item = await this.cartItemService.getCartItem(Number(id));
     if (item instanceof ApiError) {
       throw item;
     }
@@ -25,18 +25,18 @@ export class CartItemController {
   }
   @Post("add/:cartId")
   async createCartItem(
-    @Param("cartId") cartId: number,
+    @Param("cartId") cartId: string,
     @Body() cartItem: cart_item
   ) {
-    const item = await this.cartItemService.addCartItem(cartItem, cartId);
+    const item = await this.cartItemService.addCartItem(cartItem, Number(cartId));
     if (item instanceof ApiError) {
       throw item;
     }
     return item;
   }
   @Put("update/:id")
-  async updateCartItem(@Param("id") id: number, @Body() values: cartItemDto) {
-    const cart = await this.cartItemService.update(id, values);
+  async updateCartItem(@Param("id") id: string, @Body() values: cartItemDto) {
+    const cart = await this.cartItemService.update(Number(id), values);
     if (cart instanceof ApiError) {
       throw cart;
     }
@@ -44,8 +44,8 @@ export class CartItemController {
   }
 
   @Delete("delete/:id")
-  async deleteCartItem(@Param("id") id: number) {
-    const result = await this.cartItemService.deleteCartItem(id);
+  async deleteCartItem(@Param("id") id: string) {
+    const result = await this.cartItemService.deleteCartItem(Number(id));
     if (result instanceof ApiError) {
       throw result;
     }

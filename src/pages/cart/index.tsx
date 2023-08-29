@@ -224,3 +224,5 @@ const CartPage = observer(() => {
 });
 
 export default CartPage;
+
+
