@@ -16,11 +16,10 @@ import { CartItem } from "@/types";
 const CartPage = observer(() => {
   const store = useContext(Context);
   const [items, setItems] = useState<CartItem[]>([]);
-  const [needsToBeUpdated, setNeedsToBeUpdated] = useState(true);
   const [totalPrice, setTotalPrice] = useState(0);
   useEffect(() => {
     async function getCart() {
-      if (!needsToBeUpdated) return;
+      if (!store.state.shouldUpdateCart) return;
       try {
         store.setIsLoading(true);
         const res = await fetch(`${API_URL}/cart/get/${store.state.cartId}`);
@@ -36,8 +35,8 @@ const CartPage = observer(() => {
         store.setIsLoading(false);
       }
     }
-    if ((store.state.cartId, needsToBeUpdated)) getCart();
-  }, [store.state.cartId, needsToBeUpdated]);
+    if ((store.state.cartId, store.state.shouldUpdateCart)) getCart();
+  }, [store.state.cartId, store.state.shouldUpdateCart]);
   const handleAddItem = (id: number) => {
     setItems((prevItems) =>
       prevItems.map((item) =>

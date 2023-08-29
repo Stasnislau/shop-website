@@ -26,7 +26,6 @@ type CartProps = {
 const Cart = observer(({ open }: CartProps) => {
   const store = useContext(Context);
   const router = useRouter();
-  const [shouldUpdate, setShouldUpdate] = useState(true);
   const [products, setProducts] = useState<ExtendedCartItem>(
     {} as ExtendedCartItem
   );
@@ -41,7 +40,7 @@ const Cart = observer(({ open }: CartProps) => {
       if (res.status < 200 || res.status > 299) {
         throw new Error(data.message);
       }
-      setShouldUpdate(true);
+      store.setShouldUpdateCart(true);
     } catch (error: any) {
       store.displayError(error.message);
     } finally {
@@ -122,15 +121,15 @@ const Cart = observer(({ open }: CartProps) => {
           throw new Error(data.message);
         }
         setProducts(data);
-        setShouldUpdate(false);
+        store.setShouldUpdateCart(false);
       } catch (error: any) {
         console.log(error.message);
       } finally {
         setLoading(false);
       }
     }
-    if (store.state.cartId && shouldUpdate) getCart();
-  }, [store.state.cartId, shouldUpdate]);
+    if (store.state.cartId && store.state.shouldUpdateCart) getCart();
+  }, [store.state.cartId, store.state.shouldUpdateCart]);
   const [items, setItems] = useState<CartItem[]>([]);
   useEffect(() => {
     if (!products) return;
@@ -291,3 +290,4 @@ const Cart = observer(({ open }: CartProps) => {
 });
 
 export default Cart;
+
