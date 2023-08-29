@@ -165,6 +165,7 @@ const ProductItem = observer(
               sx={{
                 display: "flex",
                 flexDirection: "column",
+                alignItems: "flex-end",
                 height: "80%",
                 justifyContent: "space-between",
               }}
@@ -174,18 +175,29 @@ const ProductItem = observer(
                 sx={{
                   borderRadius: "0",
                   border: "1px solid black",
+                  flexShrink: 0,
+                  width: "2.5rem",
+                  height: "2.5rem",
                 }}
                 onClick={() => onAddItem(item.id)}
               >
                 <AddIcon />
               </IconButton>
-              <Typography variant="h6" sx={{ margin: "0 1rem" }}>
-                {item.quantity}
-              </Typography>
+              <Box display="flex" justifyContent="center" width="100%">
+                <Typography
+                  fontSize="1.5rem"
+                  fontWeight="500"
+                  fontFamily="Raleway"
+                >
+                  {item.quantity}
+                </Typography>
+              </Box>
               <IconButton
                 sx={{
                   border: "1px solid black",
                   borderRadius: 0,
+                  width: "2.5rem",
+                  height: "2.5rem",
                 }}
                 aria-label="remove"
                 onClick={() => onRemoveItem(item.id)}
