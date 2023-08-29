@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import { cart, product, cart_item } from "@prisma/client";
+import ApiError from "src/exceptions/api-error";
 
 @Injectable()
 export class CartService {
@@ -14,6 +15,9 @@ export class CartService {
           },
         },
       });
+      if (!cart) {
+        return ApiError.internal("Error creating cart");
+      }
       return cart.id;
     } catch (error) {
       console.log(error);
@@ -41,6 +45,9 @@ export class CartService {
             },
           },
         });
+        if (!newCart) {
+          return ApiError.internal("Error creating cart");
+        }
         return newCart.id;
       } else {
         const cartItem = await this.PrismaService.cart_item.create({
@@ -53,7 +60,7 @@ export class CartService {
           },
         });
         if (!cartItem) {
-          return null;
+          return ApiError.internal("Error adding cart item");
         }
         const cart = await this.PrismaService.cart.update({
           where: { id: Number(cartId) },
@@ -65,6 +72,9 @@ export class CartService {
             },
           },
         });
+        if (!cart) {
+          return ApiError.internal("Error adding cart item");
+        }
         return cart.id;
       }
     } catch (error) {
@@ -94,6 +104,9 @@ export class CartService {
           },
         },
       });
+      if (!cart) {
+        return ApiError.notFound("Cart not found");
+      }
       return cart;
     } catch (error) {
       console.log(error);
@@ -105,7 +118,12 @@ export class CartService {
       const cart = await this.PrismaService.cart.delete({
         where: { id },
       });
-      return "Cart deleted";
+      if (!cart) {
+        return ApiError.internal("Error deleting cart");
+      }
+      if (cart.id === id) {
+        return "Cart deleted successfully";
+      }
     } catch (error) {
       console.log(error);
     }
@@ -120,6 +138,9 @@ export class CartService {
           },
         },
       });
+      if (!cart) {
+        return ApiError.internal("Error updating cart");
+      }
       return cart;
     } catch (error) {
       console.log(error);

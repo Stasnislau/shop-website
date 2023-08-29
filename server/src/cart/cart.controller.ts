@@ -9,29 +9,50 @@ import {
 } from "@nestjs/common";
 import { CartService } from "./cart.service";
 import { cart_item } from "@prisma/client";
+import ApiError from "src/exceptions/api-error";
 
 @Controller("cart")
 export class CartController {
   constructor(private cartService: CartService) {}
   @Post("create")
   async createCart() {
-    return await this.cartService.createCart();
+    const cart = await this.cartService.createCart();
+    if (cart instanceof ApiError) {
+      throw cart;
+    }
+    return cart;
   }
   @Post("add")
   async addCart(@Body() body: cart_item) {
-    return await this.cartService.addCart(body);
+    const cart = await this.cartService.addCart(body);
+    if (cart instanceof ApiError) {
+      throw cart;
+    }
+    return cart;
   }
   @Put("update/:id")
   async updateCart(@Param("id") id: string, @Body() body: cart_item[]) {
-    return this.cartService.updateCart(Number(id), body);
+    const cart = this.cartService.updateCart(Number(id), body);
+    if (cart instanceof ApiError) {
+      throw cart;
+    }
+    return cart;
   }
   @Get("get/:id")
   async getCart(@Param("id") id: string) {
-    return this.cartService.getCart(Number(id));
+    const cart = this.cartService.getCart(Number(id));
+    if (cart instanceof ApiError) {
+      throw cart;
+    }
+    return cart;
   }
 
   @Delete("delete/:id")
   async deleteCart(@Param("id") id: string) {
-    return this.cartService.deleteCart(Number(id));
+    const cart = this.cartService.deleteCart(Number(id));
+    if (cart instanceof ApiError) {
+      throw cart;
+    }
+    return cart;
   }
 }
