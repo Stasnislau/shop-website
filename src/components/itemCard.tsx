@@ -12,9 +12,9 @@ import {
 import { observer } from "mobx-react-lite";
 import { Context } from "@/pages/_app";
 import { useContext, useEffect, useState } from "react";
-import { price, product } from "@prisma/client";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { extendedProduct } from "@/types";
+import { API_URL } from "./header";
 
 type ItemCardProps = {
   item: extendedProduct;
@@ -35,6 +35,34 @@ const ItemCard = observer(({ item, onClick }: ItemCardProps) => {
       )?.amount
     );
   }, [store.state.currentCurrency]);
+  const handleAddToCart = async () => {
+    try {
+      store.setIsBeingSubmitted(true);
+      const res = await fetch(`${API_URL}/cart-item/add/${store.state.cartId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          cartId: store.state.cartId,
+          productId: item.id,
+          quantity: 1,
+          chosenSize: item.sizes[0],
+          chosenColor: item.colors[0],
+        }),
+      });
+      const data = await res.json();
+      if (res.status < 200 || res.status > 299) {
+        throw new Error(data.message);
+      }
+      store.setShouldUpdateCart(true);
+      store.displaySuccess("Item added to cart");
+    } catch (error: any) {
+      store.displayError(error.message);
+    } finally {
+      store.setIsBeingSubmitted(false);
+    }
+  };
   return (
     <Card
       sx={{
@@ -66,9 +94,7 @@ const ItemCard = observer(({ item, onClick }: ItemCardProps) => {
         />
         {isCartShown && (
           <IconButton
-            onClick={() => {
-              console.log("Clicked");
-            }}
+            onClick={handleAddToCart}
             sx={{
               position: "absolute",
               backgroundColor: "#5ECE7B",
