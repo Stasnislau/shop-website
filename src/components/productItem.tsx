@@ -32,8 +32,7 @@ type ProductItemProps = {
     chosenSize: string;
     chosenColor: string;
   };
-  onRemoveItem: (id: number) => void;
-  onAddItem: (id: number) => void;
+  onChangeQuantity: (id: number, quantity: number) => void;
   onUpdateItem: (id: number, size: string, color: string) => void;
   onDeleteItem: (id: number) => void;
 };
@@ -41,8 +40,7 @@ type ProductItemProps = {
 const ProductItem = observer(
   ({
     item,
-    onRemoveItem,
-    onAddItem,
+    onChangeQuantity,
     onUpdateItem,
     onDeleteItem,
   }: ProductItemProps) => {
@@ -64,7 +62,7 @@ const ProductItem = observer(
         <IconButton
           aria-label="delete"
           onClick={() => onDeleteItem(item.id)}
-          sx={{ position: "absolute", top: 0, right: 0 }}
+          sx={{ position: "absolute", top: 0, right: 0, zIndex: 1 }}
         >
           <Delete />
         </IconButton>
@@ -179,7 +177,7 @@ const ProductItem = observer(
                   width: "2.5rem",
                   height: "2.5rem",
                 }}
-                onClick={() => onAddItem(item.id)}
+                onClick={() => onChangeQuantity(item.id, item.quantity + 1)}
               >
                 <AddIcon />
               </IconButton>
@@ -200,7 +198,7 @@ const ProductItem = observer(
                   height: "2.5rem",
                 }}
                 aria-label="remove"
-                onClick={() => onRemoveItem(item.id)}
+                onClick={() => onChangeQuantity(item.id, item.quantity - 1)}
                 disabled={item.quantity === 1}
               >
                 <RemoveIcon />

@@ -12,11 +12,33 @@ import { API_URL } from "@/components/header";
 import { Context } from "@/pages/_app";
 import { observer } from "mobx-react-lite";
 import { CartItem } from "@/types";
+import useDebounce from "@/hooks/useDebounce";
 
 const CartPage = observer(() => {
   const store = useContext(Context);
   const [items, setItems] = useState<CartItem[]>([]);
   const [totalPrice, setTotalPrice] = useState(0);
+  const changeQuantity = useDebounce(async (id: number, quantity: number) => {
+    try {
+      store.setIsBeingSubmitted(true);
+      const res = await fetch(`${API_URL}/cart-item/update/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ quantity }),
+      });
+      const data = await res.json();
+      if (res.status < 200 || res.status > 299) {
+        throw new Error(data.message);
+      }
+      store.setShouldUpdateCart(true);
+    } catch (error: any) {
+      store.displayError(error.message);
+    } finally {
+      store.setIsBeingSubmitted(false);
+    }
+  }, 1000);
   useEffect(() => {
     async function getCart() {
       if (!store.state.shouldUpdateCart) return;
@@ -37,30 +59,39 @@ const CartPage = observer(() => {
     }
     if ((store.state.cartId, store.state.shouldUpdateCart)) getCart();
   }, [store.state.cartId, store.state.shouldUpdateCart]);
-  const handleAddItem = (id: number) => {
+  const handleChangeQuantity = async (id: number, quantity: number) => {
     setItems((prevItems) =>
       prevItems.map((item) =>
-        item.id === id ? { ...item, quantity: item.quantity + 1 } : item
+        item.id === id ? { ...item, quantity } : item
       )
     );
+    changeQuantity(id, quantity);
   };
 
-  const handleRemoveItem = (id: number) => {
-    setItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === id ? { ...item, quantity: item.quantity - 1 } : item
-      )
-    );
-  };
-  const handleUpdateItem = (id: number, size: string, color: string) => {
+  const handleUpdateItem = async (id: number, size: string, color: string) => {
     setItems((prevItems) =>
       prevItems.map((item) =>
         item.id === id ? { ...item, size, color } : item
       )
     );
   };
-  const handleDeleteItem = (id: number) => {
-    setItems((prevItems) => prevItems.filter((item) => item.id !== id));
+  const handleDeleteItem = async (id: number) => {
+    try {
+      store.setIsBeingSubmitted(true);
+      const res = await fetch(`${API_URL}/cart-item/delete/${id}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+
+      if (res.status < 200 || res.status > 299) {
+        throw new Error(data.message);
+      }
+      store.setShouldUpdateCart(true);
+    } catch (error: any) {
+      store.displayError(error.message);
+    } finally {
+      store.setIsBeingSubmitted(false);
+    }
   };
   useEffect(() => {
     if (!items) return;
@@ -76,7 +107,7 @@ const CartPage = observer(() => {
       );
     });
   }, [items, store.state.currentCurrency]);
-  const totalTax = totalPrice * 0.2;
+  
 
   return (
     <Box sx={{ marginTop: "2rem" }}>
@@ -128,8 +159,7 @@ const CartPage = observer(() => {
                 chosenSize: item.chosenSize,
                 chosenColor: item.chosenColor,
               }}
-              onRemoveItem={handleRemoveItem}
-              onAddItem={handleAddItem}
+              onChangeQuantity={handleChangeQuantity}
               onUpdateItem={handleUpdateItem}
               onDeleteItem={handleDeleteItem}
             />
@@ -223,5 +253,3 @@ const CartPage = observer(() => {
 });
 
 export default CartPage;
-
-

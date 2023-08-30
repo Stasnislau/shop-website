@@ -164,7 +164,7 @@ const Cart = observer(({ open }: CartProps) => {
         top: "100%",
         right: 0,
         backgroundColor: "rgba(0, 0, 0, 0.5)",
-        zIndex: 1,
+        zIndex: 2,
         width: "350px",
       }}
     >
