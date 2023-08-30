@@ -7,6 +7,7 @@ import { observer } from "mobx-react-lite";
 import SmallCartItem from "./smallCartItem";
 import { useRouter } from "next/router";
 import useDebounce from "@/hooks/useDebounce";
+import { set } from "lodash";
 
 type CartProps = {
   open: boolean;
@@ -74,12 +75,18 @@ const Cart = observer(({ open }: CartProps) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ size }),
+        body: JSON.stringify({ chosenSize: size }),
       });
       const data = await res.json();
       if (res.status < 200 || res.status > 299) {
         throw new Error(data.message);
       }
+      setProducts((prev) => ({
+        ...prev,
+        items: prev.items.map((item) =>
+          item.id === id ? { ...item, chosenSize: size } : item
+        ),
+      }));
       store.setShouldUpdateCart(true);
     } catch (error: any) {
       store.displayError(error.message);
@@ -95,12 +102,18 @@ const Cart = observer(({ open }: CartProps) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ color }),
+        body: JSON.stringify({ chosenColor: color }),
       });
       const data = await res.json();
       if (res.status < 200 || res.status > 299) {
         throw new Error(data.message);
       }
+      setProducts((prev) => ({
+        ...prev,
+        items: prev.items.map((item) =>
+          item.id === id ? { ...item, chosenColor: color } : item
+        ),
+      }));
       store.setShouldUpdateCart(true);
     } catch (error: any) {
       store.displayError(error.message);
