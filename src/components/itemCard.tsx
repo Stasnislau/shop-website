@@ -35,6 +35,7 @@ const ItemCard = observer(({ item, onClick }: ItemCardProps) => {
       )?.amount
     );
   }, [store.state.currentCurrency]);
+  
   const handleAddToCart = async () => {
     try {
       store.setIsBeingSubmitted(true);

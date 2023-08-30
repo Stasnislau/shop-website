@@ -1,23 +1,12 @@
-import { Suspense, useEffect, useState, useContext } from "react";
-import {
-  Box,
-  Button,
-  Divider,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemSecondaryAction,
-  ListItemText,
-  Skeleton,
-  Typography,
-} from "@mui/material";
-import Image from "next/image";
+import { useEffect, useState, useContext } from "react";
+import { Box, Button, Divider, List, Typography } from "@mui/material";
 import { API_URL } from "./header";
 import { Context } from "@/pages/_app";
 import { CartItem, ExtendedCartItem } from "@/types";
 import { observer } from "mobx-react-lite";
 import SmallCartItem from "./smallCartItem";
 import { useRouter } from "next/router";
+import useDebounce from "@/hooks/useDebounce";
 
 type CartProps = {
   open: boolean;
@@ -47,7 +36,7 @@ const Cart = observer(({ open }: CartProps) => {
       store.setIsBeingSubmitted(false);
     }
   };
-  const onQuantityChange = async (id: number, quantity: number) => {
+  const changeQuantity = useDebounce(async (id: number, quantity: number) => {
     try {
       store.setIsBeingSubmitted(true);
       const res = await fetch(`${API_URL}/cart-item/update/${id}`, {
@@ -67,6 +56,15 @@ const Cart = observer(({ open }: CartProps) => {
     } finally {
       store.setIsBeingSubmitted(false);
     }
+  }, 1000);
+  const onQuantityChange = async (id: number, quantity: number) => {
+    setProducts((prev) => ({
+      ...prev,
+      items: prev.items.map((item) =>
+        item.id === id ? { ...item, quantity } : item
+      ),
+    }));
+    changeQuantity(id, quantity);
   };
   const onSizeChange = async (id: number, size: string) => {
     try {
@@ -290,4 +288,3 @@ const Cart = observer(({ open }: CartProps) => {
 });
 
 export default Cart;
-
