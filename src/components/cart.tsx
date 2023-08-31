@@ -49,9 +49,9 @@ const Cart = observer(({ open }: CartProps) => {
       });
       const data = await res.json();
       if (res.status < 200 || res.status > 299) {
+        store.setShouldUpdateCart(true);
         throw new Error(data.message);
       }
-      store.setShouldUpdateCart(true);
     } catch (error: any) {
       store.displayError(error.message);
     } finally {
@@ -87,7 +87,6 @@ const Cart = observer(({ open }: CartProps) => {
           item.id === id ? { ...item, chosenSize: size } : item
         ),
       }));
-      store.setShouldUpdateCart(true);
     } catch (error: any) {
       store.displayError(error.message);
     } finally {
@@ -114,7 +113,6 @@ const Cart = observer(({ open }: CartProps) => {
           item.id === id ? { ...item, chosenColor: color } : item
         ),
       }));
-      store.setShouldUpdateCart(true);
     } catch (error: any) {
       store.displayError(error.message);
     } finally {

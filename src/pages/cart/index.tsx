@@ -34,9 +34,10 @@ const CartPage = observer(() => {
       });
       const data = await res.json();
       if (res.status < 200 || res.status > 299) {
+        store.setShouldUpdateCart(true);
         throw new Error(data.message);
       }
-      store.setShouldUpdateCart(true);
+      
     } catch (error: any) {
       store.displayError(error.message);
     } finally {
@@ -93,7 +94,6 @@ const CartPage = observer(() => {
             : item
         )
       );
-      store.setShouldUpdateCart(true);
     } catch (error: any) {
       store.displayError(error.message);
     } finally {
