@@ -106,7 +106,7 @@ const ItemCard = observer(({ item, onClick }: ItemCardProps) => {
               bottom: "15%",
               right: "7%",
               ":hover": {
-                backgroundColor: "#5ECE7B99",
+                backgroundColor: "#409455",
               },
             }}
           >
