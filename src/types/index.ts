@@ -45,8 +45,8 @@ export interface ExtendedCartItem {
 }
 
 export interface SmallCartItemProps {
-  item: SmallItemProps
-  technicalProps: smallTechnicalProps
+  item: SmallItemProps;
+  technicalProps: SmallTechnicalProps;
 }
 
 export interface SmallItemProps {
@@ -62,10 +62,16 @@ export interface SmallItemProps {
   chosenColor: string;
 }
 
-export interface smallTechnicalProps {
+export interface SmallTechnicalProps {
   isLoading: boolean;
   onRemove: (id: number) => void;
   onQuantityChange: (id: number, quantity: number) => void;
   onSizeChange: (id: number, size: string) => void;
   onColorChange: (id: number, color: string) => void;
+}
+
+export interface Message {
+  type: "error" | "success";
+  message: string;
+  id: number;
 }
