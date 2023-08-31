@@ -12,6 +12,7 @@ export interface stateInterface {
   cartId: string;
   itemsInCart: number;
   shouldUpdateCart: boolean;
+  shouldUpdateProducts: boolean;
 }
 export default class Store {
   state: stateInterface;
@@ -29,6 +30,7 @@ export default class Store {
       cartId: "",
       itemsInCart: 0,
       shouldUpdateCart: true,
+      shouldUpdateProducts: false,
     };
     makeAutoObservable(this);
   }
@@ -69,5 +71,8 @@ export default class Store {
   }
   setShouldUpdateCart = (value: boolean) => {
     this.state.shouldUpdateCart = value;
+  }
+  setShouldUpdateProducts = (value: boolean) => {
+    this.state.shouldUpdateProducts = value;
   }
 }

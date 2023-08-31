@@ -39,30 +39,38 @@ const Page = observer(() => {
   useEffect(() => {
     setPaginationCount(Math.ceil(currentProducts.length / 6));
   }, [currentProducts]);
-  useEffect(() => {
-    const fetchByCategory = async () => {
-      try {
-        store.setIsLoading(true);
-        setCurrentProducts([]);
-        const response = await fetch(
-          API_URL + `/products/category/${store.state.currentCategory}`
-        );
-        const data = await response.json();
-        if (response.status !== 200) {
-          throw new Error(data.message);
-        }
-        setCurrentProducts(data);
-      } catch (error: any) {
-        store.displayError(error.message);
-      } finally {
-        store.setIsLoading(false);
-        setCurrentPage(1);
+  const fetchByCategory = async () => {
+    try {
+      store.setIsLoading(true);
+      setCurrentProducts([]);
+      const response = await fetch(
+        API_URL + `/products/category/${store.state.currentCategory}`
+      );
+      const data = await response.json();
+      if (response.status !== 200) {
+        throw new Error(data.message);
       }
-    };
+      store.setShouldUpdateProducts(false);
+      setCurrentProducts(data);
+    } catch (error: any) {
+      store.displayError(error.message);
+    } finally {
+      store.setIsLoading(false);
+      setCurrentPage(1);
+    }
+  };
+  useEffect(() => {
     startTransition(() => {
       fetchByCategory();
     });
   }, [store.state.currentCategory, store]);
+  useEffect(() => {
+    if (store.state.shouldUpdateProducts) {
+      startTransition(() => {
+        fetchByCategory();
+      });
+    }
+  }, [store.state.shouldUpdateProducts]);
   const router = useRouter();
   return (
     <Box
