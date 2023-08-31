@@ -161,7 +161,7 @@ const Header = observer(() => {
                   width: "max-content",
                   left: 0,
                   right: -0,
-                  zIndex: 1,
+                  zIndex: 2,
                   p: 0,
                   m: 0,
                   boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
