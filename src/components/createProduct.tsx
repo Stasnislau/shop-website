@@ -73,7 +73,7 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
           method: "GET",
         });
         const data = await response.json();
-        
+
         if (response.status !== 200) {
           throw new Error(data.message);
         }
@@ -138,20 +138,21 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
   const onSubmit = async (values: ProductToCreate) => {
     try {
       store.setIsBeingSubmitted(true);
-      const response = await fetch(API_URL + "/products/create", {
+      const res = await fetch(API_URL + "/products/create", {
         method: "POST",
         body: JSON.stringify(values),
         headers: {
           "Content-Type": "application/json",
         },
       });
-      if (!response.ok) {
-        throw new Error("Something went wrong");
-      } else {
-        store.displaySuccess("Product created successfully");
-        formik.resetForm();
-        onClose();
+      const data = await res.json();
+      if (res.status < 200 || res.status > 299) {
+        throw new Error(data.message);
       }
+      store.displaySuccess("Product created successfully");
+      formik.resetForm();
+      store.setShouldUpdateProducts(true);
+      onClose();
     } catch (error: any) {
       store.displayError(error.message);
     } finally {
