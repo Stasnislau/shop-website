@@ -19,6 +19,27 @@ const Cart = observer(({ open }: CartProps) => {
   const [products, setProducts] = useState<ExtendedCartItem>(
     {} as ExtendedCartItem
   );
+  const buyProducts = async () => {
+    try {
+      store.setIsBeingSubmitted(true);
+      const res = await fetch(`${API_URL}/cart/buy/${store.state.cartId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      if (res.status < 200 || res.status > 299) {
+        throw new Error(data.message);
+      }
+      store.setShouldUpdateCart(true);
+      store.displaySuccess(data.message);
+    } catch (error: any) {
+      store.displayError(error.message);
+    } finally {
+      store.setIsBeingSubmitted(false);
+    }
+  };
   const onRemove = async (id: number) => {
     try {
       store.setIsBeingSubmitted(true);
@@ -289,6 +310,7 @@ const Cart = observer(({ open }: CartProps) => {
                 backgroundColor: "#5ECE7B",
               },
             }}
+            onClick={buyProducts}
           >
             Checkout
           </Button>

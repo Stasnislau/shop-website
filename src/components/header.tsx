@@ -27,8 +27,7 @@ import Cart from "./cart";
 import CreateProduct from "./createProduct";
 import { Context } from "@/pages/_app";
 import { useRouter } from "next/router";
-import { Prisma, currencies } from "@prisma/client";
-import { start } from "repl";
+import { currencies } from "@prisma/client";
 export const API_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 const Header = observer(() => {

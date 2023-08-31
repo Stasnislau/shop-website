@@ -13,7 +13,7 @@ import { Context } from "@/pages/_app";
 import { observer } from "mobx-react-lite";
 import { CartItem } from "@/types";
 import useDebounce from "@/hooks/useDebounce";
-import { get, set } from "lodash";
+import { set } from "lodash";
 
 const CartPage = observer(() => {
   const store = useContext(Context);
@@ -22,6 +22,28 @@ const CartPage = observer(() => {
   useEffect(() => {
     store.setShouldUpdateCart(true);
   }, [store]);
+  const buyProducts = async () => {
+    try {
+      store.setIsBeingSubmitted(true);
+      const res = await fetch(`${API_URL}/cart/buy/${store.state.cartId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      if (res.status < 200 || res.status > 299) {
+        throw new Error(data.message);
+      }
+      setItems([]);
+      store.setShouldUpdateCart(true);
+      store.displaySuccess(data.message);
+    } catch (error: any) {
+      store.displayError(error.message);
+    } finally {
+      store.setIsBeingSubmitted(false);
+    }
+  };
   const changeQuantity = useDebounce(async (id: number, quantity: number) => {
     try {
       store.setIsBeingSubmitted(true);
@@ -37,7 +59,6 @@ const CartPage = observer(() => {
         store.setShouldUpdateCart(true);
         throw new Error(data.message);
       }
-      
     } catch (error: any) {
       store.displayError(error.message);
     } finally {
@@ -63,8 +84,9 @@ const CartPage = observer(() => {
         store.setIsLoading(false);
       }
     }
-    console.log(store.state.cartId, store.state.shouldUpdateCart);
-    if (store.state.cartId && store.state.shouldUpdateCart) getCart();
+    if (store.state.cartId) {
+      getCart();
+    }
   }, [store.state.cartId, store.state.shouldUpdateCart, store]);
   const handleChangeQuantity = async (id: number, quantity: number) => {
     setItems((prevItems) =>
@@ -165,31 +187,33 @@ const CartPage = observer(() => {
           overflowY: "auto",
         }}
       >
-        {items.map((item, index) => (
-          <Box key={index}>
-            <ProductItem
-              key={item.id}
-              item={{
-                id: item.id,
-                name: item.product.name,
-                description: item.product.description,
-                price: item.product.prices.find(
-                  (price) => price.currency === store.state.currentCurrency
-                )!,
-                sizes: item.product.sizes,
-                colors: item.product.colors,
-                image: item.product.gallery[0],
-                quantity: item.quantity,
-                chosenSize: item.chosenSize,
-                chosenColor: item.chosenColor,
-              }}
-              onChangeQuantity={handleChangeQuantity}
-              onUpdateItem={handleUpdateItem}
-              onDeleteItem={handleDeleteItem}
-            />
-            {index !== items.length - 1 && <Divider />}
-          </Box>
-        ))}
+        {items &&
+          items.length > 0 &&
+          items.map((item, index) => (
+            <Box key={index}>
+              <ProductItem
+                key={item.id}
+                item={{
+                  id: item.id,
+                  name: item.product.name,
+                  description: item.product.description,
+                  price: item.product.prices.find(
+                    (price) => price.currency === store.state.currentCurrency
+                  )!,
+                  sizes: item.product.sizes,
+                  colors: item.product.colors,
+                  image: item.product.gallery[0],
+                  quantity: item.quantity,
+                  chosenSize: item.chosenSize,
+                  chosenColor: item.chosenColor,
+                }}
+                onChangeQuantity={handleChangeQuantity}
+                onUpdateItem={handleUpdateItem}
+                onDeleteItem={handleDeleteItem}
+              />
+              {index !== items.length - 1 && <Divider />}
+            </Box>
+          ))}
       </List>
       <Box>
         <Divider sx={{ width: "100%" }} />
@@ -266,6 +290,7 @@ const CartPage = observer(() => {
                 color: "white",
                 width: "100%",
               }}
+              onClick={buyProducts}
             >
               Order
             </Button>
@@ -277,4 +302,5 @@ const CartPage = observer(() => {
 });
 
 export default CartPage;
+
 
