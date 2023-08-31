@@ -1,9 +1,7 @@
 import {
   Box,
-  Button,
   Card,
   CardActionArea,
-  CardActions,
   CardContent,
   CardMedia,
   IconButton,
@@ -35,23 +33,26 @@ const ItemCard = observer(({ item, onClick }: ItemCardProps) => {
       )?.amount
     );
   }, [store.state.currentCurrency]);
-  
+
   const handleAddToCart = async () => {
     try {
       store.setIsBeingSubmitted(true);
-      const res = await fetch(`${API_URL}/cart-item/add/${store.state.cartId}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          cartId: store.state.cartId,
-          productId: item.id,
-          quantity: 1,
-          chosenSize: item.sizes[0],
-          chosenColor: item.colors[0],
-        }),
-      });
+      const res = await fetch(
+        `${API_URL}/cart-item/add/${store.state.cartId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            cartId: store.state.cartId,
+            productId: item.id,
+            quantity: 1,
+            chosenSize: item.sizes[0],
+            chosenColor: item.colors[0],
+          }),
+        }
+      );
       const data = await res.json();
       if (res.status < 200 || res.status > 299) {
         throw new Error(data.message);
@@ -95,14 +96,17 @@ const ItemCard = observer(({ item, onClick }: ItemCardProps) => {
         />
         {isCartShown && (
           <IconButton
-            onClick={handleAddToCart}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleAddToCart();
+            }}
             sx={{
               position: "absolute",
               backgroundColor: "#5ECE7B",
               bottom: "15%",
               right: "7%",
               ":hover": {
-                backgroundColor: "#5ECE7B80",
+                backgroundColor: "#5ECE7B99",
               },
             }}
           >
