@@ -162,10 +162,18 @@ export class CartService {
         where: { id: cartId },
         select: {
           id: true,
+          items: {
+            select: {
+              id: true,
+            },
+          },
         },
       });
       if (!cart) {
         return ApiError.notFound("Cart not found");
+      }
+      if (cart.items.length === 0) {
+        return ApiError.badRequest("Cart is empty");
       }
       const cartItems = await this.PrismaService.cart_item.deleteMany({
         where: { cartId },
@@ -173,7 +181,9 @@ export class CartService {
       if (!cartItems) {
         return ApiError.internal("Error buying cart");
       }
-      return "All items bought successfully";
+      return {
+        message: "Cart bought successfully",
+      }
     } catch (error) {
       console.log(error);
     }

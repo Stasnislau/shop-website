@@ -67,6 +67,14 @@ export class CartItemService {
 
   async deleteCartItem(id: number) {
     try {
+      const isAlreadyInCart = await this.prismaService.cart_item.findFirst({
+        where: {
+          id,
+        },
+      });
+      if (!isAlreadyInCart) {
+        return ApiError.notFound("Item not in cart");
+      }
       const cartItem = await this.prismaService.cart_item.delete({
         where: { id },
       });
@@ -83,6 +91,14 @@ export class CartItemService {
       const { quantity, chosenColor, chosenSize } = body;
       if (quantity < 1) {
         return ApiError.badRequest("Quantity cannot be less than 1");
+      }
+      const isAlreadyInCart = await this.prismaService.cart_item.findFirst({
+        where: {
+          id: cartItemId,
+        },
+      });
+      if (!isAlreadyInCart) {
+        return ApiError.notFound("Item not in cart");
       }
       const cartItem = await this.prismaService.cart_item.update({
         where: { id: cartItemId },
