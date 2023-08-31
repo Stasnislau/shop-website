@@ -155,4 +155,27 @@ export class CartService {
       console.log(error);
     }
   }
+
+  async buyCart(cartId: number) {
+    try {
+      const cart = await this.PrismaService.cart.findUnique({
+        where: { id: cartId },
+        select: {
+          id: true,
+        },
+      });
+      if (!cart) {
+        return ApiError.notFound("Cart not found");
+      }
+      const cartItems = await this.PrismaService.cart_item.deleteMany({
+        where: { cartId },
+      });
+      if (!cartItems) {
+        return ApiError.internal("Error buying cart");
+      }
+      return "All items bought successfully";
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }

@@ -55,4 +55,13 @@ export class CartController {
     }
     return cart;
   }
+
+  @Post("buy/:cartId")
+  async buyCart(@Param("cartId") cartId: string) {
+    const cart = await this.cartService.buyCart(Number(cartId));
+    if (cart instanceof ApiError) {
+      throw cart;
+    }
+    return cart;
+  }
 }
