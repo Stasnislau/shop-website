@@ -13,11 +13,15 @@ import { Context } from "@/pages/_app";
 import { observer } from "mobx-react-lite";
 import { CartItem } from "@/types";
 import useDebounce from "@/hooks/useDebounce";
+import { get, set } from "lodash";
 
 const CartPage = observer(() => {
   const store = useContext(Context);
   const [items, setItems] = useState<CartItem[]>([]);
   const [totalPrice, setTotalPrice] = useState(0);
+  useEffect(() => {
+    store.setShouldUpdateCart(true);
+  }, [store]);
   const changeQuantity = useDebounce(async (id: number, quantity: number) => {
     try {
       store.setIsBeingSubmitted(true);
@@ -39,6 +43,7 @@ const CartPage = observer(() => {
       store.setIsBeingSubmitted(false);
     }
   }, 1000);
+
   useEffect(() => {
     async function getCart() {
       if (!store.state.shouldUpdateCart) return;
@@ -57,23 +62,43 @@ const CartPage = observer(() => {
         store.setIsLoading(false);
       }
     }
-    if ((store.state.cartId, store.state.shouldUpdateCart)) getCart();
-  }, [store.state.cartId, store.state.shouldUpdateCart]);
+    console.log(store.state.cartId, store.state.shouldUpdateCart);
+    if (store.state.cartId && store.state.shouldUpdateCart) getCart();
+  }, [store.state.cartId, store.state.shouldUpdateCart, store]);
   const handleChangeQuantity = async (id: number, quantity: number) => {
     setItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === id ? { ...item, quantity } : item
-      )
+      prevItems.map((item) => (item.id === id ? { ...item, quantity } : item))
     );
     changeQuantity(id, quantity);
   };
 
   const handleUpdateItem = async (id: number, size: string, color: string) => {
-    setItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === id ? { ...item, size, color } : item
-      )
-    );
+    try {
+      store.setIsBeingSubmitted(true);
+      const res = await fetch(`${API_URL}/cart-item/update/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ chosenColor: color, chosenSize: size }),
+      });
+      const data = await res.json();
+      if (res.status < 200 || res.status > 299) {
+        throw new Error(data.message);
+      }
+      setItems((prevItems) =>
+        prevItems.map((item) =>
+          item.id === id
+            ? { ...item, chosenColor: color, chosenSize: size }
+            : item
+        )
+      );
+      store.setShouldUpdateCart(true);
+    } catch (error: any) {
+      store.displayError(error.message);
+    } finally {
+      store.setIsBeingSubmitted(false);
+    }
   };
   const handleDeleteItem = async (id: number) => {
     try {
@@ -107,7 +132,6 @@ const CartPage = observer(() => {
       );
     });
   }, [items, store.state.currentCurrency]);
-  
 
   return (
     <Box sx={{ marginTop: "2rem" }}>
@@ -253,3 +277,4 @@ const CartPage = observer(() => {
 });
 
 export default CartPage;
+
