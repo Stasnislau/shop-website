@@ -11,6 +11,7 @@ export interface stateInterface {
   itemsInCart: number;
   shouldUpdateCart: boolean;
   shouldUpdateProducts: boolean;
+  addedMessage: boolean;
 }
 export default class Store {
   state: stateInterface;
@@ -26,6 +27,7 @@ export default class Store {
       itemsInCart: 0,
       shouldUpdateCart: true,
       shouldUpdateProducts: false,
+      addedMessage: false,
     };
     makeAutoObservable(this);
   }
@@ -55,13 +57,15 @@ export default class Store {
       message,
       id: this.createMessageId(), 
     });
+    this.state.addedMessage = true;
   };
   displaySuccess = (message: string) => {
     this.state.messages.push({
       type: "success",
       message,
-      id: this.state.messages.length === 0 ? 0 : this.state.messages.length - 1,
+      id: this.createMessageId(),
     });
+    this.state.addedMessage = true;
   };
   removeMessage = (id: number) => {
     this.state.messages = this.state.messages.filter((message) => message.id !== id);
