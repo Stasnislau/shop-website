@@ -74,6 +74,7 @@ const Header = observer(() => {
       fetchCurrencies();
     });
   }, [store.state.currentCurrency, store]);
+  const router = useRouter();
   return (
     <AppBar
       position="static"
@@ -195,30 +196,32 @@ const Header = observer(() => {
               </List>
             )}
           </IconButton>
-          <IconButton
-            onMouseEnter={() => setIsCartOpen(true)}
-            onMouseLeave={() => setIsCartOpen(false)}
-          >
-            <Badge badgeContent={store.state.itemsInCart} sx={
-              {
-                "& .MuiBadge-badge": {
-                  backgroundColor: "#1D1F22",
-                  color: "#fff",
-                  top: "-10%",
-                  right: "-10%",
-                  fontSize: "0.75rem",
-                  minWidth: "1.5rem",
-                  minHeight: "1.5rem",
-                  padding: "0 0.5rem",
-                  borderRadius: "50%",
-                }
-                
-              }
-            }>
-              <Image src={cartIcon} alt="cart icon" />
-            </Badge>
-            <Cart open={isCartOpen} />
-          </IconButton>
+          {router.pathname === "/cart" ? null : (
+            <IconButton
+              onMouseEnter={() => setIsCartOpen(true)}
+              onMouseLeave={() => setIsCartOpen(false)}
+            >
+              <Badge
+                badgeContent={store.state.itemsInCart}
+                sx={{
+                  "& .MuiBadge-badge": {
+                    backgroundColor: "#1D1F22",
+                    color: "#fff",
+                    top: "-10%",
+                    right: "-10%",
+                    fontSize: "0.75rem",
+                    minWidth: "1.5rem",
+                    minHeight: "1.5rem",
+                    padding: "0 0.5rem",
+                    borderRadius: "50%",
+                  },
+                }}
+              >
+                <Image src={cartIcon} alt="cart icon" />
+              </Badge>
+              <Cart open={isCartOpen} />
+            </IconButton>
+          )}
         </Box>
       </Box>
       <CreateProduct
