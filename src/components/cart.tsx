@@ -7,7 +7,6 @@ import { observer } from "mobx-react-lite";
 import SmallCartItem from "./smallCartItem";
 import { useRouter } from "next/router";
 import useDebounce from "@/hooks/useDebounce";
-import { set } from "lodash";
 
 type CartProps = {
   open: boolean;
@@ -321,3 +320,4 @@ const Cart = observer(({ open }: CartProps) => {
 });
 
 export default Cart;
+

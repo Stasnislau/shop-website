@@ -1,25 +1,16 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { observer } from "mobx-react-lite";
 import { Context } from "../pages/_app";
 import { useContext } from "react";
 import { Message } from "@/types";
-import { Slide, Snackbar } from "@mui/material";
+import { Snackbar, Slide, SlideProps, Box } from "@mui/material";
 import SuccessMessageComponent from "./successMessageComponent";
 import ErrorMessageComponent from "./errorMessageComponent";
-import { SlideProps } from "@mui/material/Slide";
+import React from "react";
 
 const MessageComponent = observer(() => {
   const store = useContext(Context);
-  const [width, setWidth] = useState(0);
-  const ref = useRef<HTMLElement>(null);
 
-  useEffect(() => {
-    if (!ref.current || ref.current === null) return;
-    if (ref.current) {
-      const rect = ref.current.getBoundingClientRect();
-      setWidth(rect.width);
-    }
-  }, [ref]);
   const [numberOfMessagesShown, setNumberOfMessagesShown] = useState(0);
   const [messages, setMessages] = useState<Message[]>(store.state.messages);
   useEffect(() => {
@@ -59,13 +50,19 @@ const MessageComponent = observer(() => {
             store.removeMessage(item.id);
             setNumberOfMessagesShown((prevNumber) => prevNumber - 1);
           }}
-          anchorOrigin={{ vertical: "top", horizontal: "center" }}
-          style={{ marginTop: index * 70 }}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+          sx={{
+            marginBottom: `${index * 80}px`,
+          }}
         >
           {item.type === "success" ? (
-            <SuccessMessageComponent message={item.message} />
+            <Box>
+              <SuccessMessageComponent alert={item} />
+            </Box>
           ) : (
-            <ErrorMessageComponent message={item.message} />
+            <Box>
+              <ErrorMessageComponent alert={item} />
+            </Box>
           )}
         </Snackbar>
       ))}

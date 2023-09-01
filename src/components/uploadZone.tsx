@@ -1,8 +1,8 @@
-import { Button, Stack, Box, Typography, IconButton } from "@mui/material";
+import { Box, Typography, IconButton } from "@mui/material";
 import { useDropzone } from "react-dropzone";
 import React, { useEffect, useState } from "react";
 import AddedImage from "./addedImage";
-import { FiveK, Close } from "@mui/icons-material";
+import { Close } from "@mui/icons-material";
 import { fileObject } from "@/types";
 import convertBase64 from "@/assets/convertBase64";
 const UploadZone = ({
@@ -92,7 +92,13 @@ const UploadZone = ({
         >
           Drag and drop photos here or click to upload
         </Typography>
-        <input hidden accept="image/*" type="file" {...getInputProps()} onBlur={onBlur}/>
+        <input
+          hidden
+          accept="image/*"
+          type="file"
+          {...getInputProps()}
+          onBlur={onBlur}
+        />
       </Box>
       <Box
         sx={{

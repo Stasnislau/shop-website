@@ -3,10 +3,9 @@ import React from "react";
 import { Context } from "../pages/_app";
 import { observer } from "mobx-react-lite";
 import Close from "@mui/icons-material/Close";
+import { Message } from "@/types";
 
-const ErrorMessageComponent = observer(({ message }: {
-  message: string;
-}) => {
+const ErrorMessageComponent = observer(({ alert }: { alert: Message }) => {
   const store = React.useContext(Context);
   return (
     <Alert
@@ -22,7 +21,7 @@ const ErrorMessageComponent = observer(({ message }: {
           color="inherit"
           size="small"
           onClick={() => {
-            // store.hideError();
+            store.removeMessage(alert.id);
           }}
         >
           <Close fontSize="inherit" />
@@ -37,7 +36,7 @@ const ErrorMessageComponent = observer(({ message }: {
           width: "80%",
         }}
       >
-        {`${message}`}
+        {`${alert.message}`}
       </Typography>
     </Alert>
   );

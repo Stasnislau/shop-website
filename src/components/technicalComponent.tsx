@@ -1,9 +1,8 @@
 import { observer } from "mobx-react-lite";
 import { useContext, useEffect } from "react";
 import { Context } from "../pages/_app";
-import ErrorMessageComponent from "./errorMessageComponent";
+import MessageComponent from "./messageComponent";
 import LoadingSpinner from "./loadingSpinner";
-import SuccessMessageComponent from "./successMessageComponent";
 import { API_URL } from "./header";
 
 const TechnicalComponent = observer(() => {
@@ -42,9 +41,8 @@ const TechnicalComponent = observer(() => {
         zIndex: 5000,
       }}
     >
-      {store.state.isErrorDisplayed && <ErrorMessageComponent />}
       {store.state.isBeingSubmitted && <LoadingSpinner />}
-      {store.state.isSuccessDisplayed && <SuccessMessageComponent />}
+      <MessageComponent />
     </div>
   );
 });
