@@ -209,9 +209,18 @@ const Cart = observer(({ open }: CartProps) => {
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography fontSize="2ram" fontFamily="Raleway" color="#1D1F22">
-            <b>My bag</b>, {store.state.itemsInCart} items
+        <Box sx={{ display: "flex", flexDirection: "row" }}>
+          <Typography
+            fontSize="2ram"
+            fontFamily="Raleway"
+            fontWeight="700"
+            color="#1D1F22"
+          >
+            My bag,
+          </Typography>
+          <Typography>&nbsp; </Typography>
+          <Typography fontSize="2ram" fontFamily="Raleway" fontWeight="500">
+            {store.state.itemsInCart} items
           </Typography>
         </Box>
 
@@ -291,7 +300,10 @@ const Cart = observer(({ open }: CartProps) => {
             variant="outlined"
             sx={{
               width: "45%",
+              fontFamily: "Raleway",
+              fontWeight: "600",
             }}
+            color="info"
             onClick={() => {
               router.push("/cart");
             }}
@@ -305,6 +317,8 @@ const Cart = observer(({ open }: CartProps) => {
               backgroundColor: "#5ECE7B",
               width: "45%",
               color: "white",
+              fontFamily: "Raleway",
+              fontWeight: "600",
               "&:hover": {
                 backgroundColor: "#5ECE7B",
               },
@@ -320,4 +334,3 @@ const Cart = observer(({ open }: CartProps) => {
 });
 
 export default Cart;
-

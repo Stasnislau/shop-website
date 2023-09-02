@@ -83,7 +83,7 @@ const Page = observer(() => {
         height: "100vh",
       }}
     >
-      <Typography variant="h5" gutterBottom>
+      <Typography variant="h5" fontFamily="Raleway" fontWeight="400" gutterBottom>
         {store.state.currentCategory.charAt(0).toUpperCase() +
           store.state.currentCategory.slice(1)}
       </Typography>

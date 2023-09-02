@@ -120,8 +120,20 @@ const ItemCard = observer(({ item, onClick }: ItemCardProps) => {
           }}
         >
           <Box>
-            <Typography fontSize="1rem">{item.name}</Typography>
-            <Typography fontSize="1rem" color="text.secondary">
+            <Typography
+              fontSize="1rem"
+              fontFamily="Raleway"
+              fontWeight="300"
+              color="#1D1F22"
+            >
+              {item.name}
+            </Typography>
+            <Typography
+              fontSize="1rem"
+              fontFamily="Raleway"
+              fontWeight="500"
+              color="#1D1F22"
+            >
               {store.state.currentCurrency} {moneyValue}
             </Typography>
           </Box>

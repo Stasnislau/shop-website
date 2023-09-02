@@ -175,7 +175,9 @@ const CartPage = observer(() => {
               {items.length}
             </Typography>
           </Box>
-          Cart
+          <Typography variant="h6" fontFamily="Raleway" fontWeight="600">
+            Cart
+          </Typography>
         </Box>
       </Typography>
       <Divider />
@@ -229,10 +231,12 @@ const CartPage = observer(() => {
           <Box
             sx={{
               display: "flex",
-              justifyContent: "space-between",
             }}
           >
-            <Typography fontFamily="Raleway">Tax 21%: </Typography>
+            <Typography fontFamily="Raleway" fontWeight="400">
+              Tax 21%:
+            </Typography>
+            <Typography> &nbsp;&nbsp;</Typography>
             <Typography
               fontFamily="Raleway"
               sx={{
@@ -249,13 +253,11 @@ const CartPage = observer(() => {
               flexDirection: "row",
             }}
           >
-            <Typography fontFamily="Raleway">Quantity: </Typography>
-            <Typography
-              fontFamily="Raleway"
-              sx={{
-                fontWeight: 700,
-              }}
-            >
+            <Typography fontFamily="Raleway" fontWeight="400">
+              Quantity:{" "}
+            </Typography>
+            <Typography> &nbsp;</Typography>
+            <Typography fontFamily="Raleway" fontWeight="700">
               {items.reduce((total, item) => total + item.quantity, 0)}
             </Typography>
           </Box>
@@ -265,13 +267,11 @@ const CartPage = observer(() => {
               justifyContent: "space-between",
             }}
           >
-            <Typography fontFamily="Raleway">Total: </Typography>
-            <Typography
-              fontFamily="Raleway"
-              sx={{
-                fontWeight: 700,
-              }}
-            >
+            <Typography fontFamily="Raleway" fontWeight="400">
+              Total:{" "}
+            </Typography>
+            <Typography> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Typography>
+            <Typography fontFamily="Raleway" fontWeight="700">
               {store.state.currentCurrency}
               {totalPrice.toFixed(2)}
             </Typography>
@@ -289,6 +289,8 @@ const CartPage = observer(() => {
               sx={{
                 color: "white",
                 width: "100%",
+                fontFamily: "Raleway",
+                fontWeight: "600",
               }}
               onClick={buyProducts}
             >
@@ -303,3 +305,7 @@ const CartPage = observer(() => {
 
 export default CartPage;
 
+// TODO: fix the bug where the prices are not rerendered if we change page on the pagination PRIORITY: MEDIUM
+// TODO: add markings for empty cart PRIORITY: LOW
+// TODO: fix the height of pagination, so that it doesn't change when changing the page PRIORITY: LOW
+// TODO: fix the overflow message error PRIORITY: VERY LOW

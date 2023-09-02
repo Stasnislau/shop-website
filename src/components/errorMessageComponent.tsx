@@ -1,4 +1,4 @@
-import { Snackbar, Box, Alert, IconButton, Typography } from "@mui/material";
+import { Alert, IconButton, Typography } from "@mui/material";
 import React from "react";
 import { Context } from "../pages/_app";
 import { observer } from "mobx-react-lite";
@@ -33,10 +33,13 @@ const ErrorMessageComponent = observer(({ alert }: { alert: Message }) => {
     >
       <Typography
         variant="body1"
+        
         sx={{
           display: "inline",
           marginRight: "auto",
           width: "80%",
+          fontFamily: "Roboto",
+          fontWeight: "400",
         }}
       >
         {`${alert.message}`}

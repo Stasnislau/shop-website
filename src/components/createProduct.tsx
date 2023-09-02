@@ -169,8 +169,14 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
       {isOpen ? (
         <Dialog open onClose={onClose}>
           <form onSubmit={formik.handleSubmit}>
-            <DialogTitle>Create Product</DialogTitle>
-            <DialogContent>
+            <DialogTitle fontFamily="Roboto" fontWeight="600">
+              Create Product
+            </DialogTitle>
+            <DialogContent
+              sx={{
+                fontFamily: "Raleway",
+              }}
+            >
               <FormControl fullWidth>
                 <TextField
                   autoFocus

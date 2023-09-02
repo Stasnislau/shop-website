@@ -11,7 +11,6 @@ import {
   Divider,
   Typography,
 } from "@mui/material";
-import Image from "next/image";
 import {
   Add as AddIcon,
   Remove as RemoveIcon,
@@ -68,11 +67,18 @@ const ProductItem = observer(
           <Delete />
         </IconButton>
         <Box sx={{ display: "flex", flexDirection: "column" }}>
-          <ListItemText primary={item.name} secondary={item.description} />
+          <Typography fontFamily="Raleway" fontWeight="600">
+            {item.name}
+          </Typography>
+          <Typography fontFamily="Raleway" fontWeight="400">
+            {item.description}
+          </Typography>
           <Typography fontFamily="Raleway" fontWeight="700">
             {store.state.currentCurrency} {item.price.amount}
           </Typography>
-          <ListItemText primary={"Size:"} />
+          <Typography fontFamily="Roboto Condensed" fontWeight="700">
+            Size:
+          </Typography>
           <Box sx={{ display: "flex", flexDirection: "column" }}>
             <ButtonGroup
               variant="contained"
@@ -104,6 +110,8 @@ const ProductItem = observer(
                     textAlign: "center",
                     alignItems: "center",
                     justifyContent: "center",
+                    fontFamily: "Source Sans",
+                    fontWeight: "400",
                   }}
                   onClick={() => handleSizeChange(sizeOption)}
                 >
@@ -112,7 +120,9 @@ const ProductItem = observer(
               ))}
             </ButtonGroup>
           </Box>
-          <ListItemText primary={"Color:"} />
+          <Typography fontFamily="Roboto Condensed" fontWeight="700">
+            Color:
+          </Typography>
           <Box sx={{ display: "flex", flexDirection: "column" }}>
             <ButtonGroup
               variant="contained"
@@ -132,6 +142,7 @@ const ProductItem = observer(
                     backgroundColor: colorOption,
                     margin: "0.25rem",
                     cursor: "pointer",
+                    fontFamily: "Raleway",
                     border: color === colorOption ? "1px solid black" : "none",
                     outline: color === colorOption ? "1px solid green" : "none",
                   }}
@@ -220,8 +231,7 @@ const ProductItem = observer(
               src={item.image}
               alt={item.name}
               width="180px"
-
-              height="200px"
+              height="178px"
             />
           </Box>
         </ListItemSecondaryAction>

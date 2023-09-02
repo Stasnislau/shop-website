@@ -97,12 +97,34 @@ const Header = observer(() => {
             "& .Mui-selected": {
               borderBottom: "2px solid",
               borderColor: (theme) => theme.palette.primary.main,
+              fontWeight: "600",
             },
           }}
         >
-          <Tab value={"men"} label="Men" />
-          <Tab value={"women"} label="Women" />
-          <Tab value={"kids"} label="Kids" />
+          <Tab
+            sx={{
+              fontFamily: "Raleway",
+              fontWeight: "400",
+            }}
+            value={"men"}
+            label="Men"
+          />
+          <Tab
+            sx={{
+              fontFamily: "Raleway",
+              fontWeight: "400",
+            }}
+            value={"women"}
+            label="Women"
+          />
+          <Tab
+            sx={{
+              fontFamily: "Raleway",
+              fontWeight: "400",
+            }}
+            value={"kids"}
+            label="Kids"
+          />
         </Tabs>
         <Box
           sx={{
@@ -182,6 +204,8 @@ const Header = observer(() => {
                           py: 1,
                           px: 2,
                           fontSize: "1rem",
+                          fontFamily: "Raleway",
+                          fontWeight: "500",
                           backgroundColor:
                             store.state.currentCurrency === currency.currency
                               ? "#EEEEEE"

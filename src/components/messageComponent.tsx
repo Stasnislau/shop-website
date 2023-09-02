@@ -7,7 +7,6 @@ import { Snackbar, Slide, SlideProps, Box } from "@mui/material";
 import SuccessMessageComponent from "./successMessageComponent";
 import ErrorMessageComponent from "./errorMessageComponent";
 import React from "react";
-import { forEach } from "lodash";
 
 const MessageComponent = observer(() => {
   const store = useContext(Context);
@@ -17,8 +16,6 @@ const MessageComponent = observer(() => {
   ) {
     return <Slide direction="up" ref={ref} {...props} />;
   });
-  // there should be up to 3 messages shown at a time, so we need to keep track of how many are shown
-  // TODO: finish this algorithm to show up to 3 messages at a time and remove the oldest one when a new one is added
 
   const [messages, setMessages] = useState<Message[]>([]);
 
@@ -55,6 +52,7 @@ const MessageComponent = observer(() => {
     <>
       {messages.map((item, index) => (
         <Snackbar
+
           key={item.id}
           open={true}
           autoHideDuration={5000}

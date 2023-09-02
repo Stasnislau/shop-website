@@ -12,10 +12,10 @@ const NothingToDisplay: React.FC = () => {
       alignItems="center"
       justifyContent="center"
     >
-      <Typography variant="h5" align="center" mt={3}>
+      <Typography variant="h5" align="center" mt={3} fontFamily="Raleway">
         Oops! Looks like there is nothing to display here.
       </Typography>
-      <Typography variant="body1" align="center">
+      <Typography variant="body1" align="center" fontFamily="Raleway">
         Check back later or explore other categories.
       </Typography>
       <Image src={EmptyShelfI} alt="Empty shelf" />

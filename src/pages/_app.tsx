@@ -7,6 +7,7 @@ import Store from "../store";
 import { createContext } from "react";
 const existingRoutes = ["/", "/cart", "/product"];
 import "./styles.css";
+import { info } from "console";
 
 const theme = createTheme({
   palette: {
@@ -17,10 +18,13 @@ const theme = createTheme({
       main: "#EEEEEE",
     },
     text: {
-      primary: "#000000",
+      primary: "#1D1F22",
     },
     common: {
       black: "#1D1F22"
+    },
+    info: {
+      main: "#1D1F22"
     }
   },
 });
@@ -46,5 +50,3 @@ export default function App({
     </Context.Provider>
   );
 }
-
-// TODO: integrate with main pages

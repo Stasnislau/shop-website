@@ -48,34 +48,50 @@ const SmallCartItem = observer((props: SmallCartItemProps) => {
             maxWidth: "34%",
           }}
         >
-          <ListItemText
-            primary={item.name}
-            secondary={item.description}
+          <Typography
             sx={{
               maxHeight: "1.5rem",
               overflow: "hidden",
-              margin: "0",
-              padding: "0",
+              fontFamily: "Raleway",
+              fontWeight: "300",
+              color: "#1D1F22",
             }}
-          />
-          <ListItemText
+          >
+            {item.name}
+          </Typography>
+          <Typography
             sx={{
               maxHeight: "1.5rem",
               overflow: "hidden",
-              margin: "0",
-              padding: "0",
+              fontFamily: "Raleway",
+              fontWeight: "300",
+              color: "#1D1F22",
             }}
-            primary={`${store.state.currentCurrency}${item.price.amount}`}
-          />
-          <ListItemText
+          >
+            {item.description}
+          </Typography>
+          <Typography
             sx={{
-              maxHeight: "2rem",
+              maxHeight: "1.5rem",
               overflow: "hidden",
-              margin: "0",
-              padding: "0",
+              fontFamily: "Raleway",
+              fontWeight: "500",
+              color: "#1D1F22",
             }}
-            primary={"Size: "}
-          />
+          >
+            {`${store.state.currentCurrency}${item.price.amount}`}
+          </Typography>
+          <Typography
+            sx={{
+              maxHeight: "1.5rem",
+              overflow: "hidden",
+              fontFamily: "Raleway",
+              fontWeight: "400",
+              color: "#1D1F22",
+            }}
+          >
+            {"Size: "}
+          </Typography>
           <ButtonGroup
             variant="contained"
             aria-label="size"
@@ -114,6 +130,8 @@ const SmallCartItem = observer((props: SmallCartItemProps) => {
                   alignItems: "center",
                   justifyContent: "center",
                   flexShrink: 0,
+                  fontFamily: "Source Sans",
+                  fontWeight: "400",
                 }}
                 onClick={() => technicalProps.onSizeChange(item.id, sizeOption)}
               >
@@ -121,7 +139,17 @@ const SmallCartItem = observer((props: SmallCartItemProps) => {
               </Box>
             ))}
           </ButtonGroup>
-          <ListItemText primary={"Color: "} />
+          <Typography
+            sx={{
+              maxHeight: "1.5rem",
+              overflow: "hidden",
+              fontFamily: "Raleway",
+              fontWeight: "400",
+              color: "#1D1F22",
+            }}
+          >
+            {"Color: "}
+          </Typography>
           <ButtonGroup
             variant="contained"
             aria-label="color"

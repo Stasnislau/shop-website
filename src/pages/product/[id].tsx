@@ -100,7 +100,6 @@ const ProductPage = observer(() => {
     } finally {
       store.setIsBeingSubmitted(false);
     }
-    
   };
 
   return (
@@ -183,6 +182,7 @@ const ProductPage = observer(() => {
                       width: "2.5rem",
                       height: "2rem",
                       margin: "0.25rem",
+                      padding: "0.25rem",
                       cursor: "pointer",
                       display: "flex",
                       backgroundColor:
@@ -191,6 +191,8 @@ const ProductPage = observer(() => {
                       textAlign: "center",
                       alignItems: "center",
                       justifyContent: "center",
+                      fontFamily: "Source Sans",
+                      fontWeight: "400",
                     }}
                     onClick={() => handleSizeChange(sizeOption)}
                   >
