@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { useContext, useState } from "react";
 import { observer } from "mobx-react-lite";
 import {
@@ -164,7 +165,7 @@ const ProductItem = observer(
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "flex-end",
-                height: "80%",
+                height: "90%",
                 justifyContent: "space-between",
               }}
             >
@@ -212,15 +213,15 @@ const ProductItem = observer(
               justifyContent: "flex-end",
               height: "100%",
               marginBottom: "1.5rem",
+              marginRight: "1rem",
             }}
           >
-            <Image
+            <img
               src={item.image}
               alt={item.name}
-              width={0}
-              height={0}
-              sizes="100vw"
-              style={{ width: "auto", height: "80%" }}
+              width="180px"
+
+              height="200px"
             />
           </Box>
         </ListItemSecondaryAction>
