@@ -119,3 +119,12 @@
   font-family: "Roboto Condensed";
   src: url("/fonts/RobotoCondensed.ttf")
 }
+@font-face {
+  font-family: "Roboto";
+  src: url("/fonts/Roboto.ttf")
+}
+
+@font-face {
+  font-family: "Source Sans Pro";
+  src: url("/fonts/SourceSansPro")
+}
