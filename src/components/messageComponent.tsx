@@ -7,6 +7,7 @@ import { Snackbar, Slide, SlideProps, Box } from "@mui/material";
 import SuccessMessageComponent from "./successMessageComponent";
 import ErrorMessageComponent from "./errorMessageComponent";
 import React from "react";
+import { forEach } from "lodash";
 
 const MessageComponent = observer(() => {
   const store = useContext(Context);
@@ -16,29 +17,40 @@ const MessageComponent = observer(() => {
   ) {
     return <Slide direction="up" ref={ref} {...props} />;
   });
+  // there should be up to 3 messages shown at a time, so we need to keep track of how many are shown
+  // TODO: finish this algorithm to show up to 3 messages at a time and remove the oldest one when a new one is added
 
-  const [numberOfMessagesShown, setNumberOfMessagesShown] = useState(0);
   const [messages, setMessages] = useState<Message[]>([]);
 
   useEffect(() => {
-    setMessages(store.state.messages);
-  }, [store.state.messages]);
-
-  useEffect(() => {
-    setNumberOfMessagesShown(messages.length);
-  }, [messages]);
-
-  useEffect(() => {
-    if (numberOfMessagesShown > 3) {
-      setMessages((prevMessages) => prevMessages.slice(1));
+    if (
+      store.state.addedMessage &&
+      store.state.messages.length > 0 &&
+      messages.length < 3
+    ) {
+      store.state.messages.forEach((item) => {
+        if (!messages.find((message) => message.id === item.id)) {
+          setMessages((prevMessages) => [...prevMessages, item]);
+        }
+      });
     }
-  }, [numberOfMessagesShown]);
+  }, [store.state.addedMessage, store.state.messages.length, messages.length]);
 
+  useEffect(() => {
+    messages.forEach((item) => {
+      if (!store.state.messages.find((message) => message.id === item.id)) {
+        setMessages((prevMessages) =>
+          prevMessages.filter((message) => message.id !== item.id)
+        );
+      }
+      console.log("messages", messages);
+    });
+  }, [store.state.messages.length, messages.length]);
   useEffect(() => {
     if (messages.length > 3) {
       setMessages((prevMessages) => prevMessages.slice(1));
     }
-  }, [messages]);
+  }, [messages.length]);
   return (
     <>
       {messages.map((item, index) => (
@@ -47,10 +59,6 @@ const MessageComponent = observer(() => {
           open={true}
           autoHideDuration={5000}
           TransitionComponent={upTransition}
-          onClose={() => {
-            store.removeMessage(item.id);
-            setNumberOfMessagesShown((prevNumber) => prevNumber - 1);
-          }}
           anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
           sx={{
             marginBottom: `${index * 70}px`,

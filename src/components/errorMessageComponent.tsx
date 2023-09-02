@@ -14,6 +14,9 @@ const ErrorMessageComponent = observer(({ alert }: { alert: Message }) => {
         margin: "auto",
         overflowWrap: "break-word",
       }}
+      onClose={() => {
+        store.removeMessage(alert.id);
+      }}
       severity="error"
       action={
         <IconButton
