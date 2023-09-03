@@ -13,7 +13,6 @@ import { Context } from "@/pages/_app";
 import { observer } from "mobx-react-lite";
 import { CartItem } from "@/types";
 import useDebounce from "@/hooks/useDebounce";
-import { set } from "lodash";
 
 const CartPage = observer(() => {
   const store = useContext(Context);
@@ -78,6 +77,7 @@ const CartPage = observer(() => {
         }
         const items = data.items.filter((item: CartItem) => item.quantity > 0);
         setItems(items);
+        store.setShouldUpdateCart(false);
       } catch (error: any) {
         console.log(error.message);
       } finally {
@@ -194,7 +194,6 @@ const CartPage = observer(() => {
           items.map((item, index) => (
             <Box key={index}>
               <ProductItem
-                key={item.id}
                 item={{
                   id: item.id,
                   name: item.product.name,
@@ -305,7 +304,3 @@ const CartPage = observer(() => {
 
 export default CartPage;
 
-// TODO: fix the bug where the prices are not rerendered if we change page on the pagination PRIORITY: MEDIUM
-// TODO: add markings for empty cart PRIORITY: LOW
-// TODO: fix the height of pagination, so that it doesn't change when changing the page PRIORITY: LOW
-// TODO: fix the overflow message error PRIORITY: VERY LOW
