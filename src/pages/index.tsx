@@ -11,6 +11,7 @@ import { useRouter } from "next/router";
 import {
   Suspense,
   startTransition,
+  use,
   useContext,
   useEffect,
   useState,
@@ -34,15 +35,21 @@ const Page = observer(() => {
     setProductsToShow(
       currentProducts.slice((currentPage - 1) * 6, currentPage * 6)
     );
-  }, [currentPage, currentProducts]);
+  }, [currentPage, currentProducts, store.state.currentCategory]);
+  useEffect(() => {
+    console.log("ZAŁADOWANO", productsToShow);
+  }, [productsToShow]);
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [store.state.currentCategory]);
 
   useEffect(() => {
     setPaginationCount(Math.ceil(currentProducts.length / 6));
-  }, [currentProducts]);
+  }, [currentProducts, store.state.currentCategory]);
   const fetchByCategory = async () => {
     try {
       store.setIsLoading(true);
-      setCurrentProducts([]);
+
       const response = await fetch(
         API_URL + `/products/category/${store.state.currentCategory}`
       );
@@ -50,6 +57,8 @@ const Page = observer(() => {
       if (response.status < 200 || response.status >= 300) {
         throw new Error(data.message);
       }
+      setCurrentProducts([]);
+      setProductsToShow([]);
       store.setShouldUpdateProducts(false);
       setCurrentProducts(data);
     } catch (error: any) {
@@ -83,7 +92,12 @@ const Page = observer(() => {
         height: "100vh",
       }}
     >
-      <Typography variant="h5" fontFamily="Raleway" fontWeight="400" gutterBottom>
+      <Typography
+        variant="h5"
+        fontFamily="Raleway"
+        fontWeight="400"
+        gutterBottom
+      >
         {store.state.currentCategory.charAt(0).toUpperCase() +
           store.state.currentCategory.slice(1)}
       </Typography>
@@ -94,7 +108,7 @@ const Page = observer(() => {
           width: "100%",
           flexWrap: "wrap",
           gap: "4%",
-          flex : 1,
+          flex: 1,
           overflowY: "scroll",
         }}
       >
@@ -153,6 +167,8 @@ const Page = observer(() => {
             variant="outlined"
             shape="rounded"
             color="primary"
+            defaultPage={1}
+            page={currentPage}
           />
         )}
       </Box>
@@ -161,3 +177,5 @@ const Page = observer(() => {
 });
 
 export default Page;
+
+// DON'T KNOW WHY, BUT STILL WHEN YOU CHANGE THE PAGE THE PRICES ARE NOT UPDATED, UNLIKE GOING TO ANOTHER CATEGORY

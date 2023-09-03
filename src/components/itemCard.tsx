@@ -21,18 +21,7 @@ type ItemCardProps = {
 
 const ItemCard = observer(({ item, onClick }: ItemCardProps) => {
   const store = useContext(Context);
-  const [moneyValue, setMoneyValue] = useState<number | undefined>(
-    item.prices.find((price) => price.currency === store.state.currentCurrency)
-      ?.amount
-  );
   const [isCartShown, setIsCartShown] = useState(false);
-  useEffect(() => {
-    setMoneyValue(
-      item.prices.find(
-        (price) => price.currency === store.state.currentCurrency
-      )?.amount
-    );
-  }, [store.state.currentCurrency]);
 
   const handleAddToCart = async () => {
     try {
@@ -134,7 +123,12 @@ const ItemCard = observer(({ item, onClick }: ItemCardProps) => {
               fontWeight="500"
               color="#1D1F22"
             >
-              {store.state.currentCurrency} {moneyValue}
+              {store.state.currentCurrency}{" "}
+              {
+                item.prices.find(
+                  (price) => price.currency === store.state.currentCurrency
+                )?.amount
+              }
             </Typography>
           </Box>
         </CardContent>
