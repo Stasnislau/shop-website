@@ -10,12 +10,6 @@ import React from "react";
 
 const MessageComponent = observer(() => {
   const store = useContext(Context);
-  const upTransition = React.forwardRef(function Transition(
-    props: SlideProps,
-    ref: React.Ref<unknown>
-  ) {
-    return <Slide direction="up" ref={ref} {...props} />;
-  });
 
   const [messages, setMessages] = useState<Message[]>([]);
 
@@ -48,13 +42,11 @@ const MessageComponent = observer(() => {
     }
   }, [messages.length]);
   return (
-    <>
+    <Box>
       {messages.map((item, index) => (
         <Snackbar
-
           key={item.id}
           open={true}
-          TransitionComponent={upTransition}
           anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
           sx={{
             marginBottom: `${index * 70}px`,
@@ -71,7 +63,7 @@ const MessageComponent = observer(() => {
           )}
         </Snackbar>
       ))}
-    </>
+    </Box>
   );
 });
 
