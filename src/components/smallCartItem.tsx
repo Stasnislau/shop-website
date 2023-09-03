@@ -132,6 +132,10 @@ const SmallCartItem = observer((props: SmallCartItemProps) => {
                   flexShrink: 0,
                   fontFamily: "Source Sans",
                   fontWeight: "400",
+                  "&:hover": {
+                    backgroundColor: "black",
+                    color: "white",
+                  },
                 }}
                 onClick={() => technicalProps.onSizeChange(item.id, sizeOption)}
               >
@@ -168,7 +172,8 @@ const SmallCartItem = observer((props: SmallCartItemProps) => {
                 sx={{
                   width: "1rem",
                   height: "1rem",
-                  backgroundColor: colorOption === "white" ? "#e8e6df" : colorOption,
+                  backgroundColor:
+                    colorOption === "white" ? "#e8e6df" : colorOption,
                   margin: "0.25rem",
                   cursor: "pointer",
                   border:
@@ -181,6 +186,9 @@ const SmallCartItem = observer((props: SmallCartItemProps) => {
                       : "none",
 
                   flexShrink: 0,
+                  "&:hover": {
+                    border: "1px solid black",
+                  },
                 }}
                 onClick={() =>
                   technicalProps.onColorChange(item.id, colorOption)

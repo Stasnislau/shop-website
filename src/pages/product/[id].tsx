@@ -201,6 +201,10 @@ const ProductPage = observer(() => {
                       justifyContent: "center",
                       fontFamily: "Source Sans",
                       fontWeight: "400",
+                      "&:hover": {
+                        backgroundColor: "black",
+                        color: "white",
+                      },
                     }}
                     onClick={() => handleSizeChange(sizeOption)}
                   >
@@ -241,13 +245,17 @@ const ProductPage = observer(() => {
                     sx={{
                       width: "1.5rem",
                       height: "1.5rem",
-                      backgroundColor: colorOption === "white" ? "#e8e6df" : colorOption,
+                      backgroundColor:
+                        colorOption === "white" ? "#e8e6df" : colorOption,
                       margin: "0.25rem",
                       cursor: "pointer",
                       border:
                         color === colorOption ? "1px solid black" : "none",
                       outline:
                         color === colorOption ? "1px solid green" : "none",
+                      "&:hover": {
+                        border: "1px solid black",
+                      },
                     }}
                     onClick={() => handleColorChange(colorOption)}
                   />
