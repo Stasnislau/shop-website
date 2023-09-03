@@ -131,10 +131,18 @@ const ProductPage = observer(() => {
         <Box sx={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
           <Box>
             <Typography fontFamily="Raleway" variant="h5" fontWeight="600">
-              {product.name}
+              {store.state.isLoading ? (
+                <Skeleton variant="rectangular" width="10rem" height="1.5rem" />
+              ) : (
+                product.name
+              )}
             </Typography>
             <Typography variant="h5" fontFamily="Raleway" fontWeight="400">
-              {product.description}
+              {store.state.isLoading ? (
+                <Skeleton variant="rectangular" width="10rem" height="1.5rem" />
+              ) : (
+                product.description
+              )}
             </Typography>
           </Box>
 
@@ -261,11 +269,13 @@ const ProductPage = observer(() => {
             >
               Price:
             </Typography>
-            <Typography
-              variant="h6"
-              fontFamily="Raleway"
-              fontWeight="700"
-            >{`${store.state.currentCurrency}${moneyValue}`}</Typography>
+            <Typography variant="h6" fontFamily="Raleway" fontWeight="700">
+              {store.state.isLoading ? (
+                <Skeleton variant="rectangular" width="10rem" height="1.5rem" />
+              ) : (
+                `${store.state.currentCurrency}${moneyValue}`
+              )}
+            </Typography>
           </Box>
           <Button
             variant="contained"
