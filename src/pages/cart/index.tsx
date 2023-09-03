@@ -14,6 +14,7 @@ import { observer } from "mobx-react-lite";
 import { CartItem } from "@/types";
 import useDebounce from "@/hooks/useDebounce";
 import EmptyCart from "@/components/emptyCart";
+import ProductItemSkeleton from "@/components/productItemSkeleton";
 
 const CartPage = observer(() => {
   const store = useContext(Context);
@@ -73,6 +74,7 @@ const CartPage = observer(() => {
         store.setIsLoading(true);
         const res = await fetch(`${API_URL}/cart/get/${store.state.cartId}`);
         const data = await res.json();
+        console.log(data)
         if (res.status < 200 || res.status > 299) {
           throw new Error(data.message);
         }
@@ -80,7 +82,7 @@ const CartPage = observer(() => {
         setItems(items);
         store.setShouldUpdateCart(false);
       } catch (error: any) {
-        console.log(error.message);
+        store.displayError(error.message);
       } finally {
         store.setIsLoading(false);
       }
@@ -216,8 +218,11 @@ const CartPage = observer(() => {
               {index !== items.length - 1 && <Divider />}
             </Box>
           ))}
+        {store.state.isLoading && 
+          <ProductItemSkeleton />
+        }
       </List>
-      {items && items.length === 0 && <EmptyCart />}
+      {items && items.length === 0 && !store.state.isLoading && <EmptyCart />}
       <Box>
         <Divider sx={{ width: "100%" }} />
         <Box
@@ -305,5 +310,4 @@ const CartPage = observer(() => {
 });
 
 export default CartPage;
-
 
