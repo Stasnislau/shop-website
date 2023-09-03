@@ -168,7 +168,7 @@ const SmallCartItem = observer((props: SmallCartItemProps) => {
                 sx={{
                   width: "1rem",
                   height: "1rem",
-                  backgroundColor: colorOption,
+                  backgroundColor: colorOption === "white" ? "#e8e6df" : colorOption,
                   margin: "0.25rem",
                   cursor: "pointer",
                   border:

@@ -139,7 +139,7 @@ const ProductItem = observer(
                   sx={{
                     width: "1.5rem",
                     height: "1.5rem",
-                    backgroundColor: colorOption,
+                    backgroundColor: colorOption === "white" ? "#e8e6df" : colorOption,
                     margin: "0.25rem",
                     cursor: "pointer",
                     fontFamily: "Raleway",
