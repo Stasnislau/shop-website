@@ -13,6 +13,7 @@ import { Context } from "@/pages/_app";
 import { observer } from "mobx-react-lite";
 import { CartItem } from "@/types";
 import useDebounce from "@/hooks/useDebounce";
+import EmptyCart from "@/components/emptyCart";
 
 const CartPage = observer(() => {
   const store = useContext(Context);
@@ -216,6 +217,7 @@ const CartPage = observer(() => {
             </Box>
           ))}
       </List>
+      {items && items.length === 0 && <EmptyCart />}
       <Box>
         <Divider sx={{ width: "100%" }} />
         <Box
@@ -303,4 +305,5 @@ const CartPage = observer(() => {
 });
 
 export default CartPage;
+
 
