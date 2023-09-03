@@ -40,7 +40,6 @@ const MessageComponent = observer(() => {
           prevMessages.filter((message) => message.id !== item.id)
         );
       }
-      console.log("messages", messages);
     });
   }, [store.state.messages.length, messages.length]);
   useEffect(() => {
@@ -55,7 +54,6 @@ const MessageComponent = observer(() => {
 
           key={item.id}
           open={true}
-          autoHideDuration={5000}
           TransitionComponent={upTransition}
           anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
           sx={{

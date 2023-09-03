@@ -4,9 +4,13 @@ import { Context } from "../pages/_app";
 import { observer } from "mobx-react-lite";
 import Close from "@mui/icons-material/Close";
 import { Message } from "@/types";
+import { set } from "lodash";
 
 const SuccessMessageComponent = observer(({ alert }: { alert: Message }) => {
   const store = React.useContext(Context);
+  setTimeout(() => {
+    store.removeMessage(alert.id);
+  }, 5000);
   return (
     <Alert
       sx={{

@@ -7,6 +7,9 @@ import { Message } from "@/types";
 
 const ErrorMessageComponent = observer(({ alert }: { alert: Message }) => {
   const store = React.useContext(Context);
+  setTimeout(() => {
+    store.removeMessage(alert.id);
+  }, 5000);
   return (
     <Alert
       sx={{
@@ -33,7 +36,6 @@ const ErrorMessageComponent = observer(({ alert }: { alert: Message }) => {
     >
       <Typography
         variant="body1"
-        
         sx={{
           display: "inline",
           marginRight: "auto",
