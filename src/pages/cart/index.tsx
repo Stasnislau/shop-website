@@ -74,7 +74,6 @@ const CartPage = observer(() => {
         store.setIsLoading(true);
         const res = await fetch(`${API_URL}/cart/get/${store.state.cartId}`);
         const data = await res.json();
-        console.log(data)
         if (res.status < 200 || res.status > 299) {
           throw new Error(data.message);
         }

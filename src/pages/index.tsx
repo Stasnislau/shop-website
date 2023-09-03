@@ -37,7 +37,6 @@ const Page = observer(() => {
     );
   }, [currentPage, currentProducts, store.state.currentCategory]);
   useEffect(() => {
-    console.log("ZAŁADOWANO", productsToShow);
   }, [productsToShow]);
   useEffect(() => {
     setCurrentPage(1);

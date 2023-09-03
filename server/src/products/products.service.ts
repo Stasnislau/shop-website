@@ -52,7 +52,6 @@ export class ProductsService {
     return product;
   }
   async getAllProducts() {
-    try {
       const products = await this.prisma.product.findMany({
         select: {
           id: true,
@@ -69,9 +68,6 @@ export class ProductsService {
         return ApiError.notFound("No products found");
       }
       return products;
-    } catch (error) {
-      console.log(error);
-    }
   }
   async getSpecificProduct(id: string) {
     if (!id || isNaN(Number(id)) || Number(id) < 1) {
