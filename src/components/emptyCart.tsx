@@ -18,7 +18,6 @@ const EmptyCart = () => {
   setTimeout(() => {
     setShowText(true);
   }, 500);
-  console.log(EmptyCartImage)
   return (
     <Container
       sx={{

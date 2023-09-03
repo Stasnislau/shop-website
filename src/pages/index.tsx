@@ -47,7 +47,7 @@ const Page = observer(() => {
         API_URL + `/products/category/${store.state.currentCategory}`
       );
       const data = await response.json();
-      if (response.status !== 200) {
+      if (response.status < 200 || response.status >= 300) {
         throw new Error(data.message);
       }
       store.setShouldUpdateProducts(false);

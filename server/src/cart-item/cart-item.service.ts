@@ -7,66 +7,57 @@ import { cartItemDto } from "./dto";
 export class CartItemService {
   constructor(private prismaService: PrismaService) {}
   async addCartItem(body: cart_item, cartId: number) {
-    try {
-      const { productId, quantity, chosenColor, chosenSize } = body;
-      if (quantity < 1) {
-        return ApiError.badRequest("Quantity cannot be less than 1");
-      }
-      const isAlreadyInCart = await this.prismaService.cart_item.findFirst({
-        where: {
-          cartId: Number(cartId),
-          productId: Number(productId),
-        },
-      });
-      if (isAlreadyInCart) {
-        return ApiError.badRequest("Item already in cart");
-      }
-      const cartItem = await this.prismaService.cart_item.create({
-        data: {
-          cartId,
-          productId,
-          quantity,
-          chosenColor,
-          chosenSize,
-        },
-      });
-      if (!cartItem) {
-        return ApiError.badRequest("Cannot create cart item");
-      }
-      const cart = await this.prismaService.cart.update({
-        where: { id: cartId },
-        data: {
-          items: {
-            connect: {
-              id: cartItem.id,
-            },
+    const { productId, quantity, chosenColor, chosenSize } = body;
+    if (quantity < 1) {
+      return ApiError.badRequest("Quantity cannot be less than 1");
+    }
+    const isAlreadyInCart = await this.prismaService.cart_item.findFirst({
+      where: {
+        cartId: Number(cartId),
+        productId: Number(productId),
+      },
+    });
+    if (isAlreadyInCart) {
+      return ApiError.badRequest("Item already in cart");
+    }
+    const cartItem = await this.prismaService.cart_item.create({
+      data: {
+        cartId,
+        productId,
+        quantity,
+        chosenColor,
+        chosenSize,
+      },
+    });
+    if (!cartItem) {
+      return ApiError.badRequest("Cannot create cart item");
+    }
+    const cart = await this.prismaService.cart.update({
+      where: { id: cartId },
+      data: {
+        items: {
+          connect: {
+            id: cartItem.id,
           },
         },
-      });
-      if (!cart) {
-        return ApiError.badRequest("Cannot add cart item");
-      }
-      return cart.id;
-    } catch (error) {
-      console.log(error);
+      },
+    });
+    if (!cart) {
+      return ApiError.badRequest("Cannot add cart item");
     }
+    return cart.id;
   }
   async getCartItem(id: number) {
-    try {
-      const cartItem = await this.prismaService.cart_item.findUnique({
-        where: { id },
-      });
-      if (!cartItem) {
-        return ApiError.badRequest("Cannot find cart item");
-      }
-      return cartItem;
-    } catch (error) {
-      console.log(error);
+    const cartItem = await this.prismaService.cart_item.findUnique({
+      where: { id },
+    });
+    if (!cartItem) {
+      return ApiError.badRequest("Cannot find cart item");
     }
+    return cartItem;
   }
 
   async deleteCartItem(id: number) {
-    try {
       const isAlreadyInCart = await this.prismaService.cart_item.findFirst({
         where: {
           id,
@@ -82,12 +73,8 @@ export class CartItemService {
         throw ApiError.badRequest("Cannot delete cart item");
       }
       return cartItem;
-    } catch (error) {
-      console.log(error);
-    }
   }
   async update(cartItemId: number, body: cartItemDto) {
-    try {
       const { quantity, chosenColor, chosenSize } = body;
       if (quantity < 1) {
         return ApiError.badRequest("Quantity cannot be less than 1");
@@ -112,8 +99,5 @@ export class CartItemService {
         return ApiError.badRequest("Cannot update cart item");
       }
       return cartItem;
-    } catch (error) {
-      console.log(error);
-    }
   }
 }

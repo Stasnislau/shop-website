@@ -74,7 +74,7 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
         });
         const data = await response.json();
 
-        if (response.status !== 200) {
+        if (response.status < 200 || response.status > 299) {
           throw new Error(data.message);
         }
         const newArray = [] as currencyState[];
@@ -86,7 +86,6 @@ const CreateProduct = ({ onClose, isOpen }: CreateProductProps) => {
         );
         setPossibleCurrencies(newArray);
       } catch (error: any) {
-        console.log(error);
         store.displayError(error.message);
       } finally {
         store.setIsLoading(false);
