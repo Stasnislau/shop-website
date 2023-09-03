@@ -94,13 +94,15 @@ const Page = observer(() => {
           width: "100%",
           flexWrap: "wrap",
           gap: "4%",
+          flex : 1,
+          overflowY: "scroll",
         }}
       >
         {" "}
         {store.state.isLoading &&
           LoadingCards.map((item, index) => {
             return (
-              <Box key={index} height="49%" width="30%">
+              <Box key={index} height="47%" width="30%">
                 <ItemLoadingComponent />
               </Box>
             );
@@ -108,7 +110,7 @@ const Page = observer(() => {
         {currentProducts.length > 0 &&
           productsToShow.map((item, index) => {
             return (
-              <Box key={index} height="49%" width="30%">
+              <Box key={index} height="47%" width="30%">
                 <Suspense fallback={<ItemLoadingComponent />}>
                   <ItemCard
                     onClick={() => {
