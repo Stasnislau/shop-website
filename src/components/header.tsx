@@ -28,6 +28,7 @@ import CreateProduct from "./createProduct";
 import { Context } from "@/pages/_app";
 import { useRouter } from "next/router";
 import { currencies } from "@prisma/client";
+import useTimeout from "@/hooks/useTimeout";
 export const API_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 const Header = observer(() => {
@@ -38,6 +39,11 @@ const Header = observer(() => {
   const [availableCurrencies, setAvailableCurrencies] = useState(
     [] as currencies[]
   );
+  useEffect(() => {
+    if (isCurrencyMenuOpen) {
+      setIsCartOpen(false);
+    }
+  }, [isCurrencyMenuOpen]);
   const store = useContext(Context);
   const handleCurrencySelect = (currency: string) => {
     store.setCurrentCurrency(currency);
@@ -74,6 +80,8 @@ const Header = observer(() => {
     });
   }, [store.state.currentCurrency, store]);
   const router = useRouter();
+  const [cancel, set] = useTimeout(300);
+
   return (
     <AppBar
       position="static"
@@ -221,8 +229,15 @@ const Header = observer(() => {
           </IconButton>
           {router.pathname === "/cart" ? null : (
             <IconButton
-              onMouseEnter={() => setIsCartOpen(true)}
-              onMouseLeave={() => setIsCartOpen(false)}
+              onMouseEnter={() => {
+                cancel();
+                setIsCartOpen(true);
+              }}
+              onMouseLeave={() => {
+                set(() => {
+                  setIsCartOpen(false);
+                });
+              }}
             >
               <Badge
                 badgeContent={store.state.itemsInCart}
