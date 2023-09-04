@@ -8,7 +8,7 @@ import {
   Body,
 } from "@nestjs/common";
 import { CartItemService } from "./cart-item.service";
-import { cart_item } from "@prisma/client";
+import { cart_item } from "../../../node_modules/prisma/prisma-client";
 import { cartItemDto } from "./dto";
 import ApiError from "src/exceptions/api-error";
 
