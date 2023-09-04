@@ -65,7 +65,7 @@ const Header = observer(() => {
         store.setIsLoading(true);
         const response = await fetch(API_URL + "/currency/all");
         const data = await response.json();
-        if (response.status !== 200) {
+        if (response.status < 200 || response.status >= 300) {
           throw new Error(data.message);
         }
         setAvailableCurrencies(data);

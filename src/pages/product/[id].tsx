@@ -27,7 +27,7 @@ const ProductPage = observer(() => {
           },
         });
         const data = await res.json();
-        if (res.status !== 200) {
+        if (res.status < 200 || res.status >= 300) {
           throw new Error(data.message);
         }
         setProduct(data);

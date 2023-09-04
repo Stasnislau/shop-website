@@ -16,7 +16,7 @@ const TechnicalComponent = observer(() => {
         },
       });
       const data = await response.json();
-      if (response.status !== 200) {
+      if (response.status < 200 || response.status >= 300) {
         throw new Error(data.message);
       }
       localStorage.setItem("cartId", String(data));
