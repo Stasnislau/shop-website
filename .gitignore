@@ -2,3 +2,4 @@ node_modules
 .next
 ./node_modules
 ./server/dist
+.env
