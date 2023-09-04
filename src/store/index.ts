@@ -52,6 +52,8 @@ export default class Store {
     this.state.isBeingSubmitted = newValue;
   };
   displayError = (message: string) => {
+    if (message === "" )
+      return;
     this.state.messages.push({
       type: "error",
       message,
@@ -60,6 +62,8 @@ export default class Store {
     this.state.addedMessage = true;
   };
   displaySuccess = (message: string) => {
+    if (message === "" )
+      return;
     this.state.messages.push({
       type: "success",
       message,
