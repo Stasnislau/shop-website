@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
-import { cart_item } from "../../../node_modules/prisma/prisma-client";
+import { cart_item } from "@prisma/client";
 import ApiError from "src/exceptions/api-error";
 
 @Injectable()
