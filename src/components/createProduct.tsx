@@ -21,7 +21,7 @@ import { ProductToCreate, Price, fileObject } from "../types";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { API_URL } from "./header";
 import { Context } from "@/pages/_app";
-import { currencies } from "@prisma/client";
+import { currencies } from "../../node_modules/prisma/prisma-client";
 import UploadZone from "../components/uploadZone";
 interface CreateProductProps {
   onClose: () => void;

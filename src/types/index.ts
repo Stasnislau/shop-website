@@ -1,4 +1,4 @@
-import { product } from "@prisma/client";
+import { product } from "../../node_modules/prisma/prisma-client";
 
 export interface ProductToCreate {
   name: string;
