@@ -3,7 +3,6 @@ import {
   Catch,
   ArgumentsHost,
   HttpStatus,
-  HttpException,
 } from "@nestjs/common";
 
 import ApiError from "./exceptions/api-error";
