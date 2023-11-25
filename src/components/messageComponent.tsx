@@ -15,13 +15,17 @@ const MessageComponent = observer(() => {
 
   useEffect(() => {
     if (
-      store.state.addedMessage &&
       store.state.messages.length > 0 &&
       messages.length < 3
     ) {
+      let numberOfMessages = 0;
       store.state.messages.forEach((item) => {
+        if (numberOfMessages >= 3) {
+          return;
+        }
         if (!messages.find((message) => message.id === item.id)) {
           setMessages((prevMessages) => [...prevMessages, item]);
+          numberOfMessages++;
         }
       });
     }
@@ -36,11 +40,6 @@ const MessageComponent = observer(() => {
       }
     });
   }, [store.state.messages.length, messages.length]);
-  useEffect(() => {
-    if (messages.length > 3) {
-      setMessages((prevMessages) => prevMessages.slice(1));
-    }
-  }, [messages.length]);
   return (
     <Box>
       {messages.map((item, index) => (
