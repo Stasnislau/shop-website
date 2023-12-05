@@ -7,8 +7,8 @@ import {
   Param,
   UseFilters,
 } from "@nestjs/common";
-import { HttpExceptionFilter } from "src/http-exception.filter";
-import ApiError from "src/exceptions/api-error";
+import { HttpExceptionFilter } from "../http-exception.filter";
+import ApiError from "../exceptions/api-error";
 import { ProductsService } from "./products.service";
 import { ProductDTO } from "./dto";
 @Controller("products")

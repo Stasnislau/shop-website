@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { Price, ProductDTO } from "./dto";
 import { PrismaService } from "../prisma/prisma.service";
 import cloudinary from "../cloudinary";
-import ApiError from "src/exceptions/api-error";
+import ApiError from "../exceptions/api-error";
 @Injectable({})
 export class ProductsService {
   constructor(private prisma: PrismaService) {}
@@ -129,6 +129,9 @@ export class ProductsService {
     const currentCurrency = currencies.find((item) => {
       return item.currency === price.currency;
     });
+    if (!currentCurrency) {
+      return ApiError.badRequest("Invalid currency");
+    }
     currencies.forEach((item) => {
       if (item.currency === price.currency) {
         newPrices.push(price);

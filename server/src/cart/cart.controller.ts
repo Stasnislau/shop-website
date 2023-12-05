@@ -9,7 +9,7 @@ import {
 } from "@nestjs/common";
 import { CartService } from "./cart.service";
 import { cart_item } from "@prisma/client";
-import ApiError from "src/exceptions/api-error";
+import ApiError from "../exceptions/api-error";
 
 @Controller("cart")
 export class CartController {

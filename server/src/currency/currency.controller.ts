@@ -1,7 +1,7 @@
 import { Controller, Get, UseFilters } from "@nestjs/common";
 import { CurrencyService } from "./currency.service";
-import { HttpExceptionFilter } from "src/http-exception.filter";
-import ApiError from "src/exceptions/api-error";
+import { HttpExceptionFilter } from "../http-exception.filter";
+import ApiError from "../exceptions/api-error";
 
 @Controller("currency")
 export class CurrencyController {

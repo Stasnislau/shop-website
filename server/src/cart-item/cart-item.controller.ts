@@ -10,7 +10,7 @@ import {
 import { CartItemService } from "./cart-item.service";
 import { cart_item } from "@prisma/client";
 import { cartItemDto } from "./dto";
-import ApiError from "src/exceptions/api-error";
+import ApiError from "../exceptions/api-error";
 
 @Controller("cart-item")
 export class CartItemController {
