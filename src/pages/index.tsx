@@ -120,7 +120,7 @@ const Page = observer(() => {
               </Box>
             );
           })}
-        {currentProducts.length > 0 &&
+        {currentProducts.length > 0 && !store.state.isLoading &&
           productsToShow.map((item, index) => {
             return (
               <Box key={index} height="47%" width="30%">
@@ -176,5 +176,3 @@ const Page = observer(() => {
 });
 
 export default Page;
-
-// DON'T KNOW WHY, BUT STILL WHEN YOU CHANGE THE PAGE THE PRICES ARE NOT UPDATED, UNLIKE GOING TO ANOTHER CATEGORY
